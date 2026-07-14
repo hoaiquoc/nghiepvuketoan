@@ -62,6 +62,21 @@
                         <input type="text" id="pay-ref" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 text-sm" placeholder="VD: PO-2025001">
                     </div>
                 </div>
+
+                <!-- Công nợ NCC -->
+                <div id="pay-payable-info" class="p-4 bg-slate-800/40 rounded-lg border border-red-700/20" style="display:none">
+                    <p class="text-xs text-red-300 font-semibold mb-2">📋 Công nợ nhà cung cấp</p>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-slate-400">Số dư phải trả:</span>
+                        <span id="pay-payable-balance" class="font-mono font-bold text-red-400">0 ₫</span>
+                    </div>
+                    <div id="pay-overpay-warning" class="mt-2 p-3 bg-yellow-900/10 border border-yellow-700/30 rounded-lg text-xs hidden">
+                        <p class="text-yellow-300 mb-1">⚠️ Số tiền chi <strong>lớn hơn</strong> công nợ hiện tại</p>
+                        <p class="text-slate-400">Phần chênh lệch sẽ được ghi nhận vào <span class="text-green-400">Nợ TK 1388 (Phải thu khác)</span> — coi như ứng trước cho nhà cung cấp.</p>
+                        <p class="mt-1">Chênh lệch: <span id="pay-overpay-amount" class="font-mono font-bold text-yellow-300">0 ₫</span></p>
+                    </div>
+                </div>
+
                 <div class="p-4 bg-red-900/10 rounded-lg border border-red-700/30">
                     <p class="text-xs text-red-300 mb-3 font-semibold">⚡ Thêm nhanh theo mẫu định khoản</p>
                     <div class="flex gap-3 items-end">

@@ -63,7 +63,35 @@ function getDefaultStore() {
             { id: 'ptpl005', name: 'Chi tạm ứng', debit: '141', credit: '111', vat: false, desc: 'Tạm ứng cho nhân viên' },
             { id: 'ptpl006', name: 'Chi thanh toán NCC', debit: '331', credit: '111', vat: false, desc: 'Thanh toán nợ nhà cung cấp' },
         ],
-        vouchers: { receive: [], pay: [], import: [], export: [] },
+        employees: [
+            { id: 'emp001', name: 'Nguyễn Văn A', position: 'Nhân viên bán hàng' },
+            { id: 'emp002', name: 'Trần Thị B', position: 'Thu ngân' },
+            { id: 'emp003', name: 'Lê Văn C', position: 'Quản lý cửa hàng' },
+            { id: 'emp004', name: 'Phạm Thị D', position: 'Nhân viên bếp' },
+        ],
+        vouchers: {
+            receive: [
+                { id: 's001', number: 'PT01/0001', date: '2026-01-05', partner: 'Công ty CP Bán lẻ ABC', partnerId: 'pn002', items: [{ desc: 'Thu tiền bán hàng POS', debit: '111', credit: '511', amount: 25000000 }, { desc: 'Thuế GTGT đầu ra', debit: '111', credit: '3331', amount: 2500000 }], totalAmount: 27500000, createdAt: '2026-01-05' },
+                { id: 's002', number: 'PT01/0002', date: '2026-01-10', partner: 'Nhà hàng F&B Express', partnerId: 'pn004', items: [{ desc: 'Thu tiền bán hàng CK', debit: '112', credit: '511', amount: 15000000 }, { desc: 'Thuế GTGT đầu ra', debit: '112', credit: '3331', amount: 1500000 }], totalAmount: 16500000, createdAt: '2026-01-10' },
+                { id: 's003', number: 'PT01/0003', date: '2026-01-15', partner: '', partnerId: '', items: [{ desc: 'Thu hồi tạm ứng', debit: '111', credit: '141', amount: 5000000 }], totalAmount: 5000000, createdAt: '2026-01-15' },
+            ],
+            pay: [
+                { id: 's004', number: 'PC01/0001', date: '2026-01-06', partner: 'Công ty TNHH POS Việt Nam', partnerId: 'pn001', items: [{ desc: 'Mua hàng hóa nhập kho', debit: '156', credit: '111', amount: 35000000 }], totalAmount: 35000000, createdAt: '2026-01-06' },
+                { id: 's005', number: 'PC01/0002', date: '2026-01-12', partner: 'Công ty TNHH Thực phẩm XYZ', partnerId: 'pn003', items: [{ desc: 'Mua CCDC văn phòng', debit: '153', credit: '111', amount: 3000000 }, { desc: 'Thuế GTGT được khấu trừ', debit: '133', credit: '111', amount: 300000 }], totalAmount: 3300000, createdAt: '2026-01-12' },
+                { id: 's006', number: 'PC01/0003', date: '2026-01-20', partner: '', partnerId: '', items: [{ desc: 'Trả lương tháng 01/2026', debit: '334', credit: '111', amount: 45000000 }], totalAmount: 45000000, createdAt: '2026-01-20' },
+                { id: 's007', number: 'PC01/0004', date: '2026-01-25', partner: '', partnerId: '', items: [{ desc: 'Thanh toán tiền thuê mặt bằng', debit: '642', credit: '111', amount: 15000000 }, { desc: 'Thuế GTGT được khấu trừ', debit: '133', credit: '111', amount: 1500000 }], totalAmount: 16500000, createdAt: '2026-01-25' },
+            ],
+            import: [
+                { id: 's008', number: 'PNK01/0001', date: '2026-01-06', partner: 'Công ty TNHH POS Việt Nam', partnerId: 'pn001', rows: [{ productName: 'Máy POS cầm tay MT-200', qty: 10, price: 2800000, amount: 28000000, debit: '156', credit: '331', warehouse: 'Kho tổng' }], totalAmount: 28000000, createdAt: '2026-01-06' },
+                { id: 's009', number: 'PNK01/0002', date: '2026-01-12', partner: 'Công ty TNHH Thực phẩm XYZ', partnerId: 'pn003', rows: [{ productName: 'NVL F&B (cà phê, sữa, trà...)', qty: 1, price: 12000000, amount: 12000000, debit: '152', credit: '331', warehouse: 'Kho lạnh/mát (F&B)' }], totalAmount: 12000000, createdAt: '2026-01-12' },
+                { id: 's010', number: 'PNK01/0003', date: '2026-01-18', partner: 'Công ty CP Bán lẻ ABC', partnerId: 'pn002', rows: [{ productName: 'Nhập hàng trả lại', qty: 2, price: 1200000, amount: 2400000, debit: '156', credit: '632', warehouse: 'Kho POS trưng bày' }], totalAmount: 2400000, createdAt: '2026-01-18' },
+            ],
+            export: [
+                { id: 's011', number: 'PXK01/0001', date: '2026-01-05', partner: 'Công ty CP Bán lẻ ABC', partnerId: 'pn002', reason: 'Xuất bán hàng', rows: [{ productName: 'Máy POS cầm tay MT-200', qty: 5, price: 2800000, amount: 14000000, debit: '632', credit: '156', warehouse: 'Kho tổng' }], totalAmount: 14000000, createdAt: '2026-01-05' },
+                { id: 's012', number: 'PXK01/0002', date: '2026-01-10', partner: 'Nhà hàng F&B Express', partnerId: 'pn004', reason: 'Xuất bán hàng', rows: [{ productName: 'NVL F&B', qty: 1, price: 6000000, amount: 6000000, debit: '632', credit: '152', warehouse: 'Kho lạnh/mát (F&B)' }], totalAmount: 6000000, createdAt: '2026-01-10' },
+                { id: 's013', number: 'PXK01/0003', date: '2026-01-22', partner: '', partnerId: '', reason: 'Hủy / Hết hạn', rows: [{ productName: 'Giấy in nhiệt (hết hạn)', qty: 2, price: 320000, amount: 640000, debit: '642', credit: '156', warehouse: 'Kho tổng' }], totalAmount: 640000, createdAt: '2026-01-22' },
+            ],
+        },
         voucherCounters: { receive: 0, pay: 0, import: 0, export: 0 },
         warehouses: ['Kho tổng', 'Kho POS trưng bày', 'Kho lạnh/mát (F&B)'],
     };
@@ -145,11 +173,75 @@ function updateRecvPreview() {
 function handleReceiveSubmit(e) { e.preventDefault(); const date=document.getElementById('recv-date')?.value,pid=document.getElementById('recv-partner')?.value,partner=store.partners.find(p=>p.id===pid);const items=[];document.querySelectorAll('.recv-item-row').forEach(r=>{const db=r.querySelector('.recv-debit')?.value,cr=r.querySelector('.recv-credit')?.value,amt=parseFloat(r.querySelector('.recv-amount')?.value)||0;if(db&&cr&&amt>0)items.push({desc:r.querySelector('.recv-desc')?.value||'',debit:db,credit:cr,amount:amt});});if(!date){alert('Nhập ngày.');return;}if(items.length===0){alert('Thêm ít nhất 1 dòng.');return;}const v={id:Date.now().toString(),number:generateVoucherNumber('receive'),date,partner:partner?partner.name:'(Không có)',partnerId:pid||'',items,totalAmount:items.reduce((s,i)=>s+i.amount,0),createdAt:new Date().toISOString()};store.vouchers.receive.push(v);saveStore(store);alert(`✅ Phiếu thu ${v.number} đã lưu!\nTổng: ${formatCurrency(v.totalAmount)}`);document.getElementById('form-receive')?.reset();document.getElementById('recv-items').innerHTML='';addRecvItemRow();updateRecvPreview();document.getElementById('recv-date').value=todayStr();}
 
 // ==================== PHIẾU CHI ====================
-function initPayPage() { populatePartnerSelect('pay-partner', 'supplier'); document.getElementById('pay-date').value=todayStr();const tpl=document.getElementById('pay-loai-chi');if(tpl)store.paymentTemplates.forEach(t=>{const o=document.createElement('option');o.value=t.id;o.textContent=t.desc;tpl.appendChild(o);});addPayItemRow();}
+const supplierOpeningBalances = { 'pn001': 30000000, 'pn003': 15000000 };
+
+function initPayPage() {
+    populatePartnerSelect('pay-partner', 'supplier');
+    document.getElementById('pay-date').value = todayStr();
+    const tpl = document.getElementById('pay-loai-chi');
+    if (tpl) store.paymentTemplates.forEach(t => { const o = document.createElement('option'); o.value = t.id; o.textContent = t.desc; tpl.appendChild(o); });
+    document.getElementById('pay-partner').addEventListener('change', updatePaySupplierPayable);
+    addPayItemRow();
+}
+
+function updatePaySupplierPayable() {
+    const container = document.getElementById('pay-payable-info');
+    const balanceEl = document.getElementById('pay-payable-balance');
+    if (!container || !balanceEl) return;
+    const pid = document.getElementById('pay-partner')?.value;
+    if (!pid) { container.style.display = 'none'; return; }
+    container.style.display = '';
+    let payable = supplierOpeningBalances[pid] || 0;
+    (store.vouchers.import || []).forEach(v => { if (v.partnerId === pid) (v.rows || []).forEach(r => { if (r.credit === '331') payable += r.amount || 0; }); });
+    (store.vouchers.pay || []).forEach(v => { if (v.partnerId === pid) (v.items || []).forEach(item => { if (item.debit === '331') payable -= item.amount || 0; }); });
+    balanceEl.textContent = formatCurrency(payable);
+    updatePayPreview();
+}
 function addPayItemRow() { const c=document.getElementById('pay-items');if(!c)return;const row=document.createElement('div');row.className='pay-item-row flex flex-wrap gap-3 items-end p-4 bg-slate-800/40 rounded';row.innerHTML=`<div class="flex-1 min-w-[200px]"><label class="block text-xs mb-1 text-slate-400">Nội dung</label><input type="text" class="pay-desc w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-red-500" placeholder="Mô tả khoản chi"></div><div class="w-32"><label class="block text-xs mb-1 text-slate-400">TK Nợ</label><select class="pay-debit w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-red-500"><option value="">-- Chọn --</option>${store.accounts.filter(a=>a.id==='156'||a.id==='152'||a.id==='153'||a.id==='642'||a.id==='331'||a.id==='334'||a.id==='141'||a.id==='133').map(a=>`<option value="${a.id}">${a.id} - ${a.name}</option>`).join('')}</select></div><div class="w-32"><label class="block text-xs mb-1 text-slate-400">TK Có</label><select class="pay-credit w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-red-500"><option value="">-- Chọn --</option>${store.accounts.filter(a=>a.id==='111'||a.id==='112').map(a=>`<option value="${a.id}">${a.id} - ${a.name}</option>`).join('')}</select></div><div class="w-28"><label class="block text-xs mb-1 text-slate-400">Số tiền</label><input type="number" class="pay-amount w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-red-500" min="0" placeholder="0" onchange="updatePayPreview()" oninput="updatePayPreview()"></div><button type="button" onclick="this.closest('.pay-item-row').remove();updatePayPreview();" class="text-red-400 hover:text-red-300 p-2">✕</button>`;c.appendChild(row);row.querySelectorAll('input,select').forEach(el=>{el.addEventListener('input',updatePayPreview);el.addEventListener('change',updatePayPreview);});}
 function quickAddPayItem() { const sel=document.getElementById('pay-loai-chi');if(!sel||!sel.value){alert('Chọn loại chi mẫu.');return;};const tpl=store.paymentTemplates.find(t=>t.id===sel.value);if(!tpl)return;const c=document.getElementById('pay-items'),prev=c.querySelectorAll('.pay-item-row');const row=document.createElement('div');row.className='pay-item-row flex flex-wrap gap-3 items-end p-4 bg-slate-800/40 rounded';row.innerHTML=`<div class="flex-1 min-w-[200px]"><label class="block text-xs mb-1 text-slate-400">Nội dung</label><input type="text" class="pay-desc w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-red-500" value="${prev.length===0?tpl.desc:''}"></div><div class="w-32"><label class="block text-xs mb-1 text-slate-400">TK Nợ</label><select class="pay-debit w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-red-500"><option value="">-- Chọn --</option>${store.accounts.filter(a=>a.id==='156'||a.id==='152'||a.id==='153'||a.id==='642'||a.id==='331'||a.id==='334'||a.id==='141'||a.id==='133').map(a=>`<option value="${a.id}" ${a.id===tpl.debit?'selected':''}>${a.id} - ${a.name}</option>`).join('')}</select></div><div class="w-32"><label class="block text-xs mb-1 text-slate-400">TK Có</label><select class="pay-credit w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-red-500"><option value="">-- Chọn --</option>${store.accounts.filter(a=>a.id==='111'||a.id==='112').map(a=>`<option value="${a.id}" ${a.id===tpl.credit?'selected':''}>${a.id} - ${a.name}</option>`).join('')}</select></div><div class="w-28"><label class="block text-xs mb-1 text-slate-400">Số tiền</label><input type="number" class="pay-amount w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-red-500" min="0" placeholder="0" onchange="updatePayPreview()" oninput="updatePayPreview()"></div><button type="button" onclick="this.closest('.pay-item-row').remove();updatePayPreview();" class="text-red-400 hover:text-red-300 p-2">✕</button>`;c.appendChild(row);row.querySelectorAll('input,select').forEach(el=>{el.addEventListener('input',updatePayPreview);el.addEventListener('change',updatePayPreview);});updatePayPreview();}
-function updatePayPreview() { const rows=document.querySelectorAll('.pay-item-row'),pc=document.getElementById('pay-preview-content'),tel=document.getElementById('pay-total-amount');if(!pc||!tel)return;let total=0,html='';rows.forEach((r,i)=>{const d=r.querySelector('.pay-desc')?.value||'',db=r.querySelector('.pay-debit')?.value||'',cr=r.querySelector('.pay-credit')?.value||'',amt=parseFloat(r.querySelector('.pay-amount')?.value)||0;total+=amt;if(db&&cr&&amt>0)html+=`<div class="mb-2 p-2 bg-slate-700/30 rounded text-xs"><span class="text-slate-400">#[${i+1}] ${d}</span><br><span class="text-green-400">Nợ ${getAccountName(db)}:</span> <span class="text-white font-mono">${formatCurrency(amt)}</span><br><span class="text-red-400">Có ${getAccountName(cr)}:</span> <span class="text-white font-mono">${formatCurrency(amt)}</span></div>`;});pc.innerHTML=html||'<p class="text-slate-300 italic text-xs">Vui lòng điền!</p>';tel.textContent=formatCurrency(total);}
-function handlePaySubmit(e) { e.preventDefault();const date=document.getElementById('pay-date')?.value,pid=document.getElementById('pay-partner')?.value,partner=store.partners.find(p=>p.id===pid);const items=[];document.querySelectorAll('.pay-item-row').forEach(r=>{const db=r.querySelector('.pay-debit')?.value,cr=r.querySelector('.pay-credit')?.value,amt=parseFloat(r.querySelector('.pay-amount')?.value)||0;if(db&&cr&&amt>0)items.push({desc:r.querySelector('.pay-desc')?.value||'',debit:db,credit:cr,amount:amt});});if(!date){alert('Nhập ngày.');return;}if(items.length===0){alert('Thêm ít nhất 1 dòng.');return;}const v={id:Date.now().toString(),number:generateVoucherNumber('pay'),date,partner:partner?partner.name:'(Không có)',partnerId:pid||'',items,totalAmount:items.reduce((s,i)=>s+i.amount,0),createdAt:new Date().toISOString()};store.vouchers.pay.push(v);saveStore(store);alert(`✅ Phiếu chi ${v.number} đã lưu!\nTổng: ${formatCurrency(v.totalAmount)}`);document.getElementById('form-pay')?.reset();document.getElementById('pay-items').innerHTML='';addPayItemRow();updatePayPreview();document.getElementById('pay-date').value=todayStr();}
+function updatePayPreview() {
+    const rows=document.querySelectorAll('.pay-item-row'),pc=document.getElementById('pay-preview-content'),tel=document.getElementById('pay-total-amount');
+    if(!pc||!tel)return;
+    let total=0,pay331Total=0,html='';
+    const pid=document.getElementById('pay-partner')?.value;
+    let payable=pid?(supplierOpeningBalances[pid]||0):0;
+    if(pid){(store.vouchers.import||[]).forEach(v=>{if(v.partnerId===pid)(v.rows||[]).forEach(r=>{if(r.credit==='331')payable+=r.amount||0;});});
+    (store.vouchers.pay||[]).forEach(v=>{if(v.partnerId===pid)(v.items||[]).forEach(item=>{if(item.debit==='331')payable-=item.amount||0;});});}
+    rows.forEach((r,i)=>{
+        const d=r.querySelector('.pay-desc')?.value||'',db=r.querySelector('.pay-debit')?.value||'',cr=r.querySelector('.pay-credit')?.value||'',amt=parseFloat(r.querySelector('.pay-amount')?.value)||0;
+        total+=amt;if(db==='331')pay331Total+=amt;
+        if(db&&cr&&amt>0)html+=`<div class="mb-2 p-2 bg-slate-700/30 rounded text-xs"><span class="text-slate-400">#[${i+1}] ${d}</span><br><span class="text-green-400">Nợ ${getAccountName(db)}:</span> <span class="text-white font-mono">${formatCurrency(amt)}</span><br><span class="text-red-400">Có ${getAccountName(cr)}:</span> <span class="text-white font-mono">${formatCurrency(amt)}</span></div>`;
+    });
+    if(pid&&pay331Total>payable&&payable>=0){
+        const overpay=pay331Total-payable;
+        const warning=document.getElementById('pay-overpay-warning'),overpayAmtEl=document.getElementById('pay-overpay-amount');
+        if(warning)warning.classList.remove('hidden');if(overpayAmtEl)overpayAmtEl.textContent=formatCurrency(overpay);
+        html+=`<div class="mt-2 p-2 bg-yellow-900/10 border border-yellow-700/30 rounded text-xs"><span class="text-yellow-300">⚠️ Trả dư ${formatCurrency(overpay)}</span><br><span class="text-green-400">Tự động thêm: Nợ TK 138 / Có TK 111:</span> <span class="text-white font-mono">${formatCurrency(overpay)}</span></div>`;
+    }else{const warning=document.getElementById('pay-overpay-warning');if(warning)warning.classList.add('hidden');}
+    pc.innerHTML=html||'<p class="text-slate-300 italic text-xs">Vui lòng điền!</p>';tel.textContent=formatCurrency(total);
+}
+function handlePaySubmit(e) {
+    e.preventDefault();
+    const date=document.getElementById('pay-date')?.value,pid=document.getElementById('pay-partner')?.value,partner=store.partners.find(p=>p.id===pid);
+    const items=[];let pay331Total=0;
+    let payable=pid?(supplierOpeningBalances[pid]||0):0;
+    if(pid){(store.vouchers.import||[]).forEach(v=>{if(v.partnerId===pid)(v.rows||[]).forEach(r=>{if(r.credit==='331')payable+=r.amount||0;});});
+    (store.vouchers.pay||[]).forEach(v=>{if(v.partnerId===pid)(v.items||[]).forEach(item=>{if(item.debit==='331')payable-=item.amount||0;});});}
+    document.querySelectorAll('.pay-item-row').forEach(r=>{const db=r.querySelector('.pay-debit')?.value,cr=r.querySelector('.pay-credit')?.value,amt=parseFloat(r.querySelector('.pay-amount')?.value)||0;if(db&&cr&&amt>0){if(db==='331')pay331Total+=amt;items.push({desc:r.querySelector('.pay-desc')?.value||'',debit:db,credit:cr,amount:amt});}});
+    if(!date){alert('Nhập ngày.');return;}if(items.length===0){alert('Thêm ít nhất 1 dòng.');return;}
+    if(pid&&pay331Total>payable&&payable>=0){
+        const overpay=pay331Total-payable;
+        if(confirm(`⚠️ Số tiền chi vượt công nợ ${formatCurrency(overpay)}.\n\nPhần vượt sẽ được ghi Nợ TK 138 (Phải thu khác).\n\nTiếp tục?`)){
+            const newItems=[];let remaining=overpay;
+            for(const item of items){if(item.debit==='331'&&remaining>0){const adjusted=Math.max(0,item.amount-remaining);if(adjusted>0)newItems.push({...item,amount:adjusted});const overpayPart=Math.min(item.amount,remaining);newItems.push({...item,debit:'138',amount:overpayPart,desc:(item.desc||'')+' (trả dư → ứng trước NCC)'});remaining-=overpayPart;}else{newItems.push(item);}}
+            items.length=0;items.push(...newItems);
+        }else{return;}
+    }
+    const v={id:Date.now().toString(),number:generateVoucherNumber('pay'),date,partner:partner?partner.name:'(Không có)',partnerId:pid||'',items,totalAmount:items.reduce((s,i)=>s+i.amount,0),createdAt:new Date().toISOString()};
+    store.vouchers.pay.push(v);saveStore(store);
+    alert(`✅ Phiếu chi ${v.number} đã lưu!\nTổng: ${formatCurrency(v.totalAmount)}`);
+    document.getElementById('form-pay')?.reset();document.getElementById('pay-items').innerHTML='';document.getElementById('pay-payable-info').style.display='none';addPayItemRow();updatePayPreview();document.getElementById('pay-date').value=todayStr();
+}
 
 // ==================== V3: PHIẾU NHẬP KHO ====================
 function initImportPage() { populatePartnerSelect('import-partner', 'supplier'); document.getElementById('import-date').value = todayStr(); addImportProductRow(); }

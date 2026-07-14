@@ -9,6 +9,7 @@
     { "src": "voucher-export.html", "use": "@vercel/static" },
     { "src": "voucher-sales.html", "use": "@vercel/static" },
     { "src": "styles.css", "use": "@vercel/static" },
+    { "src": "accounts.html", "use": "@vercel/static" },
     { "src": "journal.html", "use": "@vercel/static" },
     { "src": "ledger.html", "use": "@vercel/static" },
     { "src": "closing.html", "use": "@vercel/static" },

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Tài Khoản - Theo TT 99/2025/TT-BTC | POS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                </div>
+                <span class="text-sm font-semibold text-slate-300">Quay về</span>
+            </a>
+            <div class="flex items-center gap-3 text-sm">
+                <a href="journal.html" class="text-slate-400 hover:text-teal-400">Sổ Nhật Ký</a>
+                <a href="ledger.html" class="text-slate-400 hover:text-indigo-400">Sổ Chi Tiết</a>
+                <a href="closing.html" class="text-slate-400 hover:text-cyan-400">Kết Chuyển</a>
+            </div>
+        </div>
+    </header>
+    <main class="max-w-5xl mx-auto px-4 py-8">
+        <div class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-white mb-2">Hệ Thống Tài Khoản Kế Toán</h1>
+            <p class="text-slate-400">Ban hành theo Thông tư 99/2025/TT-BTC ngày 30/6/2025 của Bộ Tài chính</p>
+        </div>
+
+        <!-- LOẠI 1: TÀI SẢN NGẮN HẠN -->
+        <div class="glassmorphism rounded-xl border border-slate-700 mb-6 overflow-hidden">
+            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-5 hover:bg-slate-700/30 transition-all">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-600/20 rounded-lg flex items-center justify-center"><span class="text-blue-400 font-bold">1</span></div>
+                    <div class="text-left"><h2 class="text-lg font-semibold text-blue-400">TÀI SẢN NGẮN HẠN</h2></div>
+                </div>
+                <svg class="w-5 h-5 text-slate-400 accordion-arrow transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="accordion-content p-5 pt-0 border-t border-slate-700">
+                <div class="space-y-3">
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-blue-300">111 — Tiền mặt</strong><br><span class="text-slate-400 text-xs">1111 — Tiền Việt Nam &nbsp;|&nbsp; 1112 — Ngoại tệ &nbsp;|&nbsp; 1113 — Vàng tiền tệ</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-blue-300">112 — Tiền gửi ngân hàng</strong><br><span class="text-slate-400 text-xs">1121 — Tiền Việt Nam &nbsp;|&nbsp; 1122 — Ngoại tệ &nbsp;|&nbsp; 1123 — Vàng tiền tệ</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-blue-300">113 — Tiền đang chuyển</strong><br><span class="text-slate-400 text-xs">1131 — Tiền Việt Nam &nbsp;|&nbsp; 1132 — Ngoại tệ</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-blue-300">121 — Chứng khoán kinh doanh</strong><br><span class="text-slate-400 text-xs">1211 — Cổ phiếu &nbsp;|&nbsp; 1212 — Trái phiếu &nbsp;|&nbsp; 1218 — Chứng khoán khác</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-blue-300">128 — Đầu tư nắm giữ đến ngày đáo hạn</strong><br><span class="text-slate-400 text-xs">1281 — Tiền gửi có kỳ hạn &nbsp;|&nbsp; 1282 — Trái phiếu &nbsp;|&nbsp; 1288 — Khác</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-blue-300">131 — Phải thu của khách hàng</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-blue-300">133 — Thuế GTGT được khấu trừ</strong><br><span class="text-slate-400 text-xs">1331 — Thuế GTGT được khấu trừ của hàng hóa, dịch vụ &nbsp;|&nbsp; 1332 — Thuế GTGT được khấu trừ của TSCĐ</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-blue-300">136 — Phải thu nội bộ</strong><br><span class="text-slate-400 text-xs">1361 — Vốn kinh doanh ở đơn vị trực thuộc &nbsp;|&nbsp; 1368 — Phải thu nội bộ khác</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-blue-300">138 — Phải thu khác</strong><br><span class="text-slate-400 text-xs">1381 — Tài sản thiếu chờ xử lý &nbsp;|&nbsp; 1385 — Phải thu về cổ phần hóa &nbsp;|&nbsp; 1388 — Phải thu khác</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-blue-300">141 — Tạm ứng</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-blue-300">151 — Hàng mua đang đi đường</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-blue-300">152 — Nguyên liệu, vật liệu</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-blue-300">153 — Công cụ, dụng cụ</strong><br><span class="text-slate-400 text-xs">1531 — Công cụ, dụng cụ &nbsp;|&nbsp; 1532 — Bao bì luân chuyển &nbsp;|&nbsp; 1533 — Đồ dùng cho thuê &nbsp;|&nbsp; 1534 — Thiết bị, phụ tùng thay thế</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-blue-300">154 — Chi phí sản xuất, kinh doanh dở dang</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-blue-300">155 — Thành phẩm</strong><br><span class="text-slate-400 text-xs">1551 — Thành phẩm nhập kho &nbsp;|&nbsp; 1557 — Thành phẩm bất động sản</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-blue-300">156 — Hàng hóa</strong><br><span class="text-slate-400 text-xs">1561 — Giá mua hàng hóa &nbsp;|&nbsp; 1562 — Chi phí thu mua hàng hóa &nbsp;|&nbsp; 1567 — Hàng hóa bất động sản</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-blue-300">157 — Hàng gửi đi bán</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-blue-300">158 — Hàng hóa kho bảo thuế</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-blue-300">161 — Chi sự nghiệp</strong><br><span class="text-slate-400 text-xs">1611 — Chi sự nghiệp năm trước &nbsp;|&nbsp; 1612 — Chi sự nghiệp năm nay</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOẠI 2: TÀI SẢN DÀI HẠN -->
+        <div class="glassmorphism rounded-xl border border-slate-700 mb-6 overflow-hidden">
+            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-5 hover:bg-slate-700/30 transition-all">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-indigo-600/20 rounded-lg flex items-center justify-center"><span class="text-indigo-400 font-bold">2</span></div>
+                    <div class="text-left"><h2 class="text-lg font-semibold text-indigo-400">TÀI SẢN DÀI HẠN</h2></div>
+                </div>
+                <svg class="w-5 h-5 text-slate-400 accordion-arrow transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="accordion-content p-5 pt-0 border-t border-slate-700">
+                <div class="space-y-3">
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-indigo-300">211 — Tài sản cố định hữu hình</strong><br><span class="text-slate-400 text-xs">2111 — Nhà cửa, vật kiến trúc &nbsp;|&nbsp; 2112 — Máy móc, thiết bị &nbsp;|&nbsp; 2113 — Phương tiện vận tải &nbsp;|&nbsp; 2114 — Thiết bị, dụng cụ quản lý &nbsp;|&nbsp; 2115 — Cây lâu năm, súc vật &nbsp;|&nbsp; 2118 — TSCĐ khác</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-indigo-300">212 — Tài sản cố định thuê tài chính</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-indigo-300">213 — Tài sản cố định vô hình</strong><br><span class="text-slate-400 text-xs">2131 — Quyền sử dụng đất &nbsp;|&nbsp; 2132 — Quyền phát hành &nbsp;|&nbsp; 2133 — Bản quyền, bằng sáng chế &nbsp;|&nbsp; 2134 — Nhãn hiệu, tên thương mại &nbsp;|&nbsp; 2135 — Chương trình phần mềm &nbsp;|&nbsp; 2138 — TSCĐ vô hình khác</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-indigo-300">214 — Hao mòn tài sản cố định</strong><br><span class="text-slate-400 text-xs">2141 — HM TSCĐ hữu hình &nbsp;|&nbsp; 2142 — HM TSCĐ thuê tài chính &nbsp;|&nbsp; 2143 — HM TSCĐ vô hình &nbsp;|&nbsp; 2147 — HM bất động sản đầu tư</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-indigo-300">217 — Bất động sản đầu tư</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-indigo-300">219 — Dự phòng giảm giá tài sản</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-indigo-300">221 — Đầu tư vào công ty con</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-indigo-300">222 — Đầu tư vào công ty liên doanh, liên kết</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-indigo-300">228 — Đầu tư dài hạn khác</strong><br><span class="text-slate-400 text-xs">2281 — Đầu tư cổ phiếu &nbsp;|&nbsp; 2282 — Đầu tư trái phiếu &nbsp;|&nbsp; 2288 — Đầu tư khác</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-indigo-300">229 — Dự phòng tổn thất tài sản</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-indigo-300">241 — Xây dựng cơ bản dở dang</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-indigo-300">242 — Chi phí trả trước dài hạn</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-indigo-300">243 — Tài sản thuế thu nhập hoãn lại</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-indigo-300">244 — Cầm cố, thế chấp, ký quỹ, ký cược</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOẠI 3: NỢ PHẢI TRẢ -->
+        <div class="glassmorphism rounded-xl border border-slate-700 mb-6 overflow-hidden">
+            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-5 hover:bg-slate-700/30 transition-all">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-red-600/20 rounded-lg flex items-center justify-center"><span class="text-red-400 font-bold">3</span></div>
+                    <div class="text-left"><h2 class="text-lg font-semibold text-red-400">NỢ PHẢI TRẢ</h2></div>
+                </div>
+                <svg class="w-5 h-5 text-slate-400 accordion-arrow transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="accordion-content p-5 pt-0 border-t border-slate-700">
+                <div class="space-y-3">
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-red-300">311 — Vay và nợ thuê tài chính ngắn hạn</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-red-300">331 — Phải trả cho người bán</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-red-300">333 — Thuế và các khoản phải nộp Nhà nước</strong><br><span class="text-slate-400 text-xs">3331 — Thuế GTGT phải nộp &nbsp;|&nbsp; 3332 — Thuế tiêu thụ đặc biệt &nbsp;|&nbsp; 3333 — Thuế xuất, nhập khẩu &nbsp;|&nbsp; 3334 — Thuế TNDN &nbsp;|&nbsp; 3335 — Thuế TNCN &nbsp;|&nbsp; 3336 — Thuế tài nguyên &nbsp;|&nbsp; 3337 — Thuế nhà đất, tiền thuê đất &nbsp;|&nbsp; 3338 — Thuế bảo vệ môi trường &nbsp;|&nbsp; 3339 — Phí, lệ phí và các khoản nộp khác</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-red-300">334 — Phải trả người lao động</strong><br><span class="text-slate-400 text-xs">3341 — Phải trả công nhân viên &nbsp;|&nbsp; 3348 — Phải trả người lao động khác</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-red-300">335 — Chi phí phải trả</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-red-300">336 — Phải trả nội bộ</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-red-300">337 — Thanh toán theo tiến độ hợp đồng XD</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-red-300">338 — Phải trả, phải nộp khác</strong><br><span class="text-slate-400 text-xs">3381 — Tài sản thừa chờ giải quyết &nbsp;|&nbsp; 3382 — Kinh phí công đoàn &nbsp;|&nbsp; 3383 — Bảo hiểm xã hội &nbsp;|&nbsp; 3384 — Bảo hiểm y tế &nbsp;|&nbsp; 3385 — Bảo hiểm thất nghiệp &nbsp;|&nbsp; 3386 — Nhận ký quỹ, ký cược ngắn hạn &nbsp;|&nbsp; 3387 — Doanh thu chưa thực hiện &nbsp;|&nbsp; 3388 — Phải trả, phải nộp khác</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-red-300">341 — Vay và nợ thuê tài chính dài hạn</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-red-300">343 — Trái phiếu phát hành</strong><br><span class="text-slate-400 text-xs">3431 — Trái phiếu thường &nbsp;|&nbsp; 3432 — Trái phiếu chuyển đổi</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-red-300">344 — Nhận ký quỹ, ký cược dài hạn</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-red-300">347 — Thuế thu nhập hoãn lại phải trả</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-red-300">352 — Dự phòng phải trả</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-red-300">353 — Quỹ khen thưởng, phúc lợi</strong><br><span class="text-slate-400 text-xs">3531 — Quỹ khen thưởng &nbsp;|&nbsp; 3532 — Quỹ phúc lợi &nbsp;|&nbsp; 3533 — Quỹ phúc lợi đã hình thành TSCĐ &nbsp;|&nbsp; 3534 — Quỹ thưởng BQL điều hành</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-red-300">356 — Quỹ PT Khoa học và Công nghệ</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOẠI 4: VỐN CHỦ SỞ HỮU -->
+        <div class="glassmorphism rounded-xl border border-slate-700 mb-6 overflow-hidden">
+            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-5 hover:bg-slate-700/30 transition-all">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-purple-600/20 rounded-lg flex items-center justify-center"><span class="text-purple-400 font-bold">4</span></div>
+                    <div class="text-left"><h2 class="text-lg font-semibold text-purple-400">VỐN CHỦ SỞ HỮU</h2></div>
+                </div>
+                <svg class="w-5 h-5 text-slate-400 accordion-arrow transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="accordion-content p-5 pt-0 border-t border-slate-700">
+                <div class="space-y-3">
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-purple-300">411 — Vốn đầu tư của chủ sở hữu</strong><br><span class="text-slate-400 text-xs">4111 — Vốn góp của chủ sở hữu &nbsp;|&nbsp; 4112 — Thặng dư vốn cổ phần &nbsp;|&nbsp; 4118 — Vốn khác</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-purple-300">412 — Chênh lệch đánh giá lại tài sản</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-purple-300">413 — Chênh lệch tỷ giá hối đoái</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-purple-300">414 — Quỹ đầu tư phát triển</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-purple-300">417 — Quỹ hỗ trợ sắp xếp doanh nghiệp</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-purple-300">418 — Các quỹ khác thuộc VCSH</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-purple-300">419 — Cổ phiếu quỹ</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-purple-300">421 — Lợi nhuận sau thuế chưa phân phối</strong><br><span class="text-slate-400 text-xs">4211 — LNST chưa phân phối năm trước &nbsp;|&nbsp; 4212 — LNST chưa phân phối năm nay</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-purple-300">441 — Nguồn vốn đầu tư XDCB</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOẠI 5: DOANH THU -->
+        <div class="glassmorphism rounded-xl border border-slate-700 mb-6 overflow-hidden">
+            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-5 hover:bg-slate-700/30 transition-all">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-green-600/20 rounded-lg flex items-center justify-center"><span class="text-green-400 font-bold">5</span></div>
+                    <div class="text-left"><h2 class="text-lg font-semibold text-green-400">DOANH THU</h2></div>
+                </div>
+                <svg class="w-5 h-5 text-slate-400 accordion-arrow transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="accordion-content p-5 pt-0 border-t border-slate-700">
+                <div class="space-y-3">
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-green-300">511 — Doanh thu bán hàng và cung cấp dịch vụ</strong><br><span class="text-slate-400 text-xs">5111 — DT bán hàng hóa &nbsp;|&nbsp; 5112 — DT bán thành phẩm &nbsp;|&nbsp; 5113 — DT cung cấp dịch vụ &nbsp;|&nbsp; 5114 — DT trợ cấp, trợ giá &nbsp;|&nbsp; 5117 — DT KD bất động sản &nbsp;|&nbsp; 5118 — DT khác</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-green-300">515 — Doanh thu hoạt động tài chính</strong><br><span class="text-slate-400 text-xs">5151 — Lãi tiền gửi, cho vay &nbsp;|&nbsp; 5152 — Lãi bán chứng khoán &nbsp;|&nbsp; 5153 — Lãi chênh lệch tỷ giá &nbsp;|&nbsp; 5158 — DT tài chính khác</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOẠI 6: CHI PHÍ SXKD -->
+        <div class="glassmorphism rounded-xl border border-slate-700 mb-6 overflow-hidden">
+            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-5 hover:bg-slate-700/30 transition-all">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-orange-600/20 rounded-lg flex items-center justify-center"><span class="text-orange-400 font-bold">6</span></div>
+                    <div class="text-left"><h2 class="text-lg font-semibold text-orange-400">CHI PHÍ SẢN XUẤT KINH DOANH</h2></div>
+                </div>
+                <svg class="w-5 h-5 text-slate-400 accordion-arrow transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="accordion-content p-5 pt-0 border-t border-slate-700">
+                <div class="space-y-3">
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-orange-300">611 — Mua hàng</strong><br><span class="text-slate-400 text-xs">6111 — Mua nguyên liệu, vật liệu &nbsp;|&nbsp; 6112 — Mua hàng hóa &nbsp;|&nbsp; 6113 — Mua công cụ, dụng cụ</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-orange-300">621 — Chi phí nguyên liệu, vật liệu trực tiếp</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-orange-300">622 — Chi phí nhân công trực tiếp</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-orange-300">623 — Chi phí sử dụng máy thi công</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-orange-300">627 — Chi phí sản xuất chung</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-orange-300">631 — Giá thành sản xuất</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-orange-300">632 — Giá vốn hàng bán</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-orange-300">635 — Chi phí tài chính</strong><br><span class="text-slate-400 text-xs">6351 — Lỗ chênh lệch tỷ giá &nbsp;|&nbsp; 6352 — Lỗ bán chứng khoán &nbsp;|&nbsp; 6355 — Chi phí lãi vay &nbsp;|&nbsp; 6356 — Dự phòng tổn thất đầu tư tài chính &nbsp;|&nbsp; 6358 — Chi phí tài chính khác</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-orange-300">641 — Chi phí bán hàng</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-orange-300">642 — Chi phí quản lý kinh doanh</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOẠI 7: THU NHẬP KHÁC -->
+        <div class="glassmorphism rounded-xl border border-slate-700 mb-6 overflow-hidden">
+            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-5 hover:bg-slate-700/30 transition-all">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-teal-600/20 rounded-lg flex items-center justify-center"><span class="text-teal-400 font-bold">7</span></div>
+                    <div class="text-left"><h2 class="text-lg font-semibold text-teal-400">THU NHẬP KHÁC</h2></div>
+                </div>
+                <svg class="w-5 h-5 text-slate-400 accordion-arrow transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="accordion-content p-5 pt-0 border-t border-slate-700">
+                <div class="space-y-3">
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-teal-300">711 — Thu nhập khác</strong><br><span class="text-slate-400 text-xs">7111 — Thu nhượng bán, thanh lý TSCĐ &nbsp;|&nbsp; 7112 — Thu tiền phạt vi phạm HĐ &nbsp;|&nbsp; 7113 — Thu nợ khó đòi đã xử lý &nbsp;|&nbsp; 7118 — Thu nhập khác</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOẠI 8: CHI PHÍ KHÁC -->
+        <div class="glassmorphism rounded-xl border border-slate-700 mb-6 overflow-hidden">
+            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-5 hover:bg-slate-700/30 transition-all">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-pink-600/20 rounded-lg flex items-center justify-center"><span class="text-pink-400 font-bold">8</span></div>
+                    <div class="text-left"><h2 class="text-lg font-semibold text-pink-400">CHI PHÍ KHÁC</h2></div>
+                </div>
+                <svg class="w-5 h-5 text-slate-400 accordion-arrow transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="accordion-content p-5 pt-0 border-t border-slate-700">
+                <div class="space-y-3">
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-pink-300">811 — Chi phí khác</strong><br><span class="text-slate-400 text-xs">8111 — Chi thanh lý TSCĐ &nbsp;|&nbsp; 8112 — Chi phạt vi phạm HĐ &nbsp;|&nbsp; 8118 — Chi phí khác</span></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-pink-300">821 — Chi phí thuế thu nhập doanh nghiệp</strong><br><span class="text-slate-400 text-xs">8211 — CP thuế TNDN hiện hành &nbsp;|&nbsp; 8212 — CP thuế TNDN hoãn lại</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOẠI 0: TÀI KHOẢN TRUNG GIAN -->
+        <div class="glassmorphism rounded-xl border border-slate-700 mb-6 overflow-hidden">
+            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-5 hover:bg-slate-700/30 transition-all">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-cyan-600/20 rounded-lg flex items-center justify-center"><span class="text-cyan-400 font-bold">0</span></div>
+                    <div class="text-left"><h2 class="text-lg font-semibold text-cyan-400">TÀI KHOẢN TRUNG GIAN</h2></div>
+                </div>
+                <svg class="w-5 h-5 text-slate-400 accordion-arrow transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="accordion-content p-5 pt-0 border-t border-slate-700">
+                <div class="space-y-3">
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-cyan-300">911 — Xác định kết quả kinh doanh</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TÀI KHOẢN NGOÀI BẢNG -->
+        <div class="glassmorphism rounded-xl border border-slate-700 mb-6 overflow-hidden">
+            <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-5 hover:bg-slate-700/30 transition-all">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-slate-600/20 rounded-lg flex items-center justify-center"><span class="text-slate-400 font-bold">NB</span></div>
+                    <div class="text-left"><h2 class="text-lg font-semibold text-slate-400">TÀI KHOẢN NGOÀI BẢNG</h2></div>
+                </div>
+                <svg class="w-5 h-5 text-slate-400 accordion-arrow transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="accordion-content p-5 pt-0 border-t border-slate-700">
+                <div class="space-y-3">
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-slate-300">001 — Tài sản thuê ngoài</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-slate-300">002 — Vật tư, hàng hóa nhận giữ hộ, nhận gia công</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-slate-300">003 — Hàng hóa nhận bán hộ, nhận ký gửi</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-slate-300">004 — Nợ khó đòi đã xử lý</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-slate-300">007 — Ngoại tệ các loại</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-slate-300">008 — Dự toán chi sự nghiệp, dự án</strong></div>
+                    <div class="p-3 bg-slate-800/50 rounded"><strong class="text-slate-300">009 — Nguồn vốn khấu hao cơ bản</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center text-xs text-slate-500 py-4">
+            Căn cứ: Thông tư 99/2025/TT-BTC ngày 30/6/2025 của Bộ Tài chính — Hệ thống tài khoản kế toán doanh nghiệp
+        </div>
+    </main>
+    <footer class="border-t border-slate-800 py-6 mt-8">
+        <div class="max-w-7xl mx-auto px-4 text-center"><p class="text-slate-600 text-xs">Căn cứ: Thông tư 99/2025/TT-BTC ngày 30/6/2025 của Bộ Tài chính</p></div>
+    </footer>
+    <script>
+        function toggleAccordion(btn) {
+            const content = btn.nextElementSibling;
+            const arrow = btn.querySelector('.accordion-arrow');
+            content.classList.toggle('hidden');
+            arrow.classList.toggle('rotate-180');
+        }
+    </script>
+</body>
+</html>
