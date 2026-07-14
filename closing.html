@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kết Chuyển Cuối Kỳ - Theo TT 99/2025/TT-BTC | POS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                </div>
+                <span class="text-sm font-semibold text-slate-300">Quay về</span>
+            </a>
+            <div class="flex items-center gap-3 text-sm">
+                <a href="journal.html" class="text-slate-400 hover:text-teal-400">Sổ Nhật Ký</a>
+                <a href="ledger.html" class="text-slate-400 hover:text-indigo-400">Sổ Chi Tiết</a>
+                <a href="lock-period.html" class="text-slate-400 hover:text-pink-400">Khóa/Mở Sổ</a>
+            </div>
+        </div>
+    </header>
+    <main class="max-w-5xl mx-auto px-4 py-8">
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 bg-cyan-600/20 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-cyan-400">Kết Chuyển Cuối Kỳ</h1>
+                    <p class="text-xs text-slate-400">Theo TT 99/2025/TT-BTC — Tự động tính & sinh bút toán kết chuyển</p>
+                </div>
+            </div>
+            <p class="text-slate-400 text-sm mt-4 leading-relaxed">
+                Cuối kỳ kế toán (tháng/quý/năm), doanh nghiệp phải thực hiện các bút toán kết chuyển để xác định kết quả kinh doanh và lập BCTC. Hệ thống tự động sinh bút toán dựa trên số dư các tài khoản doanh thu, chi phí trong kỳ.
+            </p>
+        </div>
+        <div class="glassmorphism rounded-xl p-6 md:p-8">
+            <form id="form-closing" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div><label class="block text-xs mb-1 text-slate-400">📅 Kỳ kết chuyển</label><select id="closing-period" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-cyan-500"><option value="month">Tháng</option><option value="quarter">Quý</option><option value="year">Năm</option></select></div>
+                    <div><label class="block text-xs mb-1 text-slate-400">📅 Tháng/Quý/Năm</label><input type="text" id="closing-date" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-cyan-500" placeholder="VD: 01/2026"></div>
+                    <div><label class="block text-xs mb-1 text-slate-400">📋 Loại kết chuyển</label><select id="closing-type" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-cyan-500" onchange="updateClosingPreview()"><option value="all">Tất cả</option><option value="revenue">Doanh thu → 911</option><option value="cost">Chi phí → 911</option><option value="profit">Xác định KQKD (911 → 421)</option></select></div>
+                </div>
+
+                <!-- Simulated balances -->
+                <div class="p-4 bg-slate-800/40 rounded-lg border border-cyan-700/30">
+                    <p class="text-xs text-cyan-300 mb-3 font-semibold">📊 Số dư giả định các tài khoản trong kỳ (từ Sổ Cái)</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                        <div class="p-3 bg-slate-800/50 rounded"><span class="text-green-400">TK 511 — Doanh thu:</span><br><input type="number" id="closing-511" class="w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 mt-1 text-white font-mono text-sm focus:outline-none focus:border-green-500" value="125000000" oninput="updateClosingPreview()"></div>
+                        <div class="p-3 bg-slate-800/50 rounded"><span class="text-red-400">TK 632 — Giá vốn:</span><br><input type="number" id="closing-632" class="w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 mt-1 text-white font-mono text-sm focus:outline-none focus:border-red-500" value="75000000" oninput="updateClosingPreview()"></div>
+                        <div class="p-3 bg-slate-800/50 rounded"><span class="text-orange-400">TK 641 — CP Bán hàng:</span><br><input type="number" id="closing-641" class="w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 mt-1 text-white font-mono text-sm focus:outline-none focus:border-red-500" value="8000000" oninput="updateClosingPreview()"></div>
+                        <div class="p-3 bg-slate-800/50 rounded"><span class="text-purple-400">TK 642 — CP QLKD:</span><br><input type="number" id="closing-642" class="w-full bg-slate-800 border border-slate-700 rounded px-2 py-1 mt-1 text-white font-mono text-sm focus:outline-none focus:border-red-500" value="12000000" oninput="updateClosingPreview()"></div>
+                    </div>
+                </div>
+
+                <!-- Preview -->
+                <div id="closing-preview" class="p-4 bg-slate-800/70 rounded-lg text-sm border border-slate-700">
+                    <p class="text-slate-400 mb-3 font-semibold">📊 Bút toán kết chuyển tự động sinh</p>
+                    <div id="closing-preview-content"><p class="text-slate-300 italic text-xs">Đang tính...</p></div>
+                </div>
+
+                <!-- Result summary -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                    <div class="p-4 bg-green-900/10 rounded-lg border border-green-700/30"><span class="text-green-400">📈 Tổng Doanh thu:</span><p id="closing-total-revenue" class="font-mono font-bold text-green-400 text-xl mt-1">0 ₫</p></div>
+                    <div class="p-4 bg-red-900/10 rounded-lg border border-red-700/30"><span class="text-red-400">📉 Tổng Chi phí:</span><p id="closing-total-cost" class="font-mono font-bold text-red-400 text-xl mt-1">0 ₫</p></div>
+                    <div class="p-4 bg-purple-900/10 rounded-lg border border-purple-700/30"><span class="text-purple-400">💎 Lợi nhuận sau thuế:</span><p id="closing-net-profit" class="font-mono font-bold text-purple-400 text-xl mt-1">0 ₫</p></div>
+                </div>
+
+                <div class="p-4 bg-blue-900/10 rounded-lg border border-blue-700/30 text-xs text-slate-400 leading-relaxed">
+                    <p class="text-blue-300 font-semibold mb-1">📌 Căn cứ TT 99/2025/TT-BTC:</p>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li><strong>Điều 79:</strong> Cuối kỳ kế toán, kết chuyển doanh thu, chi phí vào TK 911 — Xác định kết quả kinh doanh</li>
+                        <li>Kết chuyển Doanh thu: Nợ TK 511 / Có TK 911</li>
+                        <li>Kết chuyển Chi phí: Nợ TK 911 / Có TK 632, 641, 642</li>
+                        <li>Xác định KQKD: Lãi → Nợ TK 911 / Có TK 421 | Lỗ → Nợ TK 421 / Có TK 911</li>
+                    </ul>
+                </div>
+
+                <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-700 py-4 rounded-lg font-semibold text-lg transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-900/30">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    Thực Hiện Kết Chuyển
+                </button>
+            </form>
+        </div>
+    </main>
+    <footer class="border-t border-slate-800 py-6 mt-8">
+        <div class="max-w-7xl mx-auto px-4 text-center"><p class="text-slate-600 text-xs">Căn cứ: Thông tư 99/2025/TT-BTC ngày 30/6/2025 của Bộ Tài chính</p></div>
+    </footer>
+    <script src="app.js"></script>
+</body>
+</html>

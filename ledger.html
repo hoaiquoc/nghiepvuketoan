@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sổ Chi Tiết Tài Khoản - Theo TT 99/2025/TT-BTC | POS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                </div>
+                <span class="text-sm font-semibold text-slate-300">Quay về</span>
+            </a>
+            <div class="flex items-center gap-3 text-sm">
+                <a href="journal.html" class="text-slate-400 hover:text-teal-400">Sổ Nhật Ký</a>
+                <a href="closing.html" class="text-slate-400 hover:text-cyan-400">Kết Chuyển</a>
+                <a href="lock-period.html" class="text-slate-400 hover:text-pink-400">Khóa/Mở Sổ</a>
+            </div>
+        </div>
+    </header>
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 bg-indigo-600/20 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 0a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 0v10a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4"/></svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-indigo-400">Sổ Chi Tiết Tài Khoản</h1>
+                    <p class="text-xs text-slate-400">Điều 25 TT 99/2025/TT-BTC — Theo dõi phát sinh chi tiết từng tài khoản</p>
+                </div>
+            </div>
+        </div>
+        <div class="glassmorphism rounded-xl p-6 md:p-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div><label class="block text-xs mb-1 text-slate-400">Tài khoản</label><select id="ledger-account" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" onchange="updateLedgerData()"></select></div>
+                <div><label class="block text-xs mb-1 text-slate-400">Từ ngày</label><input type="date" id="ledger-from" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" onchange="updateLedgerData()"></div>
+                <div><label class="block text-xs mb-1 text-slate-400">Đến ngày</label><input type="date" id="ledger-to" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" onchange="updateLedgerData()"></div>
+                <div class="flex items-end"><button type="button" onclick="updateLedgerData()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all">Xem sổ</button></div>
+            </div>
+            <div class="mb-4 grid grid-cols-3 gap-4 text-sm">
+                <div class="p-3 bg-slate-800/50 rounded"><span class="text-slate-400">Dư đầu kỳ:</span> <span id="ledger-op-balance" class="font-mono font-bold text-white">0 ₫</span></div>
+                <div class="p-3 bg-green-900/10 rounded border border-green-700/20"><span class="text-green-400">Nợ PS:</span> <span id="ledger-debit-total" class="font-mono font-bold text-green-400">0 ₫</span></div>
+                <div class="p-3 bg-red-900/10 rounded border border-red-700/20"><span class="text-red-400">Có PS:</span> <span id="ledger-credit-total" class="font-mono font-bold text-red-400">0 ₫</span></div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead><tr class="bg-slate-800 text-slate-300"><th class="px-4 py-3 text-left">Ngày</th><th class="px-4 py-3 text-left">Số CT</th><th class="px-4 py-3 text-left">Diễn giải</th><th class="px-4 py-3 text-left">TK Đ/Ư</th><th class="px-4 py-3 text-right">Nợ</th><th class="px-4 py-3 text-right">Có</th></tr></thead>
+                    <tbody id="ledger-entries" class="divide-y divide-slate-700"><tr><td colspan="6" class="px-4 py-8 text-center text-slate-500 text-xs italic">Chọn tài khoản để xem sổ chi tiết.</td></tr></tbody>
+                </table>
+            </div>
+            <div class="mt-4 p-3 bg-slate-800/50 rounded text-right text-sm"><span class="text-slate-400">Dư cuối kỳ:</span> <span id="ledger-cl-balance" class="font-mono font-bold text-white text-lg">0 ₫</span></div>
+        </div>
+    </main>
+    <footer class="border-t border-slate-800 py-6 mt-8"><div class="max-w-7xl mx-auto px-4 text-center"><p class="text-slate-600 text-xs">Căn cứ: Thông tư 99/2025/TT-BTC ngày 30/6/2025 của Bộ Tài chính</p></div></footer>
+    <script src="app.js"></script>
+</body>
+</html>

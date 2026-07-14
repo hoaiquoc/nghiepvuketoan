@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khóa/Mở Sổ Kế Toán - Theo TT 99/2025/TT-BTC | POS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                </div>
+                <span class="text-sm font-semibold text-slate-300">Quay về</span>
+            </a>
+            <div class="flex items-center gap-3 text-sm">
+                <a href="journal.html" class="text-slate-400 hover:text-teal-400">Sổ Nhật Ký</a>
+                <a href="ledger.html" class="text-slate-400 hover:text-indigo-400">Sổ Chi Tiết</a>
+                <a href="closing.html" class="text-slate-400 hover:text-cyan-400">Kết Chuyển</a>
+            </div>
+        </div>
+    </header>
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 bg-pink-600/20 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-pink-400">Khóa / Mở Sổ Kế Toán</h1>
+                    <p class="text-xs text-slate-400">Điều 13 TT 99/2025/TT-BTC — Quản lý trạng thái khóa sổ từng kỳ</p>
+                </div>
+            </div>
+            <p class="text-slate-400 text-sm mt-4 leading-relaxed">Sau khi hoàn tất kết chuyển và kiểm tra số liệu, kế toán thực hiện khóa sổ kỳ kế toán để ngăn chặn sửa đổi dữ liệu. Mở lại phải có lý do và phê duyệt theo Điều 13.</p>
+        </div>
+        <div class="glassmorphism rounded-xl p-6 md:p-8">
+            <div class="grid grid-cols-5 gap-2 px-4 py-2 text-xs font-semibold text-slate-400 border-b border-slate-700">
+                <div>Kỳ</div><div>Trạng thái</div><div>Ngày khóa</div><div>Người phê duyệt / Lý do</div><div>Thao tác</div>
+            </div>
+            <div class="space-y-2 mt-3" id="lock-period-rows">
+                <p class="text-slate-500 text-xs italic p-4">Đang tải danh sách kỳ kế toán...</p>
+            </div>
+            <div class="mt-6 p-4 bg-blue-900/10 rounded-lg border border-blue-700/30 text-xs text-slate-400 leading-relaxed">
+                <p class="text-blue-300 font-semibold mb-1">📌 Điều kiện khóa/mở sổ theo Điều 13 TT 99/2025/TT-BTC:</p>
+                <ul class="list-disc list-inside space-y-1">
+                    <li><strong>Khóa sổ:</strong> Chỉ được khóa sau khi hoàn tất kết chuyển cuối kỳ, kiểm tra cân đối, tất cả nghiệp vụ đã ghi sổ đầy đủ</li>
+                    <li><strong>Mở sổ:</strong> Chỉ khi có quyết định của cấp có thẩm quyền, phải ghi rõ lý do và người phê duyệt</li>
+                    <li>Sau khi khóa sổ, không được sửa chữa, bổ sung số liệu của kỳ đã khóa</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+    <footer class="border-t border-slate-800 py-6 mt-8">
+        <div class="max-w-7xl mx-auto px-4 text-center"><p class="text-slate-600 text-xs">Căn cứ: Thông tư 99/2025/TT-BTC ngày 30/6/2025 của Bộ Tài chính</p></div>
+    </footer>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phiếu Chi - Theo TT 99/2025/TT-BTC | POS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                </div>
+                <span class="text-sm font-semibold text-slate-300">Quay về</span>
+            </a>
+            <div class="flex items-center gap-3">
+                <a href="voucher-receive.html" class="text-sm text-slate-400 hover:text-green-400">Phiếu Thu</a>
+                <a href="voucher-import.html" class="text-sm text-slate-400 hover:text-blue-400">Phiếu Nhập Kho</a>
+                <a href="voucher-export.html" class="text-sm text-slate-400 hover:text-orange-400">Phiếu Xuất Kho</a>
+            </div>
+        </div>
+    </header>
+    <main class="max-w-5xl mx-auto px-4 py-8">
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 bg-red-600/20 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-red-400">Phiếu Chi</h1>
+                    <p class="text-xs text-slate-400">Mẫu số: 02-TT (Ban hành theo TT 99/2025/TT-BTC)</p>
+                </div>
+            </div>
+            <p class="text-slate-400 text-sm mt-4 leading-relaxed">Dùng để ghi nhận các khoản chi tiền mặt, chuyển khoản trong hoạt động POS. Áp dụng khi chi mua hàng, chi phí vận hành, chi lương, chi tạm ứng, chi thanh toán nhà cung cấp.</p>
+        </div>
+        <div class="glassmorphism rounded-xl p-6 md:p-8">
+            <form id="form-pay" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm mb-2 text-slate-300">Đối tác (Nhà cung cấp)</label>
+                        <div class="flex gap-2">
+                            <select id="pay-partner" class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 text-sm"><option value="">-- Không --</option></select>
+                            <button type="button" onclick="showAddPartnerModal('pay')" class="bg-slate-700 hover:bg-slate-600 px-3 rounded-lg transition-all text-red-400" title="Thêm đối tác">+</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-2 text-slate-300">Ngày lập phiếu</label>
+                        <input type="date" id="pay-date" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-2 text-slate-300">Phương thức chi</label>
+                        <select id="pay-phuong-thuc-tt" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 text-sm">
+                            <option value="111">Tiền mặt (TK 111)</option>
+                            <option value="112">Chuyển khoản (TK 112)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-2 text-slate-300">Số tham chiếu</label>
+                        <input type="text" id="pay-ref" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 text-sm" placeholder="VD: PO-2025001">
+                    </div>
+                </div>
+                <div class="p-4 bg-red-900/10 rounded-lg border border-red-700/30">
+                    <p class="text-xs text-red-300 mb-3 font-semibold">⚡ Thêm nhanh theo mẫu định khoản</p>
+                    <div class="flex gap-3 items-end">
+                        <div class="flex-1">
+                            <label class="block text-xs mb-1 text-slate-400">Chọn loại chi mẫu</label>
+                            <select id="pay-loai-chi" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-500"><option value="">-- Tự chọn --</option></select>
+                        </div>
+                        <button type="button" onclick="quickAddPayItem()" class="bg-red-600/20 hover:bg-red-600/30 text-red-300 px-4 py-2 rounded-lg transition-all border border-red-600/30 text-sm font-semibold whitespace-nowrap">+ Thêm dòng mẫu</button>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-semibold text-slate-200 text-sm">📋 Chi tiết các khoản chi</h3>
+                        <button type="button" onclick="addPayItemRow()" class="bg-red-600/20 hover:bg-red-600/30 text-red-300 px-3 py-1.5 rounded-lg transition-all border border-red-600/30 text-sm font-semibold flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                            Thêm dòng
+                        </button>
+                    </div>
+                    <div id="pay-items" class="space-y-3"></div>
+                    <div class="mt-3 p-4 bg-slate-800/50 rounded-lg flex justify-between items-center border border-red-700/20">
+                        <span class="text-slate-400 text-sm">💰 Tổng tiền chi:</span>
+                        <span id="pay-total-amount" class="font-mono font-bold text-red-400 text-xl">0 ₫</span>
+                    </div>
+                </div>
+                <div id="pay-preview" class="p-4 bg-slate-800/70 rounded-lg text-sm border border-slate-700">
+                    <p class="text-slate-400 mb-2 font-semibold">📊 Xem trước định khoản (căn cứ ghi sổ)</p>
+                    <div id="pay-preview-content"><p class="text-slate-300 italic text-xs">Vui lòng thêm ít nhất một dòng để xem trước!</p></div>
+                </div>
+                <div class="p-4 bg-blue-900/10 rounded-lg border border-blue-700/30 text-xs text-slate-400 leading-relaxed">
+                    <p class="text-blue-300 font-semibold mb-1">📌 Lưu ý theo TT 99/2025/TT-BTC:</p>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li>Phiếu chi phải có đầy đủ thông tin: Tên, số hiệu, ngày lập, đối tác, nội dung, số tiền</li>
+                        <li>Khi chi mua hàng có hóa đơn GTGT: Nợ TK 156, Nợ TK 133 / Có TK 111,112</li>
+                        <li>Kèm theo chứng từ gốc: hóa đơn, hợp đồng, đề nghị thanh toán, bảng kê</li>
+                    </ul>
+                </div>
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 py-4 rounded-lg font-semibold text-lg transition-all flex items-center justify-center gap-2 shadow-lg shadow-red-900/30">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    Lưu Phiếu Chi
+                </button>
+            </form>
+        </div>
+    </main>
+    <div id="partner-modal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+        <div class="glassmorphism rounded-xl p-6 max-w-md w-full mx-4 fade-in">
+            <h3 class="text-lg font-bold mb-4 text-white">Thêm đối tác mới</h3>
+            <form id="form-add-partner" class="space-y-4">
+                <div><label class="block text-sm mb-2 text-slate-300">Tên đối tác</label><input type="text" id="partner-name" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-cyan-500 text-sm" placeholder="Nhập tên đối tác"></div>
+                <div><label class="block text-sm mb-2 text-slate-300">Loại đối tác</label><select id="partner-type" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-cyan-500 text-sm"><option value="customer">Khách hàng</option><option value="supplier">Nhà cung cấp</option><option value="both">Cả hai</option></select></div>
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="hideAddPartnerModal()" class="flex-1 bg-slate-700 hover:bg-slate-600 py-3 rounded-lg font-semibold transition-all text-sm">Hủy</button>
+                    <button type="submit" class="flex-1 bg-cyan-600 hover:bg-cyan-700 py-3 rounded-lg font-semibold transition-all text-sm">Thêm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <footer class="border-t border-slate-800 py-6 mt-8">
+        <div class="max-w-7xl mx-auto px-4 text-center"><p class="text-slate-600 text-xs">Theo Thông tư 99/2025/TT-BTC ngày 30/6/2025 của Bộ Tài chính</p></div>
+    </footer>
+    <script src="app.js"></script>
+</body>
+</html>

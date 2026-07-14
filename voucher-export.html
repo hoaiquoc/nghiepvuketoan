@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phiếu Xuất Kho - Theo TT 99/2025/TT-BTC | POS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                </div>
+                <span class="text-sm font-semibold text-slate-300">Quay về</span>
+            </a>
+            <div class="flex items-center gap-3 text-sm">
+                <a href="voucher-receive.html" class="text-slate-400 hover:text-green-400">Phiếu Thu</a>
+                <a href="voucher-pay.html" class="text-slate-400 hover:text-red-400">Phiếu Chi</a>
+                <a href="voucher-import.html" class="text-slate-400 hover:text-blue-400">Phiếu Nhập Kho</a>
+            </div>
+        </div>
+    </header>
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 bg-orange-600/20 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-orange-400">Phiếu Xuất Kho</h1>
+                    <p class="text-xs text-slate-400">Mẫu số: 02-VT (Ban hành theo TT 99/2025/TT-BTC)</p>
+                </div>
+            </div>
+            <p class="text-slate-400 text-sm mt-4 leading-relaxed">Mỗi dòng sản phẩm xuất kho kèm ngay cặp định khoản Nợ/Có bên cạnh. Chọn nghiệp vụ để tự động điền TK Nợ/Có cho tất cả các dòng.</p>
+        </div>
+        <div class="glassmorphism rounded-xl p-6 md:p-8">
+            <form id="form-export" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm mb-2 text-slate-300">Khách hàng / Bộ phận</label>
+                        <div class="flex gap-2">
+                            <select id="export-partner" class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-orange-500 text-sm"><option value="">-- Không --</option></select>
+                            <button type="button" onclick="showAddPartnerModal('export')" class="bg-slate-700 hover:bg-slate-600 px-3 rounded-lg transition-all text-orange-400" title="Thêm">+</button>
+                        </div>
+                    </div>
+                    <div><label class="block text-sm mb-2 text-slate-300">Ngày xuất</label><input type="date" id="export-date" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-orange-500 text-sm"></div>
+                    <div><label class="block text-sm mb-2 text-slate-300">Kho xuất</label><select id="export-warehouse" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-orange-500 text-sm"><option>Kho tổng</option><option>Kho POS trưng bày</option><option>Kho lạnh/mát (F&B)</option></select></div>
+                    <div><label class="block text-sm mb-2 text-slate-300">Lý do xuất</label><select id="export-reason" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-orange-500 text-sm"><option>Xuất bán hàng</option><option>Trả nhà cung cấp</option><option>Điều chuyển nội bộ</option><option>Hủy / Hết hạn</option><option>Khác</option></select></div>
+                </div>
+
+                <!-- Operation type selector -->
+                <div class="bg-slate-800/40 rounded-lg p-4 border border-orange-700/30">
+                    <label class="block text-xs font-semibold text-orange-300 mb-2">🎯 Chọn loại nghiệp vụ — TK Nợ/Có tự điền cho tất cả các dòng</label>
+                    <div class="flex gap-3 items-end">
+                        <select id="export-operation-type" class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-orange-500" onchange="autoFillExportEntries()">
+                            <option value="">-- Chọn nghiệp vụ xuất kho --</option>
+                            <option value="sale">🛍️ Xuất bán hàng (giá vốn): Nợ 632 / Có 156</option>
+                            <option value="return-ncc">↩️ Xuất trả NCC: Nợ 331 / Có 156</option>
+                            <option value="destroy">🗑️ Xuất hủy/hết hạn: Nợ 642 / Có 156</option>
+                            <option value="transfer">🚚 Điều chuyển nội bộ: Nợ 156 / Có 156</option>
+                            <option value="sample">🎁 Xuất khuyến mãi: Nợ 641 / Có 156</option>
+                            <option value="custom">✏️ Tự nhập TK (không tự động)</option>
+                        </select>
+                        <button type="button" onclick="autoFillExportEntries()" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-3 rounded-lg transition-all text-sm font-semibold whitespace-nowrap">🔄 Áp dụng</button>
+                    </div>
+                </div>
+
+                <!-- Unified table -->
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-semibold text-slate-200 text-sm">📦 Chi tiết hàng xuất & Định khoản (mỗi dòng = 1 cặp Nợ/Có)</h3>
+                        <button type="button" onclick="addExportProductRow()" class="bg-orange-600/20 hover:bg-orange-600/30 text-orange-300 px-3 py-1.5 rounded-lg transition-all border border-orange-600/30 text-sm font-semibold flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                            Thêm dòng
+                        </button>
+                    </div>
+                    <div class="hidden md:grid grid-cols-14 gap-1 px-2 py-2 text-xs text-slate-500 font-semibold border-b border-slate-700/50">
+                        <div class="col-span-3">Sản phẩm</div>
+                        <div class="col-span-1">ĐVT</div>
+                        <div class="col-span-1">SL</div>
+                        <div class="col-span-1">Giá vốn</div>
+                        <div class="col-span-1">Thành tiền</div>
+                        <div class="col-span-2">TK Nợ</div>
+                        <div class="col-span-2">TK Có</div>
+                        <div class="col-span-2">Kho xuất</div>
+                        <div class="col-span-1"></div>
+                    </div>
+                    <div id="export-items" class="space-y-2"></div>
+                    <div class="mt-3 p-4 bg-slate-800/50 rounded-lg flex justify-between items-center border border-orange-700/20">
+                        <span class="text-slate-400 text-sm">📦 Tổng giá vốn xuất:</span>
+                        <span id="export-total-amount" class="font-mono font-bold text-orange-400 text-xl">0 ₫</span>
+                    </div>
+                    <div id="export-balance-check" class="mt-2 text-xs text-slate-500 italic text-center"></div>
+                </div>
+
+                <div id="export-preview" class="p-4 bg-slate-800/70 rounded-lg text-sm border border-slate-700">
+                    <p class="text-slate-400 mb-2 font-semibold">📊 Xem trước bút toán ghi sổ Nhật ký chung</p>
+                    <div id="export-preview-content"><p class="text-slate-300 italic text-xs">Vui lòng thêm ít nhất một dòng để xem trước!</p></div>
+                </div>
+
+                <div class="p-4 bg-blue-900/10 rounded-lg border border-blue-700/30 text-xs text-slate-400 leading-relaxed">
+                    <p class="text-blue-300 font-semibold mb-1">📌 Căn cứ TT 99/2025/TT-BTC:</p>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li><strong>Điều 15:</strong> Chứng từ kế toán phải có đầy đủ các chỉ tiêu bắt buộc</li>
+                        <li><strong>Phụ lục IV:</strong> Phiếu xuất kho số 02-VT làm căn cứ ghi sổ kế toán</li>
+                        <li><strong>Điều 28:</strong> Giá gốc hàng xuất kho tính theo FIFO, BQGQ hoặc thực tế đích danh</li>
+                    </ul>
+                </div>
+
+                <button type="submit" class="w-full bg-orange-600 hover:bg-orange-700 py-4 rounded-lg font-semibold text-lg transition-all flex items-center justify-center gap-2 shadow-lg shadow-orange-900/30">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    Lưu Phiếu Xuất Kho
+                </button>
+            </form>
+        </div>
+    </main>
+    <div id="partner-modal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+        <div class="glassmorphism rounded-xl p-6 max-w-md w-full mx-4 fade-in">
+            <h3 class="text-lg font-bold mb-4 text-white">Thêm đối tác mới</h3>
+            <form id="form-add-partner" class="space-y-4">
+                <div><label class="block text-sm mb-2 text-slate-300">Tên đối tác</label><input type="text" id="partner-name" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-cyan-500 text-sm" placeholder="Nhập tên đối tác"></div>
+                <div><label class="block text-sm mb-2 text-slate-300">Loại đối tác</label><select id="partner-type" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-cyan-500 text-sm"><option value="customer">Khách hàng</option><option value="supplier">Nhà cung cấp</option><option value="both">Cả hai</option></select></div>
+                <div class="flex gap-3 pt-2"><button type="button" onclick="hideAddPartnerModal()" class="flex-1 bg-slate-700 hover:bg-slate-600 py-3 rounded-lg font-semibold transition-all text-sm">Hủy</button><button type="submit" class="flex-1 bg-cyan-600 hover:bg-cyan-700 py-3 rounded-lg font-semibold transition-all text-sm">Thêm</button></div>
+            </form>
+        </div>
+    </div>
+    <footer class="border-t border-slate-800 py-6 mt-8">
+        <div class="max-w-7xl mx-auto px-4 text-center"><p class="text-slate-600 text-xs">Căn cứ: Thông tư 99/2025/TT-BTC ngày 30/6/2025 của Bộ Tài chính</p></div>
+    </footer>
+    <script src="app.js"></script>
+</body>
+</html>
