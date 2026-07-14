@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo Lưu Chuyển Tiền Tệ - Theo TT 99/2025/TT-BTC | POS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                </div>
+                <span class="text-sm font-semibold text-slate-300">Quay về</span>
+            </a>
+            <div class="flex items-center gap-3 text-sm">
+                <a href="receivables.html" class="text-slate-400 hover:text-cyan-400">Công nợ phải thu</a>
+                <a href="payables.html" class="text-slate-400 hover:text-cyan-400">Công nợ phải trả</a>
+                <a href="journal.html" class="text-slate-400 hover:text-teal-400">Sổ Nhật Ký</a>
+            </div>
+        </div>
+    </header>
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 bg-indigo-600/20 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-indigo-400">Báo cáo Lưu Chuyển Tiền Tệ</h1>
+                    <p class="text-xs text-slate-400">Theo phương pháp trực tiếp — Điều 68 TT 99/2025/TT-BTC</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div class="glassmorphism rounded-xl p-5 bg-emerald-900/20 border border-emerald-700/30">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-slate-400 text-xs">Tiền thu từ HĐKD</p>
+                        <p class="text-xl font-bold text-emerald-400 font-mono" id="cf-operating-in">0 ₫</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glassmorphism rounded-xl p-5 bg-red-900/20 border border-red-700/30">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-slate-400 text-xs">Tiền chi cho HĐKD</p>
+                        <p class="text-xl font-bold text-red-400 font-mono" id="cf-operating-out">0 ₫</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glassmorphism rounded-xl p-5 bg-blue-900/20 border border-blue-700/30">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-slate-400 text-xs">Lưu chuyển thuần HĐKD</p>
+                        <p class="text-xl font-bold text-blue-400 font-mono" id="cf-operating-net">0 ₫</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glassmorphism rounded-xl p-5 bg-amber-900/20 border border-amber-700/30">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0-2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-slate-400 text-xs">Tiền & TĐ tiền cuối kỳ</p>
+                        <p class="text-xl font-bold text-amber-400 font-mono" id="cf-ending-balance">0 ₫</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="glassmorphism rounded-xl p-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-xs mb-1 text-slate-400">Từ ngày</label>
+                    <input type="date" id="cf-from" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" onchange="updateCashFlow()">
+                </div>
+                <div>
+                    <label class="block text-xs mb-1 text-slate-400">Đến ngày</label>
+                    <input type="date" id="cf-to" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" onchange="updateCashFlow()">
+                </div>
+                <div>
+                    <label class="block text-xs mb-1 text-slate-400">Phân loại</label>
+                    <select id="cf-category" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" onchange="updateCashFlow()">
+                        <option value="all">Tất cả hoạt động</option>
+                        <option value="operating">Hoạt động kinh doanh</option>
+                        <option value="investing">Hoạt động đầu tư</option>
+                        <option value="financing">Hoạt động tài chính</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cash Flow Statement (Direct Method) -->
+        <div class="glassmorphism rounded-xl p-6 md:p-8 mb-6">
+            <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                <span class="w-2 h-2 bg-indigo-400 rounded-full inline-block"></span>
+                I. Lưu chuyển tiền từ hoạt động kinh doanh
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-slate-800 text-slate-300">
+                        <tr>
+                            <th class="px-4 py-3 text-left">Chỉ tiêu</th>
+                            <th class="px-4 py-3 text-left">Mã số</th>
+                            <th class="px-4 py-3 text-right">Kỳ này</th>
+                            <th class="px-4 py-3 text-right">Kỳ trước</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cf-operating-rows" class="divide-y divide-slate-700"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="glassmorphism rounded-xl p-6 md:p-8 mb-6">
+            <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                <span class="w-2 h-2 bg-blue-400 rounded-full inline-block"></span>
+                II. Lưu chuyển tiền từ hoạt động đầu tư
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-slate-800 text-slate-300">
+                        <tr>
+                            <th class="px-4 py-3 text-left">Chỉ tiêu</th>
+                            <th class="px-4 py-3 text-left">Mã số</th>
+                            <th class="px-4 py-3 text-right">Kỳ này</th>
+                            <th class="px-4 py-3 text-right">Kỳ trước</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cf-investing-rows" class="divide-y divide-slate-700"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="glassmorphism rounded-xl p-6 md:p-8 mb-6">
+            <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                <span class="w-2 h-2 bg-purple-400 rounded-full inline-block"></span>
+                III. Lưu chuyển tiền từ hoạt động tài chính
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-slate-800 text-slate-300">
+                        <tr>
+                            <th class="px-4 py-3 text-left">Chỉ tiêu</th>
+                            <th class="px-4 py-3 text-left">Mã số</th>
+                            <th class="px-4 py-3 text-right">Kỳ này</th>
+                            <th class="px-4 py-3 text-right">Kỳ trước</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cf-financing-rows" class="divide-y divide-slate-700"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Chi tiết dòng tiền theo giao dịch -->
+        <div class="glassmorphism rounded-xl p-6 md:p-8">
+            <h2 class="text-lg font-bold text-white mb-4">📋 Chi tiết dòng tiền theo chứng từ</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-slate-800 text-slate-300">
+                        <tr>
+                            <th class="px-4 py-3 text-left w-24">Ngày</th>
+                            <th class="px-4 py-3 text-left w-32">Số CT</th>
+                            <th class="px-4 py-3 text-left">Diễn giải</th>
+                            <th class="px-4 py-3 text-left w-24">Loại</th>
+                            <th class="px-4 py-3 text-right w-40">Tiền vào</th>
+                            <th class="px-4 py-3 text-right w-40">Tiền ra</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cf-detail-rows" class="divide-y divide-slate-700">
+                        <tr><td colspan="6" class="px-4 py-8 text-center text-slate-500 text-xs italic">Đang tải dữ liệu...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <footer class="border-t border-slate-800 py-6 mt-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-slate-600 text-xs">Căn cứ: Thông tư 99/2025/TT-BTC ngày 30/6/2025 của Bộ Tài chính — Báo cáo lưu chuyển tiền tệ theo phương pháp trực tiếp</p>
+        </div>
+    </footer>
+    <script src="app.js"></script>
+</body>
+</html>

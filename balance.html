@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Cân Đối Tài Khoản - Theo TT 99/2025/TT-BTC | POS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                </div>
+                <span class="text-sm font-semibold text-slate-300">Quay về</span>
+            </a>
+            <div class="flex items-center gap-3 text-sm">
+                <a href="cash-flow.html" class="text-slate-400 hover:text-indigo-400">Dòng tiền</a>
+                <a href="receivables.html" class="text-slate-400 hover:text-green-400">Phải thu</a>
+                <a href="payables.html" class="text-slate-400 hover:text-red-400">Phải trả</a>
+                <a href="journal.html" class="text-slate-400 hover:text-teal-400">Sổ Nhật Ký</a>
+            </div>
+        </div>
+    </header>
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 bg-amber-600/20 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-amber-400">Bảng Cân Đối Tài Khoản</h1>
+                    <p class="text-xs text-slate-400">Tổng hợp số dư và phát sinh tất cả tài khoản — Điều 26 TT 99/2025/TT-BTC</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div class="glassmorphism rounded-xl p-5 bg-blue-900/20 border border-blue-700/30">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-slate-400 text-xs">Tổng Tài sản</p>
+                        <p class="text-xl font-bold text-blue-400 font-mono" id="tb-total-assets">0 ₫</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glassmorphism rounded-xl p-5 bg-red-900/20 border border-red-700/30">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-slate-400 text-xs">Tổng Nợ phải trả</p>
+                        <p class="text-xl font-bold text-red-400 font-mono" id="tb-total-liabilities">0 ₫</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glassmorphism rounded-xl p-5 bg-green-900/20 border border-green-700/30">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-slate-400 text-xs">Vốn chủ sở hữu</p>
+                        <p class="text-xl font-bold text-green-400 font-mono" id="tb-total-equity">0 ₫</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glassmorphism rounded-xl p-5 bg-purple-900/20 border border-purple-700/30">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-slate-400 text-xs">Chênh lệch</p>
+                        <p class="text-xl font-bold text-purple-400 font-mono" id="tb-diff">0 ₫</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="glassmorphism rounded-xl p-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-xs mb-1 text-slate-400">Từ ngày</label>
+                    <input type="date" id="tb-from" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500" onchange="updateTrialBalance()">
+                </div>
+                <div>
+                    <label class="block text-xs mb-1 text-slate-400">Đến ngày</label>
+                    <input type="date" id="tb-to" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500" onchange="updateTrialBalance()">
+                </div>
+                <div>
+                    <label class="block text-xs mb-1 text-slate-400">Nhóm tài khoản</label>
+                    <select id="tb-category" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500" onchange="updateTrialBalance()">
+                        <option value="all">Tất cả tài khoản</option>
+                        <option value="Tài sản">Tài sản</option>
+                        <option value="Nguồn vốn">Nợ phải trả</option>
+                        <option value="Vốn chủ sở hữu">Vốn chủ sở hữu</option>
+                        <option value="Doanh thu">Doanh thu</option>
+                        <option value="Chi phí">Chi phí</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trial Balance Table -->
+        <div class="glassmorphism rounded-xl p-6 md:p-8">
+            <h2 class="text-lg font-bold text-amber-400 mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
+                </svg>
+                Bảng cân đối số phát sinh
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-slate-800 text-slate-300 sticky top-0">
+                        <tr>
+                            <th class="px-4 py-3 text-left">Mã TK</th>
+                            <th class="px-4 py-3 text-left">Tên tài khoản</th>
+                            <th class="px-4 py-3 text-center">Nhóm</th>
+                            <th class="px-4 py-3 text-right">Số dư đầu kỳ</th>
+                            <th class="px-4 py-3 text-right">Phát sinh Nợ</th>
+                            <th class="px-4 py-3 text-right">Phát sinh Có</th>
+                            <th class="px-4 py-3 text-right">Số dư cuối kỳ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tb-rows" class="divide-y divide-slate-700">
+                        <tr><td colspan="7" class="px-4 py-8 text-center text-slate-500 text-xs italic">Đang tải dữ liệu...</td></tr>
+                    </tbody>
+                    <tfoot id="tb-foot" class="bg-slate-800/50 font-semibold text-sm"></tfoot>
+                </table>
+            </div>
+        </div>
+    </main>
+    <footer class="border-t border-slate-800 py-6 mt-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-slate-600 text-xs">Căn cứ: Thông tư 99/2025/TT-BTC ngày 30/6/2025 của Bộ Tài chính — Điều 26: Bảng cân đối số phát sinh</p>
+        </div>
+    </footer>
+    <script src="app.js"></script>
+</body>
+</html>

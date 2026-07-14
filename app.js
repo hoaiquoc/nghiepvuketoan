@@ -74,22 +74,30 @@ function getDefaultStore() {
                 { id: 's001', number: 'PT01/0001', date: '2026-01-05', partner: 'Công ty CP Bán lẻ ABC', partnerId: 'pn002', items: [{ desc: 'Thu tiền bán hàng POS', debit: '111', credit: '511', amount: 25000000 }, { desc: 'Thuế GTGT đầu ra', debit: '111', credit: '3331', amount: 2500000 }], totalAmount: 27500000, createdAt: '2026-01-05' },
                 { id: 's002', number: 'PT01/0002', date: '2026-01-10', partner: 'Nhà hàng F&B Express', partnerId: 'pn004', items: [{ desc: 'Thu tiền bán hàng CK', debit: '112', credit: '511', amount: 15000000 }, { desc: 'Thuế GTGT đầu ra', debit: '112', credit: '3331', amount: 1500000 }], totalAmount: 16500000, createdAt: '2026-01-10' },
                 { id: 's003', number: 'PT01/0003', date: '2026-01-15', partner: '', partnerId: '', items: [{ desc: 'Thu hồi tạm ứng', debit: '111', credit: '141', amount: 5000000 }], totalAmount: 5000000, createdAt: '2026-01-15' },
+                { id: 's014', number: 'PT01/0004', date: '2026-01-25', partner: 'Công ty CP Bán lẻ ABC', partnerId: 'pn002', items: [{ desc: 'Khách hàng thanh toán nợ', debit: '111', credit: '131', amount: 25000000 }], totalAmount: 25000000, createdAt: '2026-01-25' },
+                { id: 's015', number: 'PT01/0005', date: '2026-02-05', partner: 'Nhà hàng F&B Express', partnerId: 'pn004', items: [{ desc: 'Thu tiền bán hàng F&B tháng 2', debit: '111', credit: '511', amount: 32000000 }, { desc: 'Thuế GTGT đầu ra 8%', debit: '111', credit: '3331', amount: 2560000 }], totalAmount: 34560000, createdAt: '2026-02-05' },
+                { id: 's016', number: 'PT01/0006', date: '2026-02-15', partner: 'Công ty CP Bán lẻ ABC', partnerId: 'pn002', items: [{ desc: 'Thu nốt tiền hàng tháng 1', debit: '112', credit: '131', amount: 12500000 }], totalAmount: 12500000, createdAt: '2026-02-15' },
             ],
             pay: [
                 { id: 's004', number: 'PC01/0001', date: '2026-01-06', partner: 'Công ty TNHH POS Việt Nam', partnerId: 'pn001', items: [{ desc: 'Mua hàng hóa nhập kho', debit: '156', credit: '111', amount: 35000000 }], totalAmount: 35000000, createdAt: '2026-01-06' },
                 { id: 's005', number: 'PC01/0002', date: '2026-01-12', partner: 'Công ty TNHH Thực phẩm XYZ', partnerId: 'pn003', items: [{ desc: 'Mua CCDC văn phòng', debit: '153', credit: '111', amount: 3000000 }, { desc: 'Thuế GTGT được khấu trừ', debit: '133', credit: '111', amount: 300000 }], totalAmount: 3300000, createdAt: '2026-01-12' },
                 { id: 's006', number: 'PC01/0003', date: '2026-01-20', partner: '', partnerId: '', items: [{ desc: 'Trả lương tháng 01/2026', debit: '334', credit: '111', amount: 45000000 }], totalAmount: 45000000, createdAt: '2026-01-20' },
                 { id: 's007', number: 'PC01/0004', date: '2026-01-25', partner: '', partnerId: '', items: [{ desc: 'Thanh toán tiền thuê mặt bằng', debit: '642', credit: '111', amount: 15000000 }, { desc: 'Thuế GTGT được khấu trừ', debit: '133', credit: '111', amount: 1500000 }], totalAmount: 16500000, createdAt: '2026-01-25' },
+                { id: 's017', number: 'PC01/0005', date: '2026-02-01', partner: 'Công ty TNHH POS Việt Nam', partnerId: 'pn001', items: [{ desc: 'Thanh toán nợ NCC tháng 1', debit: '331', credit: '111', amount: 25000000 }], totalAmount: 25000000, createdAt: '2026-02-01' },
+                { id: 's018', number: 'PC01/0006', date: '2026-02-10', partner: 'Công ty TNHH Thực phẩm XYZ', partnerId: 'pn003', items: [{ desc: 'Thanh toán 1 phần nợ NCC', debit: '331', credit: '111', amount: 12000000 }], totalAmount: 12000000, createdAt: '2026-02-10' },
+                { id: 's019', number: 'PC01/0007', date: '2026-02-20', partner: '', partnerId: '', items: [{ desc: 'Trả lương tháng 02/2026', debit: '334', credit: '111', amount: 45000000 }], totalAmount: 45000000, createdAt: '2026-02-20' },
             ],
             import: [
                 { id: 's008', number: 'PNK01/0001', date: '2026-01-06', partner: 'Công ty TNHH POS Việt Nam', partnerId: 'pn001', rows: [{ productName: 'Máy POS cầm tay MT-200', qty: 10, price: 2800000, amount: 28000000, debit: '156', credit: '331', warehouse: 'Kho tổng' }], totalAmount: 28000000, createdAt: '2026-01-06' },
                 { id: 's009', number: 'PNK01/0002', date: '2026-01-12', partner: 'Công ty TNHH Thực phẩm XYZ', partnerId: 'pn003', rows: [{ productName: 'NVL F&B (cà phê, sữa, trà...)', qty: 1, price: 12000000, amount: 12000000, debit: '152', credit: '331', warehouse: 'Kho lạnh/mát (F&B)' }], totalAmount: 12000000, createdAt: '2026-01-12' },
                 { id: 's010', number: 'PNK01/0003', date: '2026-01-18', partner: 'Công ty CP Bán lẻ ABC', partnerId: 'pn002', rows: [{ productName: 'Nhập hàng trả lại', qty: 2, price: 1200000, amount: 2400000, debit: '156', credit: '632', warehouse: 'Kho POS trưng bày' }], totalAmount: 2400000, createdAt: '2026-01-18' },
+                { id: 's020', number: 'PNK01/0004', date: '2026-02-05', partner: 'Công ty TNHH POS Việt Nam', partnerId: 'pn001', rows: [{ productName: 'Máy quét mã vạch BS-100', qty: 20, price: 950000, amount: 19000000, debit: '156', credit: '331', warehouse: 'Kho tổng' }], totalAmount: 19000000, createdAt: '2026-02-05' },
             ],
             export: [
-                { id: 's011', number: 'PXK01/0001', date: '2026-01-05', partner: 'Công ty CP Bán lẻ ABC', partnerId: 'pn002', reason: 'Xuất bán hàng', rows: [{ productName: 'Máy POS cầm tay MT-200', qty: 5, price: 2800000, amount: 14000000, debit: '632', credit: '156', warehouse: 'Kho tổng' }], totalAmount: 14000000, createdAt: '2026-01-05' },
-                { id: 's012', number: 'PXK01/0002', date: '2026-01-10', partner: 'Nhà hàng F&B Express', partnerId: 'pn004', reason: 'Xuất bán hàng', rows: [{ productName: 'NVL F&B', qty: 1, price: 6000000, amount: 6000000, debit: '632', credit: '152', warehouse: 'Kho lạnh/mát (F&B)' }], totalAmount: 6000000, createdAt: '2026-01-10' },
+                { id: 's011', number: 'PXK01/0001', date: '2026-01-05', partner: 'Công ty CP Bán lẻ ABC', partnerId: 'pn002', reason: 'Xuất bán hàng', rows: [{ productName: 'Máy POS cầm tay MT-200', qty: 5, price: 2800000, amount: 14000000, debit: '131', credit: '156', warehouse: 'Kho tổng' }, { productName: 'Máy quét mã vạch BS-100', qty: 3, price: 950000, amount: 2850000, debit: '131', credit: '156', warehouse: 'Kho tổng' }], totalAmount: 16850000, createdAt: '2026-01-05' },
+                { id: 's012', number: 'PXK01/0002', date: '2026-01-10', partner: 'Nhà hàng F&B Express', partnerId: 'pn004', reason: 'Xuất bán hàng', rows: [{ productName: 'NVL F&B', qty: 1, price: 6000000, amount: 6000000, debit: '131', credit: '152', warehouse: 'Kho lạnh/mát (F&B)' }], totalAmount: 6000000, createdAt: '2026-01-10' },
                 { id: 's013', number: 'PXK01/0003', date: '2026-01-22', partner: '', partnerId: '', reason: 'Hủy / Hết hạn', rows: [{ productName: 'Giấy in nhiệt (hết hạn)', qty: 2, price: 320000, amount: 640000, debit: '642', credit: '156', warehouse: 'Kho tổng' }], totalAmount: 640000, createdAt: '2026-01-22' },
+                { id: 's021', number: 'PXK01/0004', date: '2026-02-05', partner: 'Nhà hàng F&B Express', partnerId: 'pn004', reason: 'Xuất bán F&B tháng 2', rows: [{ productName: 'NVL F&B tháng 2', qty: 1, price: 14000000, amount: 14000000, debit: '131', credit: '152', warehouse: 'Kho lạnh/mát (F&B)' }], totalAmount: 14000000, createdAt: '2026-02-05' },
             ],
         },
         voucherCounters: { receive: 0, pay: 0, import: 0, export: 0 },
@@ -103,12 +111,34 @@ function loadStore() {
         if (raw) {
             const parsed = JSON.parse(raw);
             const def = getDefaultStore();
-            // Always refresh products to get latest fields (type, costPrice, etc.)
+            // Always refresh products/accounts/warehouses to get latest fields
             parsed.products = def.products;
             parsed.accounts = def.accounts;
             parsed.warehouses = def.warehouses;
             for (const k of Object.keys(def)) {
-                if (!(k in parsed)) parsed[k] = def[k];
+                if (!(k in parsed)) { parsed[k] = def[k]; }
+            }
+            // Merge seed vouchers: ensure each seed voucher exists (by id) in stored data
+            if (!parsed.vouchers) parsed.vouchers = { receive:[], pay:[], import:[], export:[] };
+            let mergedAny = false;
+            ['receive','pay','import','export'].forEach(type => {
+                if (!Array.isArray(parsed.vouchers[type])) parsed.vouchers[type] = [];
+                const storedIds = new Set(parsed.vouchers[type].map(v => v.id));
+                (def.vouchers[type] || []).forEach(seed => {
+                    if (!storedIds.has(seed.id)) {
+                        parsed.vouchers[type].push(seed);
+                        mergedAny = true;
+                    }
+                });
+            });
+            // Also merge partner data if missing
+            if (!parsed.partners) parsed.partners = [];
+            const storedPartnerIds = new Set(parsed.partners.map(p => p.id));
+            (def.partners || []).forEach(p => {
+                if (!storedPartnerIds.has(p.id)) { parsed.partners.push(p); mergedAny = true; }
+            });
+            if (mergedAny) {
+                saveStore(parsed);
             }
             return parsed;
         }
@@ -710,6 +740,375 @@ function saveClosingConfig() {
     store.closingConfigs = configs; saveStore(store); alert('✅ Đã lưu ' + configs.length + ' cấu hình kết chuyển.');
 }
 
+// ==================== BÁO CÁO LƯU CHUYỂN TIỀN TỆ ====================
+function initCashFlowPage() {
+    store = getDefaultStore();
+    document.getElementById('cf-from').value = '2026-01-01';
+    document.getElementById('cf-to').value = todayStr();
+    updateCashFlow();
+}
+function getCashFlowLineItems() {
+    const from = document.getElementById('cf-from')?.value || '';
+    const to = document.getElementById('cf-to')?.value || '';
+    const cat = document.getElementById('cf-category')?.value || 'all';
+    let cashIn = {}, cashOut = {};
+    const allVouchers = [
+        ...(store.vouchers.receive||[]).map(v=>({...v, source: 'receive'})),
+        ...(store.vouchers.pay||[]).map(v=>({...v, source: 'pay'})),
+        ...(store.vouchers.import||[]).map(v=>({...v, source: 'import'})),
+        ...(store.vouchers.export||[]).map(v=>({...v, source: 'export'}))
+    ];
+
+    function add(accId, amount, isIn) {
+        if (isIn) cashIn[accId] = (cashIn[accId]||0) + amount;
+        else cashOut[accId] = (cashOut[accId]||0) + amount;
+    }
+    function isCashCredit(accId) { return accId === '111' || accId === '112'; }
+    function isCashDebit(accId) { return accId === '111' || accId === '112'; }
+    function classifyActivity(accId) {
+        if (accId === '511' || accId === '3331' || accId === '632' || accId === '641' || accId === '642' || accId === '131' || accId === '331' || accId === '334' || accId === '133' || accId === '152' || accId === '153' || accId === '156') return 'operating';
+        if (accId === '421' || accId === '411') return 'financing';
+        return 'operating';
+    }
+
+    allVouchers.forEach(v => {
+        const dt = v.date||'';
+        if (from && dt < from) return; if (to && dt > to) return;
+        (v.entries||v.items||v.rows||[]).forEach(e => {
+            const db = e.debit||'', cr = e.credit||'', amt = e.amount||0;
+            if (isCashDebit(db)) add(cr, amt, true);
+            if (isCashCredit(cr)) add(db, amt, false);
+        });
+    });
+
+    const opItems = [
+        { code:'01', name:'Tiền thu từ bán hàng, cung cấp dịch vụ', getVal(){ return cashIn['511']||0; } },
+        { code:'02', name:'Tiền thu từ các khoản phải thu', getVal(){ return cashIn['131']||0; } },
+        { code:'03', name:'Tiền chi trả cho người bán', getVal(){ return -(cashOut['331']||0); } },
+        { code:'04', name:'Tiền chi trả cho người lao động', getVal(){ return -(cashOut['334']||0); } },
+        { code:'05', name:'Tiền chi mua hàng tồn kho', getVal(){ return -(cashOut['156']||0)-(cashOut['152']||0)-(cashOut['153']||0); } },
+        { code:'06', name:'Tiền chi trả chi phí quản lý kinh doanh', getVal(){ return -(cashOut['642']||0); } },
+        { code:'07', name:'Tiền chi nộp thuế', getVal(){ return -(cashOut['3331']||0); } },
+        { code:'20', name:'Lưu chuyển tiền thuần từ HĐKD', getVal(){ let sum=0; opItems.filter(x=>x.getVal&&x.code!=='20').forEach(x=>sum+=x.getVal()); return sum; }, bold:true }
+    ];
+    const invItems = [
+        { code:'21', name:'Tiền chi mua sắm TSCĐ', getVal(){ return 0; } },
+        { code:'22', name:'Tiền thu từ thanh lý TSCĐ', getVal(){ return 0; } },
+        { code:'30', name:'Lưu chuyển tiền thuần từ HĐ đầu tư', getVal(){ return invItems.filter(x=>x.code!=='30'&&x.getVal).reduce((s,x)=>s+x.getVal(),0); }, bold:true }
+    ];
+    const finItems = [
+        { code:'31', name:'Tiền thu từ phát hành cổ phiếu, nhận góp vốn', getVal(){ return cashIn['411']||0; } },
+        { code:'32', name:'Tiền chi trả cổ tức, lợi nhuận', getVal(){ return -(cashOut['421']||0); } },
+        { code:'40', name:'Lưu chuyển tiền thuần từ HĐ tài chính', getVal(){ return finItems.filter(x=>x.code!=='40'&&x.getVal).reduce((s,x)=>s+x.getVal(),0); }, bold:true }
+    ];
+
+    return { opItems, invItems, finItems, cashIn, cashOut };
+}
+function updateCashFlow() {
+    const data = getCashFlowLineItems();
+    const cat = document.getElementById('cf-category')?.value || 'all';
+    function render(rows, tbodyId) {
+        const tbody = document.getElementById(tbodyId);
+        if (!tbody) return;
+        let html = '';
+        rows.forEach(r => {
+            const val = r.getVal ? r.getVal() : 0;
+            const cls = r.bold ? 'font-bold bg-slate-700/30' : '';
+            html += `<tr class="${cls} hover:bg-slate-800/50"><td class="px-4 py-2">${r.name}</td><td class="px-4 py-2 text-slate-400 font-mono">${r.code}</td><td class="px-4 py-2 text-right font-mono ${val>=0?'text-emerald-400':'text-red-400'}">${formatCurrency(val)}</td><td class="px-4 py-2 text-right font-mono text-slate-500">0 ₫</td></tr>`;
+        });
+        tbody.innerHTML = html || '<tr><td colspan="4" class="px-4 py-8 text-center text-slate-500 text-xs italic">Không có dữ liệu.</td></tr>';
+    }
+    render(data.opItems, 'cf-operating-rows');
+    render(data.invItems, 'cf-investing-rows');
+    render(data.finItems, 'cf-financing-rows');
+
+    const opIn = data.opItems.filter(x=>x.getVal&&x.code!=='20').reduce((s,x)=>{const v=x.getVal();return s+(v>0?v:0);},0);
+    const opOut = data.opItems.filter(x=>x.getVal&&x.code!=='20').reduce((s,x)=>{const v=x.getVal();return s+(v<0?v:0);},0);
+    const opNet = data.opItems.find(x=>x.code==='20')?.getVal()||0;
+    const finNet = (data.finItems.find(x=>x.code==='40')?.getVal()||0) + (data.invItems.find(x=>x.code==='30')?.getVal()||0);
+    const endBal = opNet + finNet;
+
+    document.getElementById('cf-operating-in').textContent = formatCurrency(opIn);
+    document.getElementById('cf-operating-out').textContent = formatCurrency(Math.abs(opOut));
+    document.getElementById('cf-operating-net').textContent = formatCurrency(opNet);
+    document.getElementById('cf-ending-balance').textContent = formatCurrency(endBal);
+
+    // Detail rows
+    const detailBody = document.getElementById('cf-detail-rows');
+    if (!detailBody) return;
+    const from = document.getElementById('cf-from')?.value||'';
+    const to = document.getElementById('cf-to')?.value||'';
+    let allTxns = [];
+    const addTxn = (dt, num, desc, type, inAmt, outAmt) => { allTxns.push({dt, num, desc, type, inAmt, outAmt}); };
+    function isCash(accId) { return accId === '111' || accId === '112'; }
+    ['receive','pay','import','export'].forEach(tp => {
+        (store.vouchers[tp]||[]).forEach(v => {
+            const dt = v.date||'';
+            if (from && dt < from) return; if (to && dt > to) return;
+            (v.entries||v.items||v.rows||[]).forEach(e => {
+                const db = e.debit||'', cr = e.credit||'', amt = e.amount||0;
+                if (isCash(db)) addTxn(dt, v.number||'', e.desc||v.partner||v.reason||'', 'Thu', amt, 0);
+                if (isCash(cr)) addTxn(dt, v.number||'', e.desc||v.partner||v.reason||'', 'Chi', 0, amt);
+            });
+        });
+    });
+    allTxns.sort((a,b)=>a.dt.localeCompare(b.dt));
+    let detailHtml = '';
+    allTxns.forEach(t => {
+        detailHtml += `<tr class="hover:bg-slate-800/50"><td class="px-4 py-2 text-xs">${t.dt}</td><td class="px-4 py-2 text-xs">${t.num}</td><td class="px-4 py-2 text-xs">${t.desc}</td><td class="px-4 py-2 text-xs"><span class="px-2 py-0.5 rounded text-xs font-semibold ${t.type==='Thu'?'bg-green-600/20 text-green-400':'bg-red-600/20 text-red-400'}">${t.type}</span></td><td class="px-4 py-2 text-right font-mono text-xs text-emerald-400">${t.inAmt>0?formatCurrency(t.inAmt):''}</td><td class="px-4 py-2 text-right font-mono text-xs text-red-400">${t.outAmt>0?formatCurrency(t.outAmt):''}</td></tr>`;
+    });
+    detailBody.innerHTML = detailHtml || '<tr><td colspan="6" class="px-4 py-8 text-center text-slate-500 text-xs italic">Chưa có giao dịch.</td></tr>';
+}
+
+// ==================== BÁO CÁO CÔNG NỢ PHẢI THU ====================
+function initReceivablesPage() {
+    store = getDefaultStore();
+    document.getElementById('recv-from').value = '2026-01-01';
+    document.getElementById('recv-to').value = todayStr();
+    const sel = document.getElementById('recv-partner-filter');
+    if (sel) { store.partners.filter(p=>p.type==='customer'||p.type==='both').forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.name;sel.appendChild(o);}); }
+    updateReceivables();
+}
+function updateReceivables() {
+    const from = document.getElementById('recv-from')?.value||'';
+    const to = document.getElementById('recv-to')?.value||'';
+    const filterPid = document.getElementById('recv-partner-filter')?.value||'';
+    const customers = store.partners.filter(p=>p.type==='customer'||p.type==='both');
+    if (filterPid) { const fx = customers.filter(p=>p.id===filterPid); if (fx.length) customers.length=0; customers.push(...fx); }
+    const today = new Date();
+    // Collect 131 transactions
+    let partnerData = {};
+    customers.forEach(p => { partnerData[p.id] = { name: p.name, openDebit: 0, debit: 0, credit: 0, txns: [] }; });
+    ['receive','pay','import','export'].forEach(tp => {
+        (store.vouchers[tp]||[]).forEach(v => {
+            const dt = v.date||'';
+            const pid = v.partnerId||'';
+            if (from && dt < from) return;
+            if (!filterPid && customers.every(p=>p.id!==pid)) return;
+            if (filterPid && pid !== filterPid) return;
+            (v.entries||v.items||v.rows||[]).forEach(e => {
+                const db = e.debit||'', cr = e.credit||'';
+                if (db === '131' || cr === '131') {
+                    const amt = e.amount||0;
+                    if (!partnerData[pid]) partnerData[pid] = { name: v.partner||'(Không)', openDebit: 0, debit: 0, credit: 0, txns: [] };
+                    if (db === '131') partnerData[pid].debit += amt;
+                    if (cr === '131') partnerData[pid].credit += amt;
+                    // Filter by date range
+                    if (from && dt < from || to && dt > to) return;
+                    partnerData[pid].txns.push({ date: dt, number: v.number||'', desc: e.desc||v.partner||'', debitAmt: db==='131'?amt:0, creditAmt: cr==='131'?amt:0 });
+                }
+            });
+        });
+    });
+    // Render by partner
+    let pBody = '', pFoot = '', totalOpen=0, totalDebit=0, totalCredit=0, totalEnd=0;
+    Object.entries(partnerData).forEach(([pid, pd]) => {
+        if (pd.debit===0 && pd.credit===0) return;
+        const end = pd.openDebit + pd.debit - pd.credit;
+        totalOpen += pd.openDebit; totalDebit += pd.debit; totalCredit += pd.credit; totalEnd += end;
+        const status = end <= 0 ? '<span class="px-2 py-0.5 rounded text-xs bg-green-600/20 text-green-400">Đã thu hết</span>' : '<span class="px-2 py-0.5 rounded text-xs bg-yellow-600/20 text-yellow-400">Còn nợ</span>';
+        pBody += `<tr class="hover:bg-slate-800/50"><td class="px-4 py-2 text-xs">${pid}</td><td class="px-4 py-2 text-xs text-white">${pd.name}</td><td class="px-4 py-2 text-right font-mono text-xs">${formatCurrency(pd.openDebit)}</td><td class="px-4 py-2 text-right font-mono text-xs text-green-400">${formatCurrency(pd.debit)}</td><td class="px-4 py-2 text-right font-mono text-xs text-red-400">${formatCurrency(pd.credit)}</td><td class="px-4 py-2 text-right font-mono text-xs font-bold ${end>0?'text-yellow-400':'text-slate-400'}">${formatCurrency(end)}</td><td class="px-4 py-2 text-center">${status}</td></tr>`;
+    });
+    pFoot = `<tr><td colspan="2" class="px-4 py-2 font-semibold text-slate-300">Tổng cộng</td><td class="px-4 py-2 text-right font-mono font-bold">${formatCurrency(totalOpen)}</td><td class="px-4 py-2 text-right font-mono font-bold text-green-400">${formatCurrency(totalDebit)}</td><td class="px-4 py-2 text-right font-mono font-bold text-red-400">${formatCurrency(totalCredit)}</td><td class="px-4 py-2 text-right font-mono font-bold text-amber-400">${formatCurrency(totalEnd)}</td><td class="px-4 py-2"></td></tr>`;
+    const pTable = document.getElementById('recv-by-partner');
+    if (pTable) pTable.innerHTML = pBody || '<tr><td colspan="7" class="px-4 py-8 text-center text-slate-500 text-xs italic">Không có dữ liệu công nợ phải thu.</td></tr>';
+    const pFootEl = document.getElementById('recv-foot');
+    if (pFootEl) pFootEl.innerHTML = pFoot;
+
+    // Summary cards
+    document.getElementById('recv-total').textContent = formatCurrency(totalEnd);
+    document.getElementById('recv-collected').textContent = formatCurrency(totalCredit);
+    document.getElementById('recv-overdue').textContent = totalEnd > 0 ? formatCurrency(totalEnd) : '0 ₫';
+
+    // Aging
+    let agingBody = '';
+    Object.entries(partnerData).forEach(([pid, pd]) => {
+        if (pd.debit===0 && pd.credit===0) return;
+        const end = pd.openDebit + pd.debit - pd.credit;
+        if (end<=0) return;
+        const notDue = end; // simplified aging
+        agingBody += `<tr class="hover:bg-slate-800/50"><td class="px-4 py-2 text-xs text-white">${pd.name}</td><td class="px-4 py-2 text-right font-mono text-xs text-emerald-400">${formatCurrency(notDue)}</td><td class="px-4 py-2 text-right font-mono text-xs">0</td><td class="px-4 py-2 text-right font-mono text-xs">0</td><td class="px-4 py-2 text-right font-mono text-xs">0</td><td class="px-4 py-2 text-right font-mono text-xs">0</td><td class="px-4 py-2 text-right font-mono text-xs font-bold text-amber-400">${formatCurrency(end)}</td></tr>`;
+    });
+    const agingEl = document.getElementById('recv-aging');
+    if (agingEl) agingEl.innerHTML = agingBody || '<tr><td colspan="7" class="px-4 py-8 text-center text-slate-500 text-xs italic">Không có nợ tồn đọng.</td></tr>';
+
+    // Detail transactions
+    let detailAll = [];
+    Object.entries(partnerData).forEach(([pid, pd]) => {
+        pd.txns.forEach(t => {
+            detailAll.push({...t, partner: pd.name});
+        });
+    });
+    detailAll.sort((a,b)=>a.date.localeCompare(b.date)||(a.number||'').localeCompare(b.number||''));
+    let runningTotal = totalOpen;
+    let detailHtml = '';
+    detailAll.forEach((t,i) => {
+        runningTotal += t.debitAmt - t.creditAmt;
+        detailHtml += `<tr class="hover:bg-slate-800/50"><td class="px-4 py-2 text-xs">${t.date}</td><td class="px-4 py-2 text-xs">${t.number}</td><td class="px-4 py-2 text-xs text-white">${t.partner}</td><td class="px-4 py-2 text-xs">${t.desc}</td><td class="px-4 py-2 text-right font-mono text-xs text-green-400">${t.debitAmt>0?formatCurrency(t.debitAmt):''}</td><td class="px-4 py-2 text-right font-mono text-xs text-red-400">${t.creditAmt>0?formatCurrency(t.creditAmt):''}</td><td class="px-4 py-2 text-right font-mono text-xs ${runningTotal>0?'text-yellow-400':'text-slate-400'}">${formatCurrency(runningTotal)}</td></tr>`;
+    });
+    const detailEl = document.getElementById('recv-detail-rows');
+    if (detailEl) detailEl.innerHTML = detailHtml || '<tr><td colspan="7" class="px-4 py-8 text-center text-slate-500 text-xs italic">Chưa có giao dịch.</td></tr>';
+}
+
+// ==================== BÁO CÁO CÔNG NỢ PHẢI TRẢ ====================
+function initPayablesPage() {
+    store = getDefaultStore();
+    document.getElementById('payable-from').value = '2026-01-01';
+    document.getElementById('payable-to').value = todayStr();
+    const sel = document.getElementById('payable-supplier-filter');
+    if (sel) { store.partners.filter(p=>p.type==='supplier'||p.type==='both').forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.name;sel.appendChild(o);}); }
+    updatePayables();
+}
+function updatePayables() {
+    const from = document.getElementById('payable-from')?.value||'';
+    const to = document.getElementById('payable-to')?.value||'';
+    const filterPid = document.getElementById('payable-supplier-filter')?.value||'';
+    const suppliers = store.partners.filter(p=>p.type==='supplier'||p.type==='both');
+    if (filterPid) { const fx = suppliers.filter(p=>p.id===filterPid); if (fx.length) { suppliers.length=0; suppliers.push(...fx); } }
+    const today = new Date();
+    let partnerData = {};
+    suppliers.forEach(p => { partnerData[p.id] = { name: p.name, openCredit: supplierOpeningBalances[p.id]||0, debit: 0, credit: 0, txns: [] }; });
+    ['receive','pay','import','export'].forEach(tp => {
+        (store.vouchers[tp]||[]).forEach(v => {
+            const dt = v.date||'';
+            const pid = v.partnerId||'';
+            if (from && dt < from) return;
+            if (!filterPid && suppliers.every(p=>p.id!==pid)) return;
+            if (filterPid && pid !== filterPid) return;
+            (v.entries||v.items||v.rows||[]).forEach(e => {
+                const db = e.debit||'', cr = e.credit||'';
+                if (db === '331' || cr === '331') {
+                    const amt = e.amount||0;
+                    if (!partnerData[pid]) partnerData[pid] = { name: v.partner||'(Không)', openCredit: 0, debit: 0, credit: 0, txns: [] };
+                    if (db === '331') partnerData[pid].debit += amt;
+                    if (cr === '331') partnerData[pid].credit += amt;
+                    partnerData[pid].txns.push({ date: dt, number: v.number||'', desc: e.desc||v.partner||'', debitAmt: db==='331'?amt:0, creditAmt: cr==='331'?amt:0 });
+                }
+            });
+        });
+    });
+    // Render by supplier
+    let pBody = '', pFoot = '', totalOpen=0, totalDebit=0, totalCredit=0, totalEnd=0;
+    Object.entries(partnerData).forEach(([pid, pd]) => {
+        if (pd.debit===0 && pd.credit===0 && pd.openCredit===0) return;
+        const end = pd.openCredit + pd.credit - pd.debit;
+        totalOpen += pd.openCredit; totalDebit += pd.debit; totalCredit += pd.credit; totalEnd += end;
+        const status = end <= 0 ? '<span class="px-2 py-0.5 rounded text-xs bg-green-600/20 text-green-400">Đã trả hết</span>' : '<span class="px-2 py-0.5 rounded text-xs bg-yellow-600/20 text-yellow-400">Còn nợ</span>';
+        pBody += `<tr class="hover:bg-slate-800/50"><td class="px-4 py-2 text-xs">${pid}</td><td class="px-4 py-2 text-xs text-white">${pd.name}</td><td class="px-4 py-2 text-right font-mono text-xs">${formatCurrency(pd.openCredit)}</td><td class="px-4 py-2 text-right font-mono text-xs text-green-400">${formatCurrency(pd.debit)}</td><td class="px-4 py-2 text-right font-mono text-xs text-red-400">${formatCurrency(pd.credit)}</td><td class="px-4 py-2 text-right font-mono text-xs font-bold ${end>0?'text-yellow-400':'text-slate-400'}">${formatCurrency(end)}</td><td class="px-4 py-2 text-center">${status}</td></tr>`;
+    });
+    pFoot = `<tr><td colspan="2" class="px-4 py-2 font-semibold text-slate-300">Tổng cộng</td><td class="px-4 py-2 text-right font-mono font-bold">${formatCurrency(totalOpen)}</td><td class="px-4 py-2 text-right font-mono font-bold text-green-400">${formatCurrency(totalDebit)}</td><td class="px-4 py-2 text-right font-mono font-bold text-red-400">${formatCurrency(totalCredit)}</td><td class="px-4 py-2 text-right font-mono font-bold text-amber-400">${formatCurrency(totalEnd)}</td><td class="px-4 py-2"></td></tr>`;
+    const pTable = document.getElementById('payable-by-supplier');
+    if (pTable) pTable.innerHTML = pBody || '<tr><td colspan="7" class="px-4 py-8 text-center text-slate-500 text-xs italic">Không có dữ liệu công nợ phải trả.</td></tr>';
+    const pFootEl = document.getElementById('payable-foot');
+    if (pFootEl) pFootEl.innerHTML = pFoot;
+
+    // Summary
+    document.getElementById('payable-total').textContent = formatCurrency(totalEnd);
+    document.getElementById('payable-paid').textContent = formatCurrency(totalDebit);
+    document.getElementById('payable-overdue').textContent = totalEnd > 0 ? formatCurrency(totalEnd) : '0 ₫';
+
+    // Aging
+    let agingBody = '';
+    Object.entries(partnerData).forEach(([pid, pd]) => {
+        if (pd.debit===0 && pd.credit===0 && pd.openCredit===0) return;
+        const end = pd.openCredit + pd.credit - pd.debit;
+        if (end<=0) return;
+        agingBody += `<tr class="hover:bg-slate-800/50"><td class="px-4 py-2 text-xs text-white">${pd.name}</td><td class="px-4 py-2 text-right font-mono text-xs text-emerald-400">${formatCurrency(end)}</td><td class="px-4 py-2 text-right font-mono text-xs">0</td><td class="px-4 py-2 text-right font-mono text-xs">0</td><td class="px-4 py-2 text-right font-mono text-xs">0</td><td class="px-4 py-2 text-right font-mono text-xs">0</td><td class="px-4 py-2 text-right font-mono text-xs font-bold text-amber-400">${formatCurrency(end)}</td></tr>`;
+    });
+    const agingEl = document.getElementById('payable-aging');
+    if (agingEl) agingEl.innerHTML = agingBody || '<tr><td colspan="7" class="px-4 py-8 text-center text-slate-500 text-xs italic">Không có nợ tồn đọng.</td></tr>';
+
+    // Detail
+    let detailAll = [];
+    Object.entries(partnerData).forEach(([pid, pd]) => {
+        pd.txns.forEach(t => { detailAll.push({...t, partner: pd.name}); });
+    });
+    detailAll.sort((a,b)=>a.date.localeCompare(b.date)||(a.number||'').localeCompare(b.number||''));
+    let runningTotal = totalOpen;
+    let detailHtml = '';
+    detailAll.forEach((t,i) => {
+        runningTotal = runningTotal + t.creditAmt - t.debitAmt;
+        detailHtml += `<tr class="hover:bg-slate-800/50"><td class="px-4 py-2 text-xs">${t.date}</td><td class="px-4 py-2 text-xs">${t.number}</td><td class="px-4 py-2 text-xs text-white">${t.partner}</td><td class="px-4 py-2 text-xs">${t.desc}</td><td class="px-4 py-2 text-right font-mono text-xs text-green-400">${t.debitAmt>0?formatCurrency(t.debitAmt):''}</td><td class="px-4 py-2 text-right font-mono text-xs text-red-400">${t.creditAmt>0?formatCurrency(t.creditAmt):''}</td><td class="px-4 py-2 text-right font-mono text-xs ${runningTotal>0?'text-yellow-400':'text-slate-400'}">${formatCurrency(runningTotal)}</td></tr>`;
+    });
+    const detailEl = document.getElementById('payable-detail-rows');
+    if (detailEl) detailEl.innerHTML = detailHtml || '<tr><td colspan="7" class="px-4 py-8 text-center text-slate-500 text-xs italic">Chưa có giao dịch.</td></tr>';
+}
+
+// ==================== BẢNG CÂN ĐỐI TÀI KHOẢN ====================
+function initTrialBalancePage() {
+    store = getDefaultStore();
+    document.getElementById('tb-from').value = '2026-01-01';
+    document.getElementById('tb-to').value = todayStr();
+    updateTrialBalance();
+}
+function updateTrialBalance() {
+    const from = document.getElementById('tb-from')?.value||'';
+    const to = document.getElementById('tb-to')?.value||'';
+    const cat = document.getElementById('tb-category')?.value||'all';
+    const groups = {};
+    ['receive','pay','import','export'].forEach(tp => {
+        (store.vouchers[tp]||[]).forEach(v => {
+            const dt = v.date||'';
+            (v.entries||v.items||v.rows||[]).forEach(e => {
+                const db = e.debit||'', cr = e.credit||'', amt = e.amount||0;
+                const isAfterFrom = !from || dt >= from;
+                const isBeforeTo = !to || dt <= to;
+                if (!isAfterFrom || !isBeforeTo) return;
+                if (!groups[db]) groups[db] = { open: openingBalances[db]||0, debit: 0, credit: 0 };
+                if (!groups[cr]) groups[cr] = { open: openingBalances[cr]||0, credit: 0, debit: 0 };
+                groups[db].debit += amt;
+                groups[cr].credit += amt;
+            });
+        });
+    });
+    let lines = [];
+    store.accounts.forEach(acc => {
+        const d = groups[acc.id] || { open: openingBalances[acc.id]||0, debit: 0, credit: 0 };
+        if (d.debit===0 && d.credit===0 && d.open===0) return;
+        if (cat !== 'all' && acc.category !== cat) return;
+        const isDebitNormal = acc.category === 'Tài sản' || acc.category === 'Chi phí' || acc.category === 'Trung gian';
+        const balance = isDebitNormal ? (d.open + d.debit - d.credit) : (d.open + d.credit - d.debit);
+        lines.push({ code: acc.id, name: acc.name, category: acc.category, open: d.open, debit: d.debit, credit: d.credit, balance: balance, norm: isDebitNormal });
+    });
+    // Calculate totals
+    let totalOpenDr=0, totalOpenCr=0, totalDr=0, totalCr=0, totalEndDr=0, totalEndCr=0;
+    lines.forEach(l => {
+        const isDrNorm = l.norm;
+        totalDr += l.debit; totalCr += l.credit;
+        if (isDrNorm) { totalOpenDr += l.open; totalEndDr += l.balance; }
+        else { totalOpenCr += l.open; totalEndCr += l.balance; }
+    });
+    let tbodyHtml = '';
+    lines.forEach(l => {
+        const isDrNorm = l.norm;
+        const cls = l.category === 'Tài sản' ? 'text-blue-300' : l.category === 'Nguồn vốn' ? 'text-red-300' : l.category === 'Vốn chủ sở hữu' ? 'text-green-300' : l.category === 'Doanh thu' ? 'text-emerald-300' : l.category === 'Chi phí' ? 'text-orange-300' : 'text-slate-300';
+        tbodyHtml += `<tr class="hover:bg-slate-800/50"><td class="px-4 py-2 text-xs font-mono ${cls}">${l.code}</td><td class="px-4 py-2 text-xs">${l.name}</td><td class="px-4 py-2 text-xs text-center"><span class="px-2 py-0.5 rounded text-xs bg-slate-700/50">${l.category}</span></td><td class="px-4 py-2 text-right font-mono text-xs ${isDrNorm?'text-blue-300':'text-red-300'}">${formatCurrency(l.open)}</td><td class="px-4 py-2 text-right font-mono text-xs text-green-400">${formatCurrency(l.debit)}</td><td class="px-4 py-2 text-right font-mono text-xs text-red-400">${formatCurrency(l.credit)}</td><td class="px-4 py-2 text-right font-mono text-xs font-bold ${l.balance>=0?'text-emerald-400':'text-amber-400'}">${formatCurrency(l.balance)}</td></tr>`;
+    });
+    const tbody = document.getElementById('tb-rows');
+    if (tbody) tbody.innerHTML = tbodyHtml || '<tr><td colspan="7" class="px-4 py-8 text-center text-slate-500 text-xs italic">Không có dữ liệu.</td></tr>';
+    const foot = document.getElementById('tb-foot');
+    if (foot) {
+        const totalDrEnd = totalOpenDr + totalDr - totalCr;
+        const totalCrEnd = totalOpenCr + totalCr - totalDr;
+        foot.innerHTML = `<tr><td colspan="3" class="px-4 py-2 font-semibold text-slate-200">Tổng cộng</td><td class="px-4 py-2 text-right font-mono font-bold text-xs">Dr: ${formatCurrency(totalOpenDr)} | Cr: ${formatCurrency(totalOpenCr)}</td><td class="px-4 py-2 text-right font-mono font-bold text-green-400 text-xs">${formatCurrency(totalDr)}</td><td class="px-4 py-2 text-right font-mono font-bold text-red-400 text-xs">${formatCurrency(totalCr)}</td><td class="px-4 py-2 text-right font-mono font-bold text-xs">Dr: ${formatCurrency(totalEndDr)} | Cr: ${formatCurrency(totalEndCr)}</td></tr>`;
+        const diff = Math.abs(totalDr - totalCr);
+        // Category summary
+        let assetOpen=0, assetEnd=0, liabOpen=0, liabEnd=0, equityOpen=0, equityEnd=0, revCr=0, costDr=0;
+        lines.forEach(l => {
+            const isDrNorm = l.norm;
+            if (l.category==='Tài sản') { assetOpen+=l.open; assetEnd+=l.balance; }
+            else if (l.category==='Nguồn vốn') { liabOpen+=l.open; liabEnd+=l.balance; }
+            else if (l.category==='Vốn chủ sở hữu') { equityOpen+=l.open; equityEnd+=l.balance; }
+            else if (l.category==='Doanh thu') revCr+=l.credit;
+            else if (l.category==='Chi phí') costDr+=l.debit;
+        });
+        document.getElementById('tb-total-assets').textContent = formatCurrency(assetEnd);
+        document.getElementById('tb-total-liabilities').textContent = formatCurrency(liabEnd);
+        document.getElementById('tb-total-equity').textContent = formatCurrency(equityEnd);
+        document.getElementById('tb-diff').textContent = diff < 1 ? '✅ Cân bằng' : `⚠️ ${formatCurrency(diff)}`;
+    }
+}
+
 // ==================== BOOTSTRAP ====================
-function getCurrentPageType() { const p = window.location.pathname; if (p.includes('voucher-receive')) return 'receive'; if (p.includes('voucher-pay')) return 'pay'; if (p.includes('voucher-import')) return 'import'; if (p.includes('voucher-export')) return 'export'; if (p.includes('voucher-sales')) return 'sales'; if (p.includes('journal')) return 'journal'; if (p.includes('ledger')) return 'ledger'; if (p.includes('closing-config')) return 'closing-config'; if (p.includes('closing')) return 'closing'; if (p.includes('lock-period')) return 'lock-period'; return null; }
-document.addEventListener('DOMContentLoaded', () => { store = loadStore(); const pt = getCurrentPageType(); switch (pt) { case 'receive': initReceivePage(); document.getElementById('form-receive')?.addEventListener('submit', handleReceiveSubmit); break; case 'pay': initPayPage(); document.getElementById('form-pay')?.addEventListener('submit', handlePaySubmit); break; case 'import': initImportPage(); document.getElementById('form-import')?.addEventListener('submit', handleImportSubmit); break; case 'export': initExportPage(); document.getElementById('form-export')?.addEventListener('submit', handleExportSubmit); break; case 'sales': initSalesPage(); document.getElementById('form-sales')?.addEventListener('submit', handleSalesSubmit); break; case 'journal': initJournalPage(); break; case 'ledger': initLedgerPage(); break; case 'closing-config': initClosingConfigPage(); break; case 'closing': initClosingPage(); break; case 'lock-period': initLockPeriodPage(); break; } document.getElementById('form-add-partner')?.addEventListener('submit', handleAddPartner); });
+function getCurrentPageType() { const p = window.location.pathname; if (p.includes('balance')) return 'trial-balance'; if (p.includes('cash-flow')) return 'cash-flow'; if (p.includes('receivables')) return 'receivables'; if (p.includes('payables')) return 'payables'; if (p.includes('voucher-receive')) return 'receive'; if (p.includes('voucher-pay')) return 'pay'; if (p.includes('voucher-import')) return 'import'; if (p.includes('voucher-export')) return 'export'; if (p.includes('voucher-sales')) return 'sales'; if (p.includes('journal')) return 'journal'; if (p.includes('ledger')) return 'ledger'; if (p.includes('closing-config')) return 'closing-config'; if (p.includes('closing')) return 'closing'; if (p.includes('lock-period')) return 'lock-period'; return null; }
+document.addEventListener('DOMContentLoaded', () => { store = loadStore(); const pt = getCurrentPageType(); switch (pt) { case 'trial-balance': initTrialBalancePage(); break; case 'receivables': initReceivablesPage(); break; case 'payables': initPayablesPage(); break; case 'cash-flow': initCashFlowPage(); break; case 'receive': initReceivePage(); document.getElementById('form-receive')?.addEventListener('submit', handleReceiveSubmit); break; case 'pay': initPayPage(); document.getElementById('form-pay')?.addEventListener('submit', handlePaySubmit); break; case 'import': initImportPage(); document.getElementById('form-import')?.addEventListener('submit', handleImportSubmit); break; case 'export': initExportPage(); document.getElementById('form-export')?.addEventListener('submit', handleExportSubmit); break; case 'sales': initSalesPage(); document.getElementById('form-sales')?.addEventListener('submit', handleSalesSubmit); break; case 'journal': initJournalPage(); break; case 'ledger': initLedgerPage(); break; case 'closing-config': initClosingConfigPage(); break; case 'closing': initClosingPage(); break; case 'lock-period': initLockPeriodPage(); break; } document.getElementById('form-add-partner')?.addEventListener('submit', handleAddPartner); });
