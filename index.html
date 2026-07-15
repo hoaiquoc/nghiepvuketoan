@@ -30,6 +30,7 @@
                 <a href="#ban-hang" class="hover:text-blue-400 transition-colors">Bán hàng</a>
                 <a href="#chung-tu" class="hover:text-blue-400 transition-colors">Chứng từ</a>
                 <a href="#so-sach" class="hover:text-blue-400 transition-colors">Sổ sách</a>
+                <a href="closing.html" class="hover:text-cyan-400 transition-colors">Kết chuyển</a>
                 <a href="voucher-receive.html" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition-all text-white font-semibold">Dùng thử</a>
             </nav>
         </div>
@@ -151,44 +152,93 @@
             <!-- Flow Diagram -->
             <div class="glassmorphism rounded-xl p-6 md:p-8 mb-8 border border-slate-700">
                 <h3 class="text-lg font-semibold text-white mb-6 text-center">📋 Chu trình kế toán một giao dịch bán hàng POS</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Step 1: Customer orders -->
-                    <div class="p-5 rounded-xl border border-purple-700/30 bg-purple-900/10 text-center">
+
+                <!-- 2-step flow -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Step 1: Đặt hàng & Thanh toán (POS counter) -->
+                    <div class="p-5 rounded-xl border border-purple-700/30 bg-purple-900/10 text-center relative">
                         <div class="w-12 h-12 bg-purple-600/20 rounded-full flex items-center justify-center mx-auto mb-3">
                             <span class="text-purple-400 font-bold text-xl">1</span>
                         </div>
-                        <h4 class="text-purple-400 font-semibold mb-2">Khách đặt hàng</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">
-                            Khách chọn sản phẩm tại quầy POS. Hệ thống POS ghi nhận mặt hàng, số lượng, giá bán.
-                            
-                        </p>
-                    </div>
-                    <!-- Step 2: Doanh thu (Phiếu Thu) -->
-                    <div class="p-5 rounded-xl border border-green-700/30 bg-green-900/10 text-center">
-                        <div class="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <span class="text-green-400 font-bold text-xl">2</span>
+                        <h4 class="text-purple-400 font-semibold mb-3">🛒 Tại quầy: Đặt hàng & Thanh toán</h4>
+                        <div class="text-slate-400 text-xs leading-relaxed space-y-2 text-left">
+                            <div class="bg-slate-800/60 rounded-lg p-3">
+                                <p class="text-slate-300 font-semibold mb-2">👤 Thao tác của khách & thu ngân:</p>
+                                <p>① Khách <strong class="text-amber-300">chọn sản phẩm</strong> (món ăn / hàng hóa)</p>
+                                <p>② Thu ngân <strong class="text-slate-200">quét mã vạch</strong> hoặc nhập mã SP</p>
+                                <p>③ POS hiển thị <strong class="text-slate-200">số lượng, đơn giá</strong></p>
+                                <p>④ Khách <strong class="text-green-300">thanh toán</strong> 💵 Tiền mặt / 💳 CK</p>
+                                <p>⑤ POS <strong class="text-cyan-300">in hóa đơn</strong> và tự động:</p>
+                                <div class="ml-3 mt-1 space-y-0.5">
+                                    <p>📄 <span class="text-green-300">Phiếu Thu (01-TT)</span></p>
+                                    <p>📦 <span class="text-orange-300">Phiếu Xuất Kho (02-VT)</span></p>
+                                </div>
+                            </div>
                         </div>
-                        <h4 class="text-green-400 font-semibold mb-2">Ghi nhận Doanh thu</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">
-                            <strong class="text-slate-300">Chứng từ:</strong> Phiếu Thu (01-TT)<br>
-                            <strong class="text-slate-300">Định khoản:</strong><br>
-                            <span class="text-green-400">Nợ TK 111/112</span> (tiền nhận)<br>
-                            <span class="text-red-400">Có TK 511</span> (doanh thu)<br>
-                            <span class="text-red-400">Có TK 3331</span> (thuế GTGT)
-                        </p>
                     </div>
-                    <!-- Step 3: Giá vốn (Phiếu Xuất) -->
-                    <div class="p-5 rounded-xl border border-orange-700/30 bg-orange-900/10 text-center">
-                        <div class="w-12 h-12 bg-orange-600/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <span class="text-orange-400 font-bold text-xl">3</span>
+                    <!-- Step 2: Xử lý kế toán (2 bút toán đồng thời) -->
+                    <div class="p-5 rounded-xl border border-teal-700/30 bg-teal-900/10 text-center relative">
+                        <div class="w-12 h-12 bg-teal-600/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-teal-400 font-bold text-xl">2</span>
                         </div>
-                        <h4 class="text-orange-400 font-semibold mb-2">Ghi nhận Giá vốn</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">
-                            <strong class="text-slate-300">Chứng từ:</strong> Phiếu Xuất Kho (02-VT)<br>
-                            <strong class="text-slate-300">Định khoản:</strong><br>
-                            <span class="text-green-400">Nợ TK 632</span> (giá vốn)<br>
-                            <span class="text-red-400">Có TK 156</span> (hàng hóa Retail)<br>
-                            <span class="text-red-400">Có TK 152</span> (nguyên vật liệu F&B)
+                        <h4 class="text-teal-400 font-semibold mb-3">📊 Hệ thống: Xử lý kế toán (2 bút toán)</h4>
+                        <div class="grid grid-cols-1 gap-3 text-xs text-left">
+                            <!-- Bút toán Giá vốn -->
+                            <div class="bg-slate-800/60 rounded-lg p-3 border border-orange-700/30">
+                                <p class="text-orange-400 font-semibold mb-2">📦 Bút toán 1: Ghi nhận Giá vốn hàng bán</p>
+                                <p class="text-slate-400 mb-1">Chứng từ: <strong class="text-orange-300">PXK (02-VT)</strong></p>
+                                <div class="bg-slate-700/50 rounded p-2 font-mono space-y-0.5">
+                                    <p><span class="text-green-400">Nợ TK 632</span> <span class="text-slate-400 text-[0.65rem]">(Giá vốn hàng bán)</span></p>
+                                    <p><span class="text-red-400 ml-4">Có TK 156 / 152</span> <span class="text-slate-400 text-[0.65rem]">(Hàng hóa / NVL xuất kho)</span></p>
+                                </div>
+                            </div>
+                            <!-- Bút toán Doanh thu -->
+                            <div class="bg-slate-800/60 rounded-lg p-3 border border-green-700/30">
+                                <p class="text-green-400 font-semibold mb-2">💰 Bút toán 2: Ghi nhận Doanh thu & Thuế</p>
+                                <p class="text-slate-400 mb-1">Chứng từ: <strong class="text-green-300">PT (01-TT)</strong></p>
+                                <div class="bg-slate-700/50 rounded p-2 font-mono space-y-0.5">
+                                    <p><span class="text-green-400">Nợ TK 111 / 112</span> <span class="text-slate-400 text-[0.65rem]">(Tiền mặt / TGNH)</span></p>
+                                    <p><span class="text-red-400 ml-4">Có TK 511</span> <span class="text-slate-400 text-[0.65rem]">(Doanh thu bán hàng)</span></p>
+                                    <p><span class="text-red-400 ml-4">Có TK 3331</span> <span class="text-slate-400 text-[0.65rem]">(Thuế GTGT đầu ra)</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrow connectors (visible on md+) -->
+                <div class="hidden md:flex justify-center items-center gap-2 mb-6 text-slate-500 text-xs">
+                    <span>→</span>
+                </div>
+
+                <!-- Summary - 2 Journal Entries per Transaction -->
+                <div class="p-5 bg-slate-900/60 rounded-lg border border-slate-700">
+                    <h4 class="text-slate-300 font-semibold mb-3 text-sm text-center">📊 2 bút toán phát sinh đồng thời trong 1 giao dịch bán hàng</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <div class="p-3 bg-slate-800/50 rounded border border-orange-700/20">
+                            <p class="text-orange-400 font-semibold mb-2">Bút toán 1: Ghi nhận Giá vốn</p>
+                            <div class="font-mono space-y-1">
+                                <p><span class="text-green-400">Nợ TK 632</span> <span class="text-white">(Giá vốn hàng bán)</span></p>
+                                <p><span class="text-red-400 ml-4">Có TK 156/152</span> <span class="text-slate-400">(Hàng hóa / NVL)</span></p>
+                                <div class="border-t border-slate-600 mt-1 pt-1"></div>
+                                <p class="text-slate-500">Chứng từ: <strong class="text-orange-300">PXK (02-VT)</strong><br>Xuất hàng ra khỏi kho</p>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-slate-800/50 rounded border border-green-700/20">
+                            <p class="text-green-400 font-semibold mb-2">Bút toán 2: Ghi nhận Doanh thu</p>
+                            <div class="font-mono space-y-1">
+                                <p><span class="text-green-400">Nợ TK 111/112</span> <span class="text-white">(Tiền mặt / TGNH)</span></p>
+                                <p><span class="text-red-400 ml-4">Có TK 511</span> <span class="text-slate-400">(Doanh thu bán hàng)</span></p>
+                                <p><span class="text-red-400 ml-4">Có TK 3331</span> <span class="text-slate-400">(Thuế GTGT đầu ra)</span></p>
+                                <div class="border-t border-slate-600 mt-1 pt-1"></div>
+                                <p class="text-slate-500">Chứng từ: <strong class="text-green-300">PT (01-TT)</strong><br>Thu tiền + VAT từ khách</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-amber-900/10 border border-amber-700/20 rounded text-center">
+                        <p class="text-amber-300 text-xs">
+                            <strong>💡 Lưu ý:</strong> Hệ thống POS tự động sinh đồng thời <strong>Phiếu Xuất Kho (02-VT)</strong> và <strong>Phiếu Thu (01-TT)</strong> cho mỗi giao dịch bán hàng. 
+                            Cuối kỳ kế toán, kế toán thực hiện <a href="#ket-chuyen" class="text-cyan-400 underline hover:text-cyan-300">kết chuyển cuối kỳ</a> để xác định kết quả kinh doanh (TK 511,632 → TK 911 → TK 421).
                         </p>
                     </div>
                 </div>
@@ -403,6 +453,51 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kết Chuyển Cuối Kỳ - Highlighted Banner -->
+    <section class="py-12 bg-gradient-to-r from-cyan-950 via-slate-900 to-blue-950 border-b border-cyan-700/30">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="glassmorphism rounded-xl p-6 md:p-8 border border-cyan-700/30 text-center">
+                <div class="w-16 h-16 bg-cyan-600/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                </div>
+                <h2 class="text-2xl font-bold text-cyan-400 mb-3">📊 Kết Chuyển Cuối Kỳ — Xác Định Kết Quả Kinh Doanh</h2>
+                <p class="text-slate-400 text-sm max-w-2xl mx-auto mb-6 leading-relaxed">
+                    Cuối mỗi kỳ kế toán, kế toán thực hiện kết chuyển toàn bộ doanh thu (TK 511, 711) và chi phí (TK 632, 641, 642, 811) vào TK 911 — 
+                    <strong class="text-cyan-300">Xác định kết quả kinh doanh</strong>. Kết quả lãi/lỗ sau đó được kết chuyển về TK 421 — Lợi nhuận sau thuế chưa phân phối.
+                    Căn cứ: <span class="text-cyan-300/80">Điều 79, 80 TT 99/2025/TT-BTC</span>.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs mb-6">
+                    <div class="bg-cyan-900/20 border border-cyan-700/30 rounded-lg p-3">
+                        <p class="text-cyan-300 font-semibold mb-1">Bước 1: KC Doanh thu</p>
+                        <p class="text-slate-400 font-mono">Nợ TK 511,711 / Có TK 911</p>
+                    </div>
+                    <div class="bg-orange-900/20 border border-orange-700/30 rounded-lg p-3">
+                        <p class="text-orange-300 font-semibold mb-1">Bước 2: KC Chi phí</p>
+                        <p class="text-slate-400 font-mono">Nợ TK 911 / Có TK 632,641,642</p>
+                    </div>
+                    <div class="bg-purple-900/20 border border-purple-700/30 rounded-lg p-3">
+                        <p class="text-purple-300 font-semibold mb-1">Bước 3: Xác định KQKD</p>
+                        <p class="text-slate-400 font-mono">TK 911: So sánh Nợ/Có</p>
+                    </div>
+                    <div class="bg-green-900/20 border border-green-700/30 rounded-lg p-3">
+                        <p class="text-green-300 font-semibold mb-1">Bước 4: KC Lãi/Lỗ</p>
+                        <p class="text-slate-400 font-mono">Nợ TK 911 / Có TK 421 (Lãi)</p>
+                        <p class="text-slate-400 font-mono">Nợ TK 421 / Có TK 911 (Lỗ)</p>
+                    </div>
+                </div>
+                <div class="flex justify-center gap-3">
+                    <a href="closing.html" class="bg-cyan-600 hover:bg-cyan-700 px-6 py-2.5 rounded-lg font-semibold transition-all text-white text-sm flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                        Mở Kết Chuyển Cuối Kỳ
+                    </a>
+                    <a href="closing-config.html" class="bg-slate-700 hover:bg-slate-600 px-6 py-2.5 rounded-lg font-semibold transition-all text-slate-200 text-sm flex items-center gap-2">
+                        ⚙️ Cấu hình kết chuyển
+                    </a>
                 </div>
             </div>
         </div>
