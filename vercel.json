@@ -2,20 +2,10 @@
   "version": 2,
   "name": "nghiep-vu-ke-toan-pos",
   "builds": [
-    { "src": "index.html", "use": "@vercel/static" },
-    { "src": "voucher-receive.html", "use": "@vercel/static" },
-    { "src": "voucher-pay.html", "use": "@vercel/static" },
-    { "src": "voucher-import.html", "use": "@vercel/static" },
-    { "src": "voucher-export.html", "use": "@vercel/static" },
-    { "src": "voucher-sales.html", "use": "@vercel/static" },
-    { "src": "styles.css", "use": "@vercel/static" },
-    { "src": "accounts.html", "use": "@vercel/static" },
-    { "src": "journal.html", "use": "@vercel/static" },
-    { "src": "ledger.html", "use": "@vercel/static" },
-    { "src": "closing.html", "use": "@vercel/static" },
-    { "src": "closing-config.html", "use": "@vercel/static" },
-    { "src": "lock-period.html", "use": "@vercel/static" },
-    { "src": "app.js", "use": "@vercel/static" }
+    { "src": "**/*.html", "use": "@vercel/static" },
+    { "src": "**/*.css", "use": "@vercel/static" },
+    { "src": "**/*.js", "use": "@vercel/static" },
+    { "src": "**/*.json", "use": "@vercel/static" }
   ],
   "routes": [
     { "handle": "filesystem" },
