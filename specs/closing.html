@@ -70,7 +70,7 @@
 <div class="card"><h2 class="text-lg font-semibold text-cyan-300 mb-2">📤 Dữ liệu đầu ra — Các bảng bị INSERT/UPDATE</h2>
 <table>
 <tr><th>Bảng</th><th>Thao tác</th><th>Số dòng</th><th>Ghi chú</th></tr>
-<tr><td><code>closing_vouchers</code></td><td><span class="badge badge-insert">INSERT</span></td><td>1</td><td>ClosingVoucherId, VoucherNo (KCxx/xxxx), PeriodCode, ClosingDate, TotalRevenue, TotalCost, NetProfit, Status</td></tr>
+<tr><td><code>closing_vouchers</code></td><td><span class="badge badge-insert">INSERT</span></td><td>1</td><td>ClosingVoucherId, VoucherNo (KCxx/xxxx), <strong>BranchId 🆕</strong>, PeriodCode, ClosingDate, TotalRevenue, TotalCost, NetProfit, Status</td></tr>
 <tr><td><code>closing_voucher_details</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td>Mỗi rule trong closing_rules → 1 dòng detail, chứa Amount thực tế của kỳ</td></tr>
 <tr><td><code>document_accounting_entries</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td>SourceDetailType=4 (Closing), DebitId+CreditId+Amount</td></tr>
 <tr><td><code>journal</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td>1 dòng / accounting entry</td></tr>

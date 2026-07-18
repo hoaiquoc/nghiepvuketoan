@@ -117,6 +117,7 @@ Theo TT 99/2025, doanh thu bán hàng (Có 511) và thuế GTGT đầu ra (Có 3
 <tr><td>Ngày chứng từ</td><td>Ngày phát sinh</td><td>2026-01-05</td></tr>
 <tr><td>Ngày ghi sổ</td><td>Ngày hạch toán</td><td>2026-01-05</td></tr>
 <tr><td>Kỳ kế toán</td><td>PeriodCode</td><td>2026-01</td></tr>
+<tr><td><strong>BranchId</strong> 🆕</td><td>ID chi nhánh/cửa hàng trực thuộc HKD. Mỗi chứng từ phải gắn với 1 chi nhánh cụ thể để theo dõi doanh thu/chi phí riêng cho từng điểm bán.</td><td>GUID</td></tr>
 <tr><td>Đối tác</td><td>Khách hàng (tùy chọn)</td><td>Công ty ABC</td></tr>
 <tr><td><strong>SourceType</strong> 🆕</td><td>0=Manual (kế toán tự tạo), 1=Auto (phát sinh từ bán hàng)</td><td>0 hoặc 1</td></tr>
 <tr><td><strong>ReferenceDocumentId</strong> 🆕</td><td>ID chứng từ gốc được tham chiếu. Với Hướng 1: tùy chọn, hỗ trợ thu nhiều lần trên cùng một chứng từ gốc. Với Hướng 2: bắt buộc, là ID của Sales Document.</td><td>NULL hoặc GUID</td></tr>
@@ -139,7 +140,7 @@ Theo TT 99/2025, doanh thu bán hàng (Có 511) và thuế GTGT đầu ra (Có 3
 <div class="card"><h2 class="text-lg font-semibold text-emerald-300 mb-2">📤 Dữ liệu đầu ra — Các bảng bị INSERT/UPDATE</h2>
 <table>
 <tr><th>Bảng</th><th>Thao tác</th><th>Số dòng</th><th>Ghi chú</th></tr>
-<tr><td><code>documents</code></td><td><span class="badge badge-insert">INSERT</span></td><td>1</td><td>DocumentType=0, sinh DocumentNo, <strong>SourceType, ReferenceDocumentId, ReferenceDocumentNo 🆕</strong></td></tr>
+<tr><td><code>documents</code></td><td><span class="badge badge-insert">INSERT</span></td><td>1</td><td>DocumentType=0, sinh DocumentNo, <strong>BranchId 🆕, SourceType, ReferenceDocumentId, ReferenceDocumentNo</strong></td></tr>
 <tr><td><code>documents</code> (chứng từ gốc)</td><td><span class="badge badge-update">UPDATE</span></td><td>1</td><td>Cập nhật PaidAmount (số tiền đã thu) trên chứng từ gốc — <strong>chỉ khi có ReferenceDocumentId</strong></td></tr>
 <tr><td><code>document_receipt_details</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td>Description, Amount, PaymentMethod</td></tr>
 <tr><td><code>document_accounting_entries</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td>SourceDetailType=0, DebitId+CreditId+Amount</td></tr>

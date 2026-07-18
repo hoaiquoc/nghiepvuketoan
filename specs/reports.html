@@ -183,6 +183,11 @@ Response: file download (PDF hoặc Excel)
 <p class="text-xs text-slate-500 mt-3">📌 <strong>Lưu ý:</strong> Tất cả API báo cáo đều là <strong>read-only</strong> (GET), không INSERT/UPDATE/DELETE. Dữ liệu báo cáo được lấy từ các bảng <code>journal</code>, <code>ledger</code>, <code>trial_balance</code> — những bảng này đã được cập nhật tự động mỗi khi có chứng từ được Post.</p>
 </div>
 
+<!-- ====== BỘ LỌC CHI NHÁNH ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-teal-300 mb-2">🏢 Bộ lọc theo chi nhánh (BranchId)</h2>
+<p class="text-sm text-slate-400 mb-3">Tất cả các báo cáo và sổ sách đều hỗ trợ bộ lọc theo <strong>BranchId</strong> — ID chi nhánh/cửa hàng trực thuộc HKD — để xem số liệu riêng cho từng điểm bán. Khi không chọn chi nhánh, hệ thống hiển thị số liệu tổng hợp của tất cả chi nhánh. API GET đều hỗ trợ tham số <code>?branchId=xxx</code>.</p>
+</div>
+
 <!-- ====== CƠ CHẾ KIỂM SOÁT ====== -->
 <div class="card"><h2 class="text-lg font-semibold text-teal-300 mb-2">🔒 Cơ chế kiểm soát & ràng buộc</h2>
 <table>

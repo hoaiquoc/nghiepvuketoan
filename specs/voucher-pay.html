@@ -52,6 +52,7 @@ Khi trả lương, khoản <strong>phải trả người lao động giảm</str
 <tr><td>Ngày chứng từ</td><td>Ngày phát sinh</td><td>2026-01-06</td></tr>
 <tr><td>Ngày ghi sổ</td><td>Ngày hạch toán</td><td>2026-01-06</td></tr>
 <tr><td>Kỳ kế toán</td><td>PeriodCode</td><td>2026-01</td></tr>
+<tr><td><strong>BranchId</strong> 🆕</td><td>ID chi nhánh/cửa hàng trực thuộc HKD. Mỗi chứng từ phải gắn với 1 chi nhánh cụ thể để theo dõi chi phí riêng cho từng điểm bán.</td><td>GUID</td></tr>
 <tr><td>Đối tác</td><td>NCC / người nhận (tùy chọn)</td><td>Công ty XYZ</td></tr>
 <tr><th colspan="3" class="text-red-300 mt-2">Mỗi dòng chi tiết (lặp N lần)</th></tr>
 <tr><td>Diễn giải</td><td>Mô tả</td><td>Mua hàng hóa nhập kho</td></tr>
@@ -67,7 +68,7 @@ Khi trả lương, khoản <strong>phải trả người lao động giảm</str
 <div class="card"><h2 class="text-lg font-semibold text-red-300 mb-2">📤 Dữ liệu đầu ra</h2>
 <table>
 <tr><th>Bảng</th><th>Thao tác</th><th>Số dòng</th><th>Ghi chú</th></tr>
-<tr><td><code>documents</code></td><td><span class="badge badge-insert">INSERT</span></td><td>1</td><td>DocumentType=1</td></tr>
+<tr><td><code>documents</code></td><td><span class="badge badge-insert">INSERT</span></td><td>1</td><td>DocumentType=1, <strong>BranchId 🆕</strong></td></tr>
 <tr><td><code>document_expense_details</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td></td></tr>
 <tr><td><code>document_accounting_entries</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td>SourceDetailType=1</td></tr>
 <tr><td><code>journal</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td></td></tr>

@@ -20,7 +20,7 @@ svg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-even
 .t.dr{z-index:15;box-shadow:0 0 20px rgba(56,189,248,.25);border-color:#38bdf8}
 .t .n{font-weight:700;font-size:11px;color:#fff;margin-bottom:3px;pointer-events:none}
 .t .r{display:flex;justify-content:space-between;padding:1px 0;border-top:1px solid rgba(51,65,85,.2);font-size:9px;gap:4px;pointer-events:none}
-.t .r .pk{color:#fbbf24;font-weight:600}.t .r .fk{color:#60a5fa;font-weight:600}.t .r .c{color:#94a3b8}.t .r .ar{color:#fb923c}
+.t .r .pk{color:#fbbf24;font-weight:600}.t .r .fk{color:#60a5fa;font-weight:600}.t .r .c{color:#94a3b8}.t .r .ar{color:#fb923c}.t .r .nc{color:#22d3ee}
 .sot{border-color:rgba(99,102,241,.6)!important}
 #pp{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(15,23,42,.98);border:1px solid rgba(56,189,248,.4);border-radius:12px;z-index:40;display:none;min-width:380px;max-width:520px;max-height:80vh;overflow-y:auto;box-shadow:0 0 30px rgba(0,0,0,.5)}
 #pp.s{display:block}
@@ -31,7 +31,7 @@ svg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-even
 #pp .ft{width:100%;border-collapse:collapse;font-size:10px}
 #pp .ft td{padding:4px 8px;border-top:1px solid rgba(51,65,85,.3)}
 #pp .ft .fc{color:#38bdf8;font-family:monospace}.ft .ftype{color:#94a3b8;font-family:monospace;font-size:9px}
-#pp .ft .fpk{color:#fbbf24;font-weight:600}#pp .ft .ffk{color:#60a5fa;font-weight:600}#pp .ft .far{color:#fb923c;font-weight:600}
+#pp .ft .fpk{color:#fbbf24;font-weight:600}#pp .ft .ffk{color:#60a5fa;font-weight:600}#pp .ft .far{color:#fb923c;font-weight:600}#pp .ft .fnc{color:#22d3ee;font-weight:600}
 #pp .ft .fm{color:#94a3b8;font-size:10px}
 #pp .cb{color:#64748b;cursor:pointer;font-size:18px;line-height:1;padding:0 4px}#pp .cb:hover{color:#ef4444}
 #ov{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:35;display:none}#ov.s{display:block}
@@ -44,113 +44,125 @@ svg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-even
 </style>
 </head>
 <body>
-<div id="h"><a href="index.html">← Home</a><span style="font-weight:600;color:#fff;font-size:14px">🗺️ ERD — Kéo thả | Click=highlight | Double-click=popup | Scroll=zoom | 🟠 Audit</span><i>🖱️ Click=hl | Dbl-click=popup | Drag=move | Pan=nền | Scroll=zoom</i></div>
+<div id="h"><a href="index.html">← Home</a><span style="font-weight:600;color:#fff;font-size:14px">🗺️ ERD — Kéo thả | Click=highlight | Double-click=popup | Scroll=zoom | 🟠 Audit | 🆕 BranchId</span><i>🖱️ Click=hl | Dbl-click=popup | Drag=move | Pan=nền | Scroll=zoom</i></div>
 <div id="wrap"><div id="c"><svg id="s"></svg></div></div>
 <div id="ov" onclick="hp()"></div><div id="pp"></div>
 <div class="zc"><button onclick="zm(-.2)">−</button><span id="zl">100%</span><button onclick="zm(.2)">+</button><button onclick="rz()" style="margin-left:4px;width:auto;padding:0 6px;font-size:10px">Reset</button></div>
 <div class="lg">
 <div><div class="l lp"></div>PK</div><div><div class="l lf"></div>FK</div><div><div class="l ll"></div>Logical</div><div><div class="l ld"></div>Data flow</div>
-<div style="margin-top:4px;color:#fb923c;font-size:9px">🟠 = Audit column</div>
+<div style="margin-top:4px;color:#fb923c;font-size:9px">🟠 = Audit column</div><div style="color:#22d3ee;font-size:9px">🆕 = BranchId</div>
 </div>
 <script>
-// ===== FIELD DEFS & TABLES — fully synced =====
 const fd={
-accounts:{d:'Danh mục tài khoản kế toán (111,112,131,331,511,632,911…). Mọi hạch toán tham chiếu AccountId.',f:[
+accounts:{d:'Danh mục tài khoản kế toán.',f:[
 {n:'AccountId',t:'string',k:'PK',m:'Khóa chính GUID'},{n:'AccountCode',t:'string',k:'UQ',m:'Mã TK (111,112…)'},{n:'AccountName',t:'string',m:'Tên TK'},
 {n:'Category',t:'string',k:'IDX',m:'asset/liability/revenue/expense/equity'},{n:'ParentAccountId',t:'string',k:'FK→self',m:'TK cha'},
 {n:'Level',t:'int',m:'Cấp TK'},{n:'NormalBalance',t:'byte',m:'0=Dư Nợ,1=Dư Có'},{n:'Status',t:'byte',k:'IDX',m:'active/inactive'},
+{n:'BranchId',t:'string',k:'NC/IDX',m:'ID chi nhánh HKD 🆕'},
 {n:'TenantId',t:'string',k:'AR',m:'Mã đơn vị'},{n:'CreatedAt',t:'datetime',k:'AR',m:'Thời điểm tạo'},{n:'CreatedBy',t:'string',k:'AR',m:'Người tạo'},
 {n:'UpdatedAt',t:'datetime',k:'AR',m:'Thời điểm sửa'},{n:'UpdatedBy',t:'string',k:'AR',m:'Người sửa'}]},
-documents:{d:'Header chung cho mọi loại chứng từ (Thu,Chi,Nhập,Xuất).',f:[
+documents:{d:'Header chung cho mọi loại chứng từ.',f:[
 {n:'DocumentId',t:'string',k:'PK',m:'Khóa chính'},{n:'DocumentNo',t:'string',k:'UQ',m:'Số CT'},{n:'DocumentType',t:'byte',k:'IDX',m:'0=Rcpt,1=Exp,2=Inv'},
 {n:'DocumentDate',t:'date',k:'IDX',m:'Ngày CT'},{n:'AccountingDate',t:'date',k:'IDX',m:'Ngày ghi sổ'},{n:'PeriodCode',t:'string',k:'IDX',m:'Kỳ'},
-{n:'Status',t:'byte',k:'IDX',m:'Draft/Posted/Cancelled'},{n:'Note',t:'string',m:'Diễn giải'},
+{n:'BranchId',t:'string',k:'NC/IDX',m:'ID chi nhánh HKD 🆕'},{n:'Status',t:'byte',k:'IDX',m:'Draft/Posted/Cancelled'},{n:'Note',t:'string',m:'Diễn giải'},
 {n:'TenantId',t:'string',k:'AR',m:'Mã đơn vị'},{n:'CreatedAt',t:'datetime',k:'AR',m:'Thời điểm tạo'},{n:'CreatedBy',t:'string',k:'AR',m:'Người tạo'},
 {n:'UpdatedAt',t:'datetime',k:'AR',m:'Thời điểm sửa'},{n:'UpdatedBy',t:'string',k:'AR',m:'Người sửa'}]},
-receipt_details:{d:'Dòng chi tiết phiếu Thu. Không chứa Debit/Credit.',f:[
+receipt_details:{d:'Dòng chi tiết phiếu Thu.',f:[
 {n:'ReceiptDetailId',t:'string',k:'PK',m:'Khóa chính'},{n:'DocumentId',t:'string',k:'FK→documents',m:'Cascade'},
 {n:'Description',t:'string',m:'Diễn giải'},{n:'Amount',t:'decimal',m:'Số tiền'},{n:'PaymentMethod',t:'byte',m:'TM/CK/QR'},
+{n:'BranchId',t:'string',k:'NC/IDX',m:'ID chi nhánh HKD 🆕'},
 {n:'TenantId',t:'string',k:'AR',m:''},{n:'CreatedAt',t:'datetime',k:'AR',m:''},{n:'CreatedBy',t:'string',k:'AR',m:''},
 {n:'UpdatedAt',t:'datetime',k:'AR',m:''},{n:'UpdatedBy',t:'string',k:'AR',m:''}]},
-expense_details:{d:'Dòng chi tiết phiếu Chi. Không chứa Debit/Credit.',f:[
+expense_details:{d:'Dòng chi tiết phiếu Chi.',f:[
 {n:'ExpenseDetailId',t:'string',k:'PK',m:'Khóa chính'},{n:'DocumentId',t:'string',k:'FK→documents',m:'Cascade'},
 {n:'Description',t:'string',m:'Diễn giải'},{n:'Amount',t:'decimal',m:'Số tiền'},{n:'PaymentMethod',t:'byte',m:'TM/CK'},
+{n:'BranchId',t:'string',k:'NC/IDX',m:'ID chi nhánh HKD 🆕'},
 {n:'TenantId',t:'string',k:'AR',m:''},{n:'CreatedAt',t:'datetime',k:'AR',m:''},{n:'CreatedBy',t:'string',k:'AR',m:''},
 {n:'UpdatedAt',t:'datetime',k:'AR',m:''},{n:'UpdatedBy',t:'string',k:'AR',m:''}]},
-inventory_details:{d:'Dùng chung Nhập & Xuất kho. InventoryType phân biệt.',f:[
+inventory_details:{d:'Dùng chung Nhập & Xuất kho.',f:[
 {n:'InventoryDetailId',t:'string',k:'PK',m:'Khóa chính'},{n:'DocumentId',t:'string',k:'FK→documents',m:'Cascade'},
 {n:'InventoryType',t:'byte',k:'IDX',m:'0=Import,1=Export'},{n:'ProductName',t:'string',m:'Tên SP'},{n:'Quantity',t:'decimal',m:'SL'},
 {n:'UnitPrice',t:'decimal',m:'Đơn giá'},{n:'Amount',t:'decimal',m:'Thành tiền'},{n:'Warehouse',t:'string',m:'Kho'},{n:'Reason',t:'string',m:'Lý do'},
+{n:'BranchId',t:'string',k:'NC/IDX',m:'ID chi nhánh HKD 🆕'},
 {n:'TenantId',t:'string',k:'AR',m:''},{n:'CreatedAt',t:'datetime',k:'AR',m:''},{n:'CreatedBy',t:'string',k:'AR',m:''},
 {n:'UpdatedAt',t:'datetime',k:'AR',m:''},{n:'UpdatedBy',t:'string',k:'AR',m:''}]},
-accounting_entries:{d:'⭐⭐ SOT. Mỗi dòng=1 cặp Nợ/Có. Link detail nguồn qua SourceDetailType+Id.',f:[
+accounting_entries:{d:'⭐⭐ SOT. Mỗi dòng=1 cặp Nợ/Có.',f:[
 {n:'EntryId',t:'string',k:'PK',m:'Khóa chính'},{n:'DocumentId',t:'string',k:'FK→documents',m:'Header'},
 {n:'SourceDetailType',t:'byte',k:'IDX',m:'0=Rcpt,1=Exp,2=Inv,4=Closing'},{n:'SourceDetailId',t:'string',k:'IDX',m:'→detail PK(logical)'},
 {n:'DebitAccountId',t:'string',k:'FK→accounts',m:'TK Nợ'},{n:'CreditAccountId',t:'string',k:'FK→accounts',m:'TK Có'},
 {n:'Amount',t:'decimal',m:'Số tiền'},{n:'Explanation',t:'string',m:'Diễn giải'},
+{n:'BranchId',t:'string',k:'NC/IDX',m:'ID chi nhánh HKD 🆕'},
 {n:'TenantId',t:'string',k:'AR',m:''},{n:'CreatedAt',t:'datetime',k:'AR',m:''},{n:'CreatedBy',t:'string',k:'AR',m:''},
 {n:'UpdatedAt',t:'datetime',k:'AR',m:''},{n:'UpdatedBy',t:'string',k:'AR',m:''}]},
-closing_rules:{d:'Cấu hình bút toán KC cuối kỳ. Chạy closing→đọc rules→tạo entries.',f:[
+closing_rules:{d:'Cấu hình bút toán KC cuối kỳ.',f:[
 {n:'RuleId',t:'string',k:'PK',m:'Khóa chính'},{n:'DebitAccountId',t:'string',k:'FK→accounts',m:'TK Nợ'},
 {n:'CreditAccountId',t:'string',k:'FK→accounts',m:'TK Có'},{n:'RuleType',t:'string',k:'IDX',m:'revenue/cost/profit'},
 {n:'Description',t:'string',m:'Diễn giải'},{n:'SortOrder',t:'int',m:'Thứ tự'},
+{n:'BranchId',t:'string',k:'NC/IDX',m:'ID chi nhánh HKD 🆕'},
 {n:'TenantId',t:'string',k:'AR',m:''},{n:'CreatedAt',t:'datetime',k:'AR',m:''},{n:'CreatedBy',t:'string',k:'AR',m:''},
 {n:'UpdatedAt',t:'datetime',k:'AR',m:''},{n:'UpdatedBy',t:'string',k:'AR',m:''}]},
 closing_vouchers:{d:'Header phiếu KC cuối kỳ.',f:[
 {n:'ClosingVoucherId',t:'string',k:'PK',m:'Khóa chính'},{n:'VoucherNo',t:'string',k:'UQ',m:'Số phiếu'},
 {n:'PeriodCode',t:'string',k:'IDX',m:'Kỳ'},{n:'ClosingDate',t:'date',k:'IDX',m:'Ngày KC'},{n:'RunBy',t:'string',m:'Người chạy'},
 {n:'TotalRevenue',t:'decimal',m:'Tổng DT'},{n:'TotalCost',t:'decimal',m:'Tổng CP'},{n:'NetProfit',t:'decimal',m:'Lợi nhuận'},{n:'Status',t:'byte',k:'IDX',m:'0=Success'},
+{n:'BranchId',t:'string',k:'NC/IDX',m:'ID chi nhánh HKD 🆕'},
 {n:'TenantId',t:'string',k:'AR',m:''},{n:'CreatedAt',t:'datetime',k:'AR',m:''},{n:'CreatedBy',t:'string',k:'AR',m:''},
 {n:'UpdatedAt',t:'datetime',k:'AR',m:''},{n:'UpdatedBy',t:'string',k:'AR',m:''}]},
-closing_voucher_details:{d:'Chi tiết dòng KC — sinh từ closing_rules.',f:[
+closing_voucher_details:{d:'Chi tiết dòng KC.',f:[
 {n:'ClosVDetailId',t:'string',k:'PK',m:'Khóa chính'},{n:'ClosingVoucherId',t:'string',k:'FK→clos_vouchers',m:'Cascade'},
 {n:'RuleId',t:'string',k:'FK→closing_rules',m:'Rule nguồn'},{n:'Description',t:'string',m:'Diễn giải'},{n:'Amount',t:'decimal',m:'Số tiền'},
+{n:'BranchId',t:'string',k:'NC/IDX',m:'ID chi nhánh HKD 🆕'},
 {n:'TenantId',t:'string',k:'AR',m:''},{n:'CreatedAt',t:'datetime',k:'AR',m:''},{n:'CreatedBy',t:'string',k:'AR',m:''},
 {n:'UpdatedAt',t:'datetime',k:'AR',m:''},{n:'UpdatedBy',t:'string',k:'AR',m:''}]},
-period_locks:{d:'Kiểm soát khóa/mở kỳ. Kỳ Locked→chặn INSERT/UPDATE/DELETE.',f:[
+period_locks:{d:'Kiểm soát khóa/mở kỳ.',f:[
 {n:'LockId',t:'string',k:'PK',m:'Khóa chính'},{n:'PeriodCode',t:'string',k:'IDX',m:'Kỳ'},{n:'Status',t:'byte',k:'IDX',m:'0=Open,1=Locked'},
 {n:'LockedAt',t:'datetime',m:'Thời điểm'},{n:'LockedBy',t:'string',m:'Người khóa'},{n:'Reason',t:'string',m:'Lý do'},
+{n:'BranchId',t:'string',k:'NC/IDX',m:'ID chi nhánh HKD 🆕'},
 {n:'TenantId',t:'string',k:'AR',m:''},{n:'CreatedAt',t:'datetime',k:'AR',m:''},{n:'CreatedBy',t:'string',k:'AR',m:''},
 {n:'UpdatedAt',t:'datetime',k:'AR',m:''},{n:'UpdatedBy',t:'string',k:'AR',m:''}]},
-audit_logs:{d:'Nhật ký thao tác. KHÔNG có audit columns vì là bảng audit.',f:[
-{n:'LogId',t:'string',k:'PK',m:'Khóa chính'},{n:'TenantId',t:'string',k:'AR',m:'(chỉ có TenantId)'},{n:'Timestamp',t:'datetime',k:'IDX',m:'Thời điểm'},
-{n:'UserId',t:'string',k:'IDX',m:'Người dùng'},{n:'Action',t:'string',k:'IDX',m:'CREATE/UPDATE/DELETE/POST'},{n:'EntityName',t:'string',k:'IDX',m:'Bảng'},
+audit_logs:{d:'Nhật ký thao tác.',f:[
+{n:'LogId',t:'string',k:'PK',m:'Khóa chính'},{n:'TenantId',t:'string',k:'AR',m:''},{n:'BranchId',t:'string',k:'NC/IDX',m:'ID chi nhánh HKD 🆕'},
+{n:'Timestamp',t:'datetime',k:'IDX',m:'Thời điểm'},{n:'UserId',t:'string',k:'IDX',m:'Người dùng'},
+{n:'Action',t:'string',k:'IDX',m:'CREATE/UPDATE/DELETE/POST'},{n:'EntityName',t:'string',k:'IDX',m:'Bảng'},
 {n:'EntityId',t:'string',k:'IDX',m:'ID bản ghi'},{n:'OldValues',t:'JSON',m:''},{n:'NewValues',t:'JSON',m:''},{n:'IpAddress',t:'string',m:''}]},
-journal:{d:'Sổ Nhật Ký Chung — INSERT khi post, bảng độc lập.',f:[
+journal:{d:'Sổ Nhật Ký Chung.',f:[
 {n:'JournalId',t:'string',k:'PK',m:'Khóa chính'},{n:'PostingDate',t:'date',k:'IDX',m:'Ngày'},{n:'DocumentNo',t:'string',k:'IDX',m:'Số phiếu'},
 {n:'Description',t:'string',m:'Diễn giải'},{n:'DebitAccountId',t:'string',k:'FK→accounts',m:'TK Nợ'},{n:'CreditAccountId',t:'string',k:'FK→accounts',m:'TK Có'},
-{n:'Amount',t:'decimal',m:'Số tiền'},{n:'TenantId',t:'string',k:'AR',m:''},{n:'CreatedAt',t:'datetime',k:'AR',m:''},{n:'CreatedBy',t:'string',k:'AR',m:''}]},
-ledger:{d:'Sổ Cái/Sổ Chi Tiết — INSERT 2 dòng/entry.',f:[
+{n:'Amount',t:'decimal',m:'Số tiền'},
+{n:'BranchId',t:'string',k:'NC/IDX',m:'ID chi nhánh HKD 🆕'},
+{n:'TenantId',t:'string',k:'AR',m:''},{n:'CreatedAt',t:'datetime',k:'AR',m:''},{n:'CreatedBy',t:'string',k:'AR',m:''}]},
+ledger:{d:'Sổ Cái/Sổ Chi Tiết.',f:[
 {n:'LedgerId',t:'string',k:'PK',m:'Khóa chính'},{n:'AccountId',t:'string',k:'FK→accounts',m:'TK đang xem'},
 {n:'PostingDate',t:'date',k:'IDX',m:'Ngày'},{n:'DocumentNo',t:'string',m:'Số phiếu'},{n:'OffsetAccountId',t:'string',k:'FK→accounts',m:'TK đối ứng'},
 {n:'DebitAmount',t:'decimal',m:'PS Nợ'},{n:'CreditAmount',t:'decimal',m:'PS Có'},{n:'RunningBalance',t:'decimal',m:'Số dư lũy kế'},
+{n:'BranchId',t:'string',k:'NC/IDX',m:'ID chi nhánh HKD 🆕'},
 {n:'TenantId',t:'string',k:'AR',m:''},{n:'CreatedAt',t:'datetime',k:'AR',m:''},{n:'CreatedBy',t:'string',k:'AR',m:''}]},
-trial_balance:{d:'Bảng Cân Đối SPS — UPSERT khi post/closing.',f:[
+trial_balance:{d:'Bảng Cân Đối SPS — UPSERT.',f:[
 {n:'TrialBalanceId',t:'string',k:'PK',m:'Khóa chính'},{n:'PeriodCode',t:'string',k:'IDX',m:'Kỳ'},{n:'AccountId',t:'string',k:'FK→accounts',m:'TK'},
 {n:'AccountName',t:'string',m:'Tên TK'},{n:'OpeningDebit',t:'decimal',m:'Dư Nợ ĐK'},{n:'OpeningCredit',t:'decimal',m:'Dư Có ĐK'},
 {n:'MovementDebit',t:'decimal',m:'PS Nợ'},{n:'MovementCredit',t:'decimal',m:'PS Có'},{n:'ClosingDebit',t:'decimal',m:'Dư Nợ CK'},{n:'ClosingCredit',t:'decimal',m:'Dư Có CK'},
+{n:'BranchId',t:'string',k:'NC/IDX',m:'ID chi nhánh HKD 🆕'},
 {n:'TenantId',t:'string',k:'AR',m:''},{n:'CreatedAt',t:'datetime',k:'AR',m:''},{n:'CreatedBy',t:'string',k:'AR',m:''},
 {n:'UpdatedAt',t:'datetime',k:'AR',m:'Cập nhật UPSERT'},{n:'UpdatedBy',t:'string',k:'AR',m:'Cập nhật UPSERT'}]},
 };
 
 const tb=[
-{id:'accounts',r:13,x:40,y:60,c:[{n:'AccountId',k:'pk'},{n:'AccountCode',k:'uq'},{n:'AccountName'},{n:'Category',k:'idx'},{n:'ParentAccountId',k:'fk'},{n:'Level'},{n:'NormalBalance'},{n:'Status',k:'idx'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
-{id:'documents',r:13,x:40,y:330,c:[{n:'DocumentId',k:'pk'},{n:'DocumentNo',k:'uq'},{n:'DocumentType',k:'idx'},{n:'DocumentDate'},{n:'AccountingDate'},{n:'PeriodCode',k:'idx'},{n:'Status'},{n:'Note'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
-{id:'receipt_details',r:10,x:20,y:510,c:[{n:'ReceiptDetailId',k:'pk'},{n:'DocumentId',k:'fk'},{n:'Description'},{n:'Amount'},{n:'PaymentMethod'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
-{id:'expense_details',r:10,x:280,y:510,c:[{n:'ExpenseDetailId',k:'pk'},{n:'DocumentId',k:'fk'},{n:'Description'},{n:'Amount'},{n:'PaymentMethod'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
-{id:'inventory_details',r:14,x:540,y:510,c:[{n:'InventoryDetailId',k:'pk'},{n:'DocumentId',k:'fk'},{n:'InventoryType',k:'idx'},{n:'ProductName'},{n:'Quantity'},{n:'UnitPrice'},{n:'Amount'},{n:'Warehouse'},{n:'Reason'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
-{id:'accounting_entries',r:13,x:560,y:180,cs:'sot',c:[{n:'EntryId',k:'pk'},{n:'DocumentId',k:'fk'},{n:'SourceDetailType',k:'idx'},{n:'SourceDetailId',k:'idx'},{n:'DebitAccountId',k:'fk'},{n:'CreditAccountId',k:'fk'},{n:'Amount'},{n:'Explanation'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
-{id:'closing_rules',r:11,x:560,y:620,c:[{n:'RuleId',k:'pk'},{n:'DebitAccountId',k:'fk'},{n:'CreditAccountId',k:'fk'},{n:'RuleType',k:'idx'},{n:'Description'},{n:'SortOrder'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
-{id:'closing_vouchers',r:14,x:860,y:580,c:[{n:'ClosVoucherId',k:'pk'},{n:'VoucherNo',k:'uq'},{n:'PeriodCode',k:'idx'},{n:'ClosingDate'},{n:'RunBy'},{n:'TotalRevenue'},{n:'TotalCost'},{n:'NetProfit'},{n:'Status'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
-{id:'closing_voucher_details',r:10,x:860,y:730,c:[{n:'ClosVDetailId',k:'pk'},{n:'ClosingVoucherId',k:'fk'},{n:'RuleId',k:'fk'},{n:'Description'},{n:'Amount'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
-{id:'period_locks',r:11,x:1150,y:580,c:[{n:'LockId',k:'pk'},{n:'PeriodCode',k:'idx'},{n:'Status',k:'idx'},{n:'LockedAt'},{n:'LockedBy'},{n:'Reason'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
-{id:'audit_logs',r:10,x:340,y:620,c:[{n:'LogId',k:'pk'},{n:'TenantId',k:'ar'},{n:'Timestamp',k:'idx'},{n:'UserId',k:'idx'},{n:'Action',k:'idx'},{n:'EntityName'},{n:'EntityId'},{n:'OldValues'},{n:'NewValues'},{n:'IpAddress'}]},
-{id:'journal',r:10,x:80,y:780,c:[{n:'JournalId',k:'pk'},{n:'PostingDate',k:'idx'},{n:'DocumentNo',k:'idx'},{n:'Description'},{n:'DebitAccountId',k:'fk'},{n:'CreditAccountId',k:'fk'},{n:'Amount'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'}]},
-{id:'ledger',r:11,x:360,y:780,c:[{n:'LedgerId',k:'pk'},{n:'AccountId',k:'fk'},{n:'PostingDate',k:'idx'},{n:'DocumentNo'},{n:'OffsetAccountId',k:'fk'},{n:'DebitAmount'},{n:'CreditAmount'},{n:'RunningBalance'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'}]},
-{id:'trial_balance',r:15,x:700,y:780,c:[{n:'TrialBalanceId',k:'pk'},{n:'PeriodCode',k:'idx'},{n:'AccountId',k:'fk'},{n:'AccountName'},{n:'OpeningDebit'},{n:'OpeningCredit'},{n:'MovementDebit'},{n:'MovementCredit'},{n:'ClosingDebit'},{n:'ClosingCredit'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
+{id:'accounts',r:14,x:40,y:60,c:[{n:'AccountId',k:'pk'},{n:'AccountCode',k:'uq'},{n:'AccountName'},{n:'Category',k:'idx'},{n:'ParentAccountId',k:'fk'},{n:'Level'},{n:'NormalBalance'},{n:'Status',k:'idx'},{n:'BranchId',k:'nc'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
+{id:'documents',r:14,x:40,y:350,c:[{n:'DocumentId',k:'pk'},{n:'DocumentNo',k:'uq'},{n:'DocumentType',k:'idx'},{n:'DocumentDate'},{n:'AccountingDate'},{n:'PeriodCode',k:'idx'},{n:'BranchId',k:'nc'},{n:'Status'},{n:'Note'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
+{id:'receipt_details',r:11,x:20,y:540,c:[{n:'ReceiptDetailId',k:'pk'},{n:'DocumentId',k:'fk'},{n:'Description'},{n:'Amount'},{n:'PaymentMethod'},{n:'BranchId',k:'nc'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
+{id:'expense_details',r:11,x:280,y:540,c:[{n:'ExpenseDetailId',k:'pk'},{n:'DocumentId',k:'fk'},{n:'Description'},{n:'Amount'},{n:'PaymentMethod'},{n:'BranchId',k:'nc'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
+{id:'inventory_details',r:15,x:540,y:540,c:[{n:'InventoryDetailId',k:'pk'},{n:'DocumentId',k:'fk'},{n:'InventoryType',k:'idx'},{n:'ProductName'},{n:'Quantity'},{n:'UnitPrice'},{n:'Amount'},{n:'Warehouse'},{n:'Reason'},{n:'BranchId',k:'nc'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
+{id:'accounting_entries',r:14,x:580,y:200,cs:'sot',c:[{n:'EntryId',k:'pk'},{n:'DocumentId',k:'fk'},{n:'SourceDetailType',k:'idx'},{n:'SourceDetailId',k:'idx'},{n:'DebitAccountId',k:'fk'},{n:'CreditAccountId',k:'fk'},{n:'Amount'},{n:'Explanation'},{n:'BranchId',k:'nc'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
+{id:'closing_rules',r:12,x:580,y:650,c:[{n:'RuleId',k:'pk'},{n:'DebitAccountId',k:'fk'},{n:'CreditAccountId',k:'fk'},{n:'RuleType',k:'idx'},{n:'Description'},{n:'SortOrder'},{n:'BranchId',k:'nc'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
+{id:'closing_vouchers',r:15,x:880,y:610,c:[{n:'ClosVoucherId',k:'pk'},{n:'VoucherNo',k:'uq'},{n:'PeriodCode',k:'idx'},{n:'ClosingDate'},{n:'RunBy'},{n:'TotalRevenue'},{n:'TotalCost'},{n:'NetProfit'},{n:'Status'},{n:'BranchId',k:'nc'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
+{id:'closing_voucher_details',r:11,x:880,y:760,c:[{n:'ClosVDetailId',k:'pk'},{n:'ClosingVoucherId',k:'fk'},{n:'RuleId',k:'fk'},{n:'Description'},{n:'Amount'},{n:'BranchId',k:'nc'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
+{id:'period_locks',r:12,x:1190,y:610,c:[{n:'LockId',k:'pk'},{n:'PeriodCode',k:'idx'},{n:'Status',k:'idx'},{n:'LockedAt'},{n:'LockedBy'},{n:'Reason'},{n:'BranchId',k:'nc'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
+{id:'audit_logs',r:11,x:340,y:650,c:[{n:'LogId',k:'pk'},{n:'TenantId',k:'ar'},{n:'BranchId',k:'nc'},{n:'Timestamp',k:'idx'},{n:'UserId',k:'idx'},{n:'Action',k:'idx'},{n:'EntityName'},{n:'EntityId'},{n:'OldValues'},{n:'NewValues'},{n:'IpAddress'}]},
+{id:'journal',r:10,x:80,y:810,c:[{n:'JournalId',k:'pk'},{n:'PostingDate',k:'idx'},{n:'DocumentNo',k:'idx'},{n:'Description'},{n:'DebitAccountId',k:'fk'},{n:'CreditAccountId',k:'fk'},{n:'Amount'},{n:'BranchId',k:'nc'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'}]},
+{id:'ledger',r:11,x:360,y:810,c:[{n:'LedgerId',k:'pk'},{n:'AccountId',k:'fk'},{n:'PostingDate',k:'idx'},{n:'DocumentNo'},{n:'OffsetAccountId',k:'fk'},{n:'DebitAmount'},{n:'CreditAmount'},{n:'RunningBalance'},{n:'BranchId',k:'nc'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'}]},
+{id:'trial_balance',r:15,x:700,y:810,c:[{n:'TrialBalanceId',k:'pk'},{n:'PeriodCode',k:'idx'},{n:'AccountId',k:'fk'},{n:'AccountName'},{n:'OpeningDebit'},{n:'OpeningCredit'},{n:'MovementDebit'},{n:'MovementCredit'},{n:'ClosingDebit'},{n:'ClosingCredit'},{n:'BranchId',k:'nc'},{n:'TenantId',k:'ar'},{n:'CreatedAt',k:'ar'},{n:'CreatedBy',k:'ar'},{n:'UpdatedAt',k:'ar'},{n:'UpdatedBy',k:'ar'}]},
 ];
 
-// Ledger now uses AccountId (fr:0) not AccountCode (fr:1)
 const cn=[
 {f:'accounts',fr:0,t:'accounting_entries',tr:4,tp:'fk',cd:'1:N'},{f:'accounts',fr:0,t:'closing_rules',tr:1,tp:'fk',cd:'1:N'},{f:'accounts',fr:0,t:'journal',tr:4,tp:'fk',cd:'1:N'},
 {f:'accounts',fr:0,t:'accounting_entries',tr:5,tp:'fk',cd:'1:N'},{f:'accounts',fr:0,t:'closing_rules',tr:2,tp:'fk',cd:'1:N'},{f:'accounts',fr:0,t:'journal',tr:5,tp:'fk',cd:'1:N'},
@@ -162,7 +174,7 @@ const cn=[
 {f:'closing_voucher_details',fr:0,t:'accounting_entries',tr:3,tp:'lo',cd:'1:1'},
 {f:'accounting_entries',fr:0,t:'journal',tr:0,tp:'df',cd:'1:1'},{f:'accounting_entries',fr:0,t:'ledger',tr:0,tp:'df',cd:'1:N'},{f:'accounting_entries',fr:0,t:'trial_balance',tr:0,tp:'df',cd:'1:1'},
 ];
-const RH=16,HH=20,PD=6;const tm={};tb.forEach(t=>tm[t.id]=t);
+const RH=16,HH=24,PD=6;const tm={};tb.forEach(t=>tm[t.id]=t);
 function rY(t,r){return t.y+HH+PD+r*RH+RH/2}function gL(t){return t.x}function gR(t){return t.x+(t.e?t.e.offsetWidth:200)}
 const C=document.getElementById('c'),S=document.getElementById('s'),W=document.getElementById('wrap');
 let hs=new Set(),sel=null,sc=1,ofX=0,ofY=0;
@@ -170,7 +182,7 @@ let hs=new Set(),sel=null,sc=1,ofX=0,ofY=0;
 tb.forEach(t=>{
     const e=document.createElement('div');e.className='t '+(t.cs||'');e.style.left=t.x+'px';e.style.top=t.y+'px';
     e.innerHTML='<div class="n">'+t.id.replace(/_/g,' ')+'</div>'+t.c.map(c=>{
-        let cl='c';if(c.k==='pk')cl='pk';else if(c.k==='fk')cl='fk';else if(c.k==='ar')cl='ar';
+        let cl='c';if(c.k==='pk')cl='pk';else if(c.k==='fk')cl='fk';else if(c.k==='ar')cl='ar';else if(c.k==='nc')cl='nc';
         return '<div class="r"><span class="'+cl+'">'+c.n+'</span></div>';}).join('');
     e.addEventListener('click',ev=>{if(dm)return;ev.stopPropagation();
         if(sel===t){sel=null;hs.clear();}else{sel=t;hs.clear();hs.add(t.id);
@@ -197,7 +209,7 @@ W.addEventListener('wheel',e=>{e.preventDefault();zm(e.deltaY<0?.1:-.1);},{passi
 
 function sp(tid){const f=fd[tid];if(!f)return;const p=document.getElementById('pp'),o=document.getElementById('ov');
     p.innerHTML='<div class="ph"><span class="pn">'+tid.replace(/_/g,' ')+'</span><span class="cb" onclick="hp()">✕</span></div><div class="pb"><div class="pd">'+f.d+'</div><table class="ft"><tr style="color:#64748b;font-size:9px;text-transform:uppercase"><td>Column</td><td>Type</td><td>Key</td><td>Meaning</td></tr>'+f.f.map(fi=>{
-        let kc='';if(fi.k&&fi.k.includes('PK'))kc='fpk';else if(fi.k&&fi.k.includes('FK'))kc='ffk';else if(fi.k&&fi.k.includes('AR'))kc='far';
+        let kc='';if(fi.k&&fi.k.includes('PK'))kc='fpk';else if(fi.k&&fi.k.includes('FK'))kc='ffk';else if(fi.k&&fi.k.includes('AR'))kc='far';else if(fi.k&&fi.k.includes('NC'))kc='fnc';
         return '<tr><td class="fc">'+fi.n+'</td><td class="ftype">'+(fi.t||'')+'</td><td class="'+kc+'">'+(fi.k||'')+'</td><td class="fm">'+(fi.m||'')+'</td></tr>';}).join('')+'</table></div>';
     p.classList.add('s');o.classList.add('s');}
 function hp(){document.getElementById('pp').classList.remove('s');document.getElementById('ov').classList.remove('s');}
