@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Spec: Phiếu Thu</title><script src="https://cdn.tailwindcss.com"></script>
+<style>body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px}.card{background:rgba(30,41,59,.7);border:1px solid rgba(71,85,105,.4);border-radius:16px;padding:24px;margin-bottom:16px}.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}.badge-insert{background:#10b981/15;color:#34d399;border:1px solid #10b981/30}.badge-update{background:#f59e0b/15;color:#fbbf24;border:1px solid #f59e0b/30}.badge-manual{background:#6366f1/15;color:#a5b4fc;border:1px solid #6366f1/30}.badge-auto{background:#a855f7/15;color:#c084fc;border:1px solid #a855f7/30}.step{display:flex;gap:12px;margin-bottom:12px}.step-num{width:28px;height:28px;background:#10b981/20;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#34d399;flex-shrink:0}.step-content{flex:1}code{background:#1e293b;padding:2px 6px;border-radius:4px;font-size:12px;color:#38bdf8}table{width:100%;border-collapse:collapse;font-size:13px}th{background:#1e293b;padding:8px 12px;text-align:left;color:#94a3b8;font-size:11px;text-transform:uppercase}td{padding:8px 12px;border-top:1px solid #334155}pre{background:#1e293b;padding:12px;border-radius:8px;overflow-x:auto;font-size:12px;line-height:1.6}.highlight{background:#10b981/10;border-left:3px solid #10b981;padding:8px 12px;border-radius:0 8px 8px 0;font-size:13px;margin:8px 0}.highlight-blue{background:#6366f1/10;border-left:3px solid #6366f1;padding:8px 12px;border-radius:0 8px 8px 0;font-size:13px;margin:8px 0}.highlight-purple{background:#a855f7/10;border-left:3px solid #a855f7;padding:8px 12px;border-radius:0 8px 8px 0;font-size:13px;margin:8px 0}.flow-arrow{text-align:center;color:#94a3b8;font-size:18px;padding:4px 0}.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}</style>
+</head>
+<body><div class="max-w-4xl mx-auto">
+<header class="mb-8"><a href="../index.html" class="text-slate-400 text-sm hover:text-white">← Quay về Home</a><h1 class="text-2xl font-bold text-white mt-2">📋 Spec: Nghiệp Vụ Phiếu Thu (Receipt)</h1><p class="text-slate-400 mt-1">Mẫu số: 01-TT — Thiết kế cho dev hiểu đầy đủ cách hoạt động để code backend.</p></header>
+
+<div class="card"><h2 class="text-lg font-semibold text-emerald-300 mb-2">🎯 Mục đích & Ngữ cảnh</h2>
+<p><strong>Phiếu Thu</strong> dùng để ghi nhận tất cả các khoản tiền doanh nghiệp nhận được, bao gồm: bán hàng, khách hàng trả nợ, nhân viên hoàn tạm ứng, nhận hoàn thuế từ cơ quan thuế và các khoản thu khác.</p>
+</div>
+
+<!-- ====== HAI HƯỚNG HOẠT ĐỘNG ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-emerald-300 mb-2">🔄 Hai hướng hoạt động của Phiếu Thu</h2>
+<p class="text-sm text-slate-400 mb-4">Phiếu Thu có thể được tạo ra theo <strong>2 hướng</strong> khác nhau, tùy vào ngữ cảnh nghiệp vụ. Hệ thống cần hỗ trợ cả hai và phân biệt rõ nguồn gốc.</p>
+
+<div class="compare-grid">
+<!-- Hướng 1: Manual -->
+<div class="p-4 bg-indigo-900/10 rounded-lg border border-indigo-700/30">
+<h3 class="font-semibold text-indigo-300 mb-2 flex items-center gap-2"><span class="badge badge-manual">Hướng 1</span> Kế toán tự tạo</h3>
+<p class="text-xs text-slate-400 leading-relaxed">Kế toán chủ động vào màn hình <strong>"Tạo Phiếu Thu"</strong>, nhập thủ công: ngày, kỳ, đối tác, các dòng chi tiết (TK Nợ, TK Có, số tiền, diễn giải). Có thể <strong>chọn một chứng từ gốc</strong> (hóa đơn bán hàng, hợp đồng, công nợ phải thu) để tạo phiếu thu tham chiếu đến chứng từ đó. <strong>Một chứng từ gốc có thể được thu nhiều lần</strong> (thu từng phần) cho đến khi hết số tiền còn phải thu. Áp dụng cho các khoản thu phát sinh độc lập, không gắn với nghiệp vụ bán hàng: thu nợ khách hàng, thu hồi tạm ứng, nhận hoàn thuế, thu khác...</p>
+<div class="mt-3 text-xs"><span class="text-indigo-300 font-semibold">SourceType = 0 (Manual)</span><br><span class="text-slate-500">ReferenceDocumentId = NULL hoặc GUID của chứng từ gốc</span></div>
+</div>
+
+<!-- Hướng 2: Auto từ Sales -->
+<div class="p-4 bg-purple-900/10 rounded-lg border border-purple-700/30">
+<h3 class="font-semibold text-purple-300 mb-2 flex items-center gap-2"><span class="badge badge-auto">Hướng 2</span> Phát sinh từ bán hàng</h3>
+<p class="text-xs text-slate-400 leading-relaxed">Khi phát sinh <strong>nghiệp vụ bán hàng</strong>, hệ thống <strong>tự động tạo 1 Phiếu Thu</strong> tương ứng để ghi nhận doanh thu. Các dòng chi tiết và định khoản được tạo tự động dựa trên dữ liệu hàng hóa đã bán trên hóa đơn.</p>
+<div class="mt-3 text-xs"><span class="text-purple-300 font-semibold">SourceType = 1 (Auto từ Sales)</span><br><span class="text-slate-500">ReferenceDocumentId = SalesDocumentId (bắt buộc)</span></div>
+</div>
+</div>
+
+<div class="flow-arrow mt-2">⬇</div>
+<div class="highlight-blue">
+<strong class="text-indigo-300">💡 Tại sao cần phân biệt 2 hướng?</strong><br>
+<ul class="text-xs text-slate-400 mt-1 space-y-1 list-disc list-inside">
+<li><strong>Truy xuất nguồn gốc:</strong> Xác định được phiếu thu được tạo bởi ai, từ nghiệp vụ nào → thuận tiện cho công tác kiểm tra, đối chiếu.</li>
+<li><strong>Ngăn trùng lặp:</strong> Với phiếu thu phát sinh từ bán hàng (Hướng 2), mỗi hóa đơn bán hàng chỉ được tạo <strong>1 Phiếu Thu duy nhất</strong>. Với phiếu thu tự tạo (Hướng 1), kế toán có thể thu nhiều lần trên cùng một chứng từ gốc, hệ thống kiểm soát không cho vượt quá số tiền còn phải thu.</li>
+<li><strong>Hủy/sửa liên hoàn:</strong> Khi hủy hóa đơn bán hàng, Phiếu Thu liên kết được tự động hủy theo. Ngược lại, nếu phiếu thu đã được ghi sổ (Posted) thì không cho phép hủy hóa đơn bán hàng nguồn.</li>
+<li><strong>Tự động hóa:</strong> Phiếu thu được tạo tự động giúp giảm thiểu thao tác thủ công, hạn chế sai sót trong quá trình nhập liệu.</li>
+</ul>
+</div>
+</div>
+
+<!-- ====== CÁCH HOẠT ĐỘNG ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-emerald-300 mb-2">📖 Cách hoạt động của nghiệp vụ</h2>
+
+<!-- Hướng 1 flow -->
+<h3 class="text-sm font-semibold text-indigo-300 mb-3 flex items-center gap-2"><span class="badge badge-manual">Hướng 1</span> Kế toán tự tạo Phiếu Thu</h3>
+<div class="space-y-3 text-sm text-slate-300 mb-6">
+<p><strong class="text-white">1. Kế toán chọn "Tạo Phiếu Thu"</strong> → hệ thống hiển thị màn hình nhập liệu. Kế toán nhập ngày, kỳ. SourceType mặc định = 0.</p>
+<p><strong class="text-white">2. Chọn chứng từ gốc (tùy chọn):</strong> Kế toán có thể chọn một chứng từ hiện có (hóa đơn bán hàng, hợp đồng, công nợ phải thu) làm tham chiếu. Hệ thống sẽ tự động điền đối tác, số tiền còn phải thu và các thông tin liên quan từ chứng từ gốc. <em>Một chứng từ gốc có thể được chọn để thu nhiều lần (thu từng phần).</em></p>
+<p><strong class="text-white">3. Thêm dòng chi tiết:</strong> Mỗi dòng = 1 khoản thu riêng biệt với TK Nợ (111/112) và TK Có (511, 131, 141, 3331...). <em>Một phiếu Thu có thể có 1 hoặc nhiều dòng.</em></p>
+<p><strong class="text-white">4. TK Nợ</strong> luôn là 111 (Tiền mặt) hoặc 112 (TGNH) vì đây là tài khoản nhận tiền. <strong>TK Có</strong> thay đổi tùy vào nguồn thu: 511 (bán hàng), 3331 (thuế GTGT), 131 (thu nợ KH), 141 (thu hồi tạm ứng)...</p>
+<p><strong class="text-white">5. Sau khi nhập đủ:</strong> Kế toán kiểm tra tổng tiền → chọn <strong>"Lưu & Post"</strong>. Hệ thống sẽ: tạo document header → lưu detail → tạo hạch toán Nợ/Có → INSERT journal, ledger → UPSERT trial_balance. Nếu có chứng từ gốc, hệ thống cập nhật số tiền đã thu trên chứng từ đó.</p>
+</div>
+
+<!-- Hướng 2 flow -->
+<h3 class="text-sm font-semibold text-purple-300 mb-3 flex items-center gap-2"><span class="badge badge-auto">Hướng 2</span> Phiếu Thu phát sinh từ nghiệp vụ bán hàng</h3>
+<div class="space-y-3 text-sm text-slate-300">
+<p><strong class="text-white">1. Nghiệp vụ bán hàng phát sinh</strong> → hệ thống xác định: khách hàng, danh sách mặt hàng (gồm sản phẩm, số lượng và giá bán), phương thức thanh toán (tiền mặt hoặc chuyển khoản).</p>
+<p><strong class="text-white">2. Hệ thống tự động tính toán:</strong> Tổng doanh thu (chưa VAT), thuế GTGT đầu ra, tổng giá vốn. Định khoản được xác lập trước khi ghi sổ.</p>
+<p><strong class="text-white">3. Khi hóa đơn bán hàng được ghi nhận</strong> → hệ thống thực hiện đồng thời 2 nghiệp vụ kế toán trong cùng 1 transaction:</p>
+<div class="highlight-purple mt-2">
+<strong class="text-purple-300">Transaction gồm 2 nghiệp vụ con:</strong><br>
+<span class="text-xs text-slate-400">(a) <strong>Phiếu Xuất Kho</strong> — ghi nhận giá vốn: Nợ 632 / Có 156 (từng dòng hàng hóa)</span><br>
+<span class="text-xs text-slate-400">(b) <strong>Phiếu Thu</strong> — ghi nhận doanh thu: Nợ 111/112 / Có 511, Có 3331 (gộp theo thuế suất)</span>
+</div>
+<p><strong class="text-white">4. Với Phiếu Thu được tạo tự động:</strong> SourceType = 1, ReferenceDocumentId = ID của Sales Document. Các dòng chi tiết được tạo tự động: mỗi mức thuế suất sẽ có 1 dòng doanh thu (Có 511) và 1 dòng thuế GTGT (Có 3331) tương ứng.</p>
+<p><strong class="text-white">5. Ràng buộc:</strong> Mỗi Sales Document chỉ được liên kết với 1 Phiếu Thu duy nhất. Nếu Phiếu Thu đã được ghi sổ (Post) thì không cho phép sửa hoặc xóa Sales Document. Khi Sales Document bị hủy, Phiếu Thu liên kết cũng được hủy đồng thời.</p>
+</div>
+</div>
+
+<!-- ====== TẠI SAO HẠCH TOÁN NHƯ VẬY ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-emerald-300 mb-2">❓ Tại sao hạch toán như vậy?</h2>
+<div class="space-y-3 text-sm text-slate-300">
+<div class="highlight">
+<strong class="text-emerald-300">Tại sao Nợ TK 111/112?</strong><br>
+Vì doanh nghiệp <strong>nhận được tiền</strong> (tài sản tăng). Trong kế toán, khi tài sản tăng → ghi Nợ. TK 111 (Tiền mặt) và TK 112 (TGNH) là tài khoản tài sản, nên khi nhận tiền → ghi Nợ.
+</div>
+<div class="highlight">
+<strong class="text-emerald-300">Tại sao Có TK 511 (Doanh thu)?</strong><br>
+TK 511 thuộc nhóm Doanh thu — đây là tài khoản <strong>nguồn vốn</strong> (làm tăng vốn chủ sở hữu). Khi phát sinh doanh thu → ghi Có. Cuối kỳ, số dư Có của TK 511 sẽ được kết chuyển sang TK 911 để xác định KQKD.
+</div>
+<div class="highlight">
+<strong class="text-emerald-300">Tại sao Có TK 3331 (Thuế GTGT)?</strong><br>
+Khi bán hàng, doanh nghiệp <strong>thu hộ thuế GTGT</strong> cho Nhà nước. Đây là khoản phải nộp (nợ phải trả tăng) → ghi Có TK 3331. Sau này khi nộp thuế, sẽ ghi Nợ TK 3331 / Có TK 111.
+</div>
+<div class="highlight">
+<strong class="text-emerald-300">Tại sao Có TK 131 (Phải thu KH)?</strong><br>
+Khi khách hàng trả nợ, khoản <strong>phải thu giảm</strong> (tài sản giảm) → ghi Có TK 131. Trước đó khi bán chịu đã ghi Nợ TK 131, nay khách trả thì ghi Có để tất toán.
+</div>
+<div class="highlight">
+<strong class="text-emerald-300">Tại sao 1 phiếu có nhiều dòng?</strong><br>
+Vì một lần thu tiền có thể đến từ nhiều nguồn: vừa thu tiền bán hàng (Có 511), vừa thu nợ cũ (Có 131), vừa thu hồi tạm ứng (Có 141). Gộp chung một phiếu giúp giảm số lượng chứng từ, dễ quản lý.
+</div>
+<div class="highlight-blue">
+<strong class="text-indigo-300">Tại sao 1 chứng từ gốc có thể được thu nhiều lần?</strong><br>
+Trong thực tế, khách hàng thường thanh toán thành nhiều đợt (trả góp, trả theo tiến độ). Vì vậy, một chứng từ gốc (hóa đơn, hợp đồng) có giá trị 100 triệu có thể được thu qua 2-3 lần: lần 1 thu 40 triệu, lần 2 thu 35 triệu, lần 3 thu 25 triệu. Mỗi lần thu sẽ tạo một Phiếu Thu riêng, cùng tham chiếu đến chứng từ gốc. Hệ thống theo dõi tổng số tiền đã thu và số tiền còn phải thu, không cho phép tổng các phiếu thu vượt quá giá trị chứng từ gốc. Cơ chế này phản ánh đúng thực tế kinh doanh và tuân thủ nguyên tắc kế toán.
+</div>
+<div class="highlight-purple">
+<strong class="text-purple-300">Tại sao Phiếu Thu từ bán hàng lại tách riêng doanh thu và thuế?</strong><br>
+Theo TT 99/2025, doanh thu bán hàng (Có 511) và thuế GTGT đầu ra (Có 3331) là hai bản chất khác nhau, phải được hạch toán tách biệt. Khi phát sinh nghiệp vụ bán hàng, mỗi mức thuế suất (0%, 5%, 8%, 10%) tạo ra một cặp dòng hạch toán: 1 dòng Có 511 (doanh thu chưa thuế) và 1 dòng Có 3331 (tiền thuế). Việc tách riêng này giúp kê khai thuế GTGT chính xác theo từng mức thuế suất.
+</div>
+<div class="highlight-purple">
+<strong class="text-purple-300">Mối quan hệ Phiếu Thu ↔ Phiếu Xuất Kho trong bán hàng?</strong><br>
+Đây là hai mặt của cùng một giao dịch bán hàng. <strong>Phiếu Thu</strong> ghi nhận dòng tiền vào (Nợ 111,112 / Có 511,3331). <strong>Phiếu Xuất Kho</strong> ghi nhận hàng hóa xuất ra khỏi kho (Nợ 632 / Có 156). Cả hai chứng từ được tạo trong cùng một transaction nhằm đảm bảo tính nhất quán: nếu xuất kho thất bại (không đủ tồn kho) thì không ghi nhận doanh thu; nếu tạo phiếu thu thất bại thì không trừ kho. Điều này đảm bảo dữ liệu kế toán luôn khớp đúng và không bị lệch.
+</div>
+</div>
+</div>
+
+<!-- ====== DỮ LIỆU ĐẦU VÀO ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-emerald-300 mb-2">📥 Dữ liệu đầu vào</h2>
+<p class="text-sm text-slate-400 mb-3">Mỗi phiếu Thu có thể có <strong>một hoặc nhiều dòng</strong>, mỗi dòng độc lập với cặp TK Nợ/Có riêng. Nguồn gốc phiếu thu được phân biệt qua trường <code>SourceType</code>.</p>
+<table>
+<tr><th colspan="3" class="text-emerald-300">Header (chung toàn phiếu)</th></tr>
+<tr><td>Ngày chứng từ</td><td>Ngày phát sinh</td><td>2026-01-05</td></tr>
+<tr><td>Ngày ghi sổ</td><td>Ngày hạch toán</td><td>2026-01-05</td></tr>
+<tr><td>Kỳ kế toán</td><td>PeriodCode</td><td>2026-01</td></tr>
+<tr><td>Đối tác</td><td>Khách hàng (tùy chọn)</td><td>Công ty ABC</td></tr>
+<tr><td><strong>SourceType</strong> 🆕</td><td>0=Manual (kế toán tự tạo), 1=Auto (phát sinh từ bán hàng)</td><td>0 hoặc 1</td></tr>
+<tr><td><strong>ReferenceDocumentId</strong> 🆕</td><td>ID chứng từ gốc được tham chiếu. Với Hướng 1: tùy chọn, hỗ trợ thu nhiều lần trên cùng một chứng từ gốc. Với Hướng 2: bắt buộc, là ID của Sales Document.</td><td>NULL hoặc GUID</td></tr>
+<tr><td><strong>ReferenceDocumentNo</strong> 🆕</td><td>Số chứng từ gốc (hiển thị, tiện tra cứu)</td><td>NULL hoặc "HD20250001"</td></tr>
+<tr><th colspan="3" class="text-emerald-300 mt-2">Mỗi dòng chi tiết (lặp N lần)</th></tr>
+<tr><td>Diễn giải</td><td>Mô tả</td><td>Thu tiền bán hàng POS</td></tr>
+<tr><td>Số tiền</td><td>Amount</td><td>25.000.000</td></tr>
+<tr><td>Hình thức</td><td>Tiền mặt/CK/QR</td><td>Tiền mặt</td></tr>
+<tr><td>TK Nợ</td><td>TK nhận tiền (111/112)</td><td>111</td></tr>
+<tr><td>TK Có</td><td>TK đối ứng (511/131/141/3331)</td><td>511</td></tr>
+<tr><td colspan="3" class="text-slate-500 italic text-xs" style="padding-top:8px">→ Hướng Manual — Dòng 2: TK Nợ 111 / TK Có 131 — Thu nợ KH 15M</td></tr>
+<tr><td colspan="3" class="text-slate-500 italic text-xs">→ Hướng Manual — Dòng 3: TK Nợ 111 / TK Có 141 — Thu hồi tạm ứng 5M</td></tr>
+<tr><td colspan="3" class="text-purple-400 italic text-xs" style="padding-top:8px">→ Hướng Auto — Dòng 1: TK Nợ 111 / TK Có 511 — Doanh thu bán hàng (thuế 10%) 20M</td></tr>
+<tr><td colspan="3" class="text-purple-400 italic text-xs">→ Hướng Auto — Dòng 2: TK Nợ 111 / TK Có 3331 — Thuế GTGT đầu ra (10%) 2M</td></tr>
+<tr><td colspan="3" class="text-purple-400 italic text-xs">→ Hướng Auto — Dòng 3: TK Nợ 111 / TK Có 511 — Doanh thu bán hàng (thuế 0%) 5M</td></tr>
+</table>
+</div>
+
+<!-- ====== DỮ LIỆU ĐẦU RA ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-emerald-300 mb-2">📤 Dữ liệu đầu ra — Các bảng bị INSERT/UPDATE</h2>
+<table>
+<tr><th>Bảng</th><th>Thao tác</th><th>Số dòng</th><th>Ghi chú</th></tr>
+<tr><td><code>documents</code></td><td><span class="badge badge-insert">INSERT</span></td><td>1</td><td>DocumentType=0, sinh DocumentNo, <strong>SourceType, ReferenceDocumentId, ReferenceDocumentNo 🆕</strong></td></tr>
+<tr><td><code>documents</code> (chứng từ gốc)</td><td><span class="badge badge-update">UPDATE</span></td><td>1</td><td>Cập nhật PaidAmount (số tiền đã thu) trên chứng từ gốc — <strong>chỉ khi có ReferenceDocumentId</strong></td></tr>
+<tr><td><code>document_receipt_details</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td>Description, Amount, PaymentMethod</td></tr>
+<tr><td><code>document_accounting_entries</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td>SourceDetailType=0, DebitId+CreditId+Amount</td></tr>
+<tr><td><code>journal</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td>1 dòng / accounting entry</td></tr>
+<tr><td><code>ledger</code></td><td><span class="badge badge-insert">INSERT</span></td><td>2N</td><td>1 cho TK Nợ + 1 cho TK Có</td></tr>
+<tr><td><code>trial_balance</code></td><td><span class="badge badge-update">UPSERT</span></td><td>≤ 2N</td><td>Cộng dồn MovementDebit/Credit</td></tr>
+<tr><td><code>audit_logs</code></td><td><span class="badge badge-insert">INSERT</span></td><td>1</td><td>Log POST</td></tr>
+</table>
+</div>
+
+<!-- ====== LUỒNG CODE ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-emerald-300 mb-2">⚙️ Luồng code (Posting Service)</h2>
+
+<!-- Flow chung -->
+<h3 class="text-sm font-semibold text-white mb-3">🔹 Các bước chung cho cả 2 hướng</h3>
+<div class="step"><div class="step-num">1</div><div class="step-content"><strong>Check period_locks</strong><br>SELECT Status FROM <code>period_locks</code> WHERE PeriodCode = input.PeriodCode. Nếu Locked → ROLLBACK + lỗi.<br><span class="text-slate-500 text-xs">Tại sao? Vì theo Điều 13 TT 99, kỳ đã khóa thì không được sửa đổi dữ liệu.</span></div></div>
+<div class="step"><div class="step-num">2</div><div class="step-content"><strong>Validate nguồn gốc (SourceType)</strong><br>
+Nếu <code>SourceType = 0 (Manual)</code>:<br>
+&nbsp;&nbsp;• Nếu có <code>ReferenceDocumentId</code> → kiểm tra chứng từ gốc tồn tại và chưa bị hủy.<br>
+&nbsp;&nbsp;• Tính tổng số tiền đã thu từ tất cả các phiếu thu trước đó tham chiếu đến cùng chứng từ gốc.<br>
+&nbsp;&nbsp;• Nếu Tổng đã thu + Số tiền phiếu hiện tại > Tổng giá trị chứng từ gốc → ROLLBACK + lỗi "Vượt quá số tiền còn phải thu".<br>
+&nbsp;&nbsp;• Nếu không có ReferenceDocumentId → không yêu cầu kiểm tra bổ sung.<br>
+Nếu <code>SourceType = 1 (Auto từ Sales)</code> → kiểm tra:<br>
+&nbsp;&nbsp;• <code>ReferenceDocumentId</code> có tồn tại trong bảng <code>documents</code> với DocumentType = Sales không?<br>
+&nbsp;&nbsp;• Sales Document đó đã có Phiếu Thu nào liên kết chưa?<br>
+&nbsp;&nbsp;→ Nếu đã tồn tại → ROLLBACK + lỗi "Hóa đơn này đã có phiếu thu".<br>
+<span class="text-slate-500 text-xs">Tại sao? Với Hướng 1: đảm bảo không thu vượt quá số tiền phải thu của chứng từ gốc, hỗ trợ thu từng phần. Với Hướng 2: đảm bảo mỗi hóa đơn bán hàng chỉ có 1 phiếu thu duy nhất, tránh trùng lặp doanh thu.</span></div></div>
+<div class="step"><div class="step-num">3</div><div class="step-content"><strong>Tạo Document</strong><br>INSERT <code>documents</code> (DocumentId=new GUID, DocumentNo=PTmm/xxxx, DocumentType=0, DocumentDate, AccountingDate, PeriodCode, Status=1=Draft, Note, <strong>SourceType, ReferenceDocumentId, ReferenceDocumentNo</strong>).</div></div>
+<div class="step"><div class="step-num">4</div><div class="step-content"><strong>Loop từng dòng detail</strong> → INSERT <code>document_receipt_details</code> (ReceiptDetailId=new GUID, DocumentId, Description, Amount, PaymentMethod).</div></div>
+<div class="step"><div class="step-num">5</div><div class="step-content"><strong>Loop detail → Tạo accounting entry</strong><br>INSERT <code>document_accounting_entries</code> (EntryId, DocumentId, SourceDetailType=0, SourceDetailId=ReceiptDetailId, DebitAccountId, CreditAccountId, Amount, Explanation).<br><strong>Cùng trong transaction này:</strong> INSERT <code>journal</code> (1 dòng/entry), INSERT <code>ledger</code> (2 dòng/entry), UPSERT <code>trial_balance</code>.<br><span class="text-slate-500 text-xs">Tại sao cùng transaction? Để đảm bảo tính nhất quán — nếu 1 bước lỗi, toàn bộ ROLLBACK.</span></div></div>
+<div class="step"><div class="step-num">6</div><div class="step-content"><strong>Cập nhật chứng từ gốc (nếu có ReferenceDocumentId)</strong><br>UPDATE <code>documents</code> SET PaidAmount = PaidAmount + Tổng tiền phiếu thu WHERE DocumentId = ReferenceDocumentId.<br><span class="text-slate-500 text-xs">Tại sao? Để theo dõi số tiền đã thu lũy kế trên chứng từ gốc, phục vụ kiểm tra giới hạn thu ở bước 2.</span></div></div>
+<div class="step"><div class="step-num">7</div><div class="step-content"><strong>UPDATE documents SET Status=2 (Posted)</strong>. COMMIT.</div></div>
+
+<!-- Flow riêng cho hướng Auto -->
+<h3 class="text-sm font-semibold text-purple-300 mb-3 mt-6">🔹 Bước bổ sung cho hướng phát sinh từ nghiệp vụ bán hàng</h3>
+<div class="highlight-purple mb-3">
+<strong class="text-purple-300">A. Tạo dòng chi tiết tự động từ dữ liệu hóa đơn bán hàng:</strong>
+<ul class="text-xs text-slate-400 mt-1 space-y-1 list-disc list-inside">
+<li>Nhóm các mặt hàng theo <strong>thuế suất GTGT</strong> (0%, 5%, 8%, 10%)</li>
+<li>Với mỗi nhóm thuế suất → tạo <strong>1 dòng Có 511</strong> (tổng doanh thu chưa thuế của nhóm đó)</li>
+<li>Nếu thuế suất > 0% → tạo thêm <strong>1 dòng Có 3331</strong> (tổng tiền thuế của nhóm đó)</li>
+<li>TK Nợ luôn là 111 hoặc 112 (tương ứng với phương thức thanh toán trên hóa đơn)</li>
+</ul>
+</div>
+<div class="highlight-purple mb-3">
+<strong class="text-purple-300">B. Kiểm tra tồn kho trước khi xuất:</strong><br>
+<span class="text-xs text-slate-400">Trước khi tạo Phiếu Thu, hệ thống phải kiểm tra và trừ kho (qua Phiếu Xuất Kho). Nếu bất kỳ mặt hàng nào không đủ tồn → ROLLBACK toàn bộ transaction (không tạo Phiếu Thu, không tạo Phiếu Xuất).</span>
+</div>
+<div class="highlight-purple">
+<strong class="text-purple-300">C. Transaction cha — con:</strong><br>
+<span class="text-xs text-slate-400">Toàn bộ quy trình xử lý nghiệp vụ bán hàng (Tạo Sales Document → Tạo Phiếu Xuất Kho → Tạo Phiếu Thu) được thực thi trong <strong>cùng một transaction</strong>. Nếu bất kỳ bước nào gặp lỗi, toàn bộ transaction sẽ bị ROLLBACK. Cơ chế này ngăn chặn triệt để tình trạng "đã xuất kho nhưng chưa ghi nhận doanh thu" hoặc ngược lại.</span>
+</div>
+</div>
+
+<!-- ====== API ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-emerald-300 mb-2">🌐 API Endpoint</h2>
+
+<h3 class="text-sm font-semibold text-indigo-300 mb-2 flex items-center gap-2"><span class="badge badge-manual">Hướng 1</span> Kế toán tự tạo (có hoặc không tham chiếu chứng từ gốc)</h3>
+<pre>POST /api/vouchers/receipt
+Body: {
+  documentDate: "2026-01-05",
+  accountingDate: "2026-01-05",
+  periodCode: "2026-01",
+  partner: "Công ty ABC",
+  note: "Thu đợt 1 hóa đơn HD20250001",
+  <strong>sourceType: 0,</strong>
+  <strong>referenceDocumentId: "ref-doc-001",</strong>    // ← tùy chọn: ID chứng từ gốc
+  <strong>referenceDocumentNo: "HD20250001",</strong>       // ← tùy chọn: số chứng từ gốc
+  rows: [
+    { desc: "Thu đợt 1 — HĐ HD20250001", amount: 40000000, paymentMethod: 0, debitAccountId: "acc-111", creditAccountId: "acc-131" }
+  ]
+}
+Response: { success: true, documentId: "doc-xxx", documentNo: "PT01/0001" }
+
+// Ví dụ thu đợt 2 trên cùng chứng từ gốc (gọi API lần 2):
+Body: {
+  ...
+  <strong>referenceDocumentId: "ref-doc-001",</strong>
+  <strong>referenceDocumentNo: "HD20250001",</strong>
+  rows: [
+    { desc: "Thu đợt 2 — HĐ HD20250001", amount: 35000000, ... }
+  ]
+}
+Response: { success: true, documentId: "doc-yyy", documentNo: "PT01/0002" }
+</pre>
+
+<h3 class="text-sm font-semibold text-purple-300 mb-2 mt-4 flex items-center gap-2"><span class="badge badge-auto">Hướng 2</span> Phát sinh từ bán hàng (được gọi từ Sales Service)</h3>
+<pre>POST /api/vouchers/receipt
+Body: {
+  documentDate: "2026-01-05",
+  accountingDate: "2026-01-05",
+  periodCode: "2026-01",
+  partner: "Khách lẻ",
+  note: "Thu tiền bán hàng — HĐ HD20250001",
+  <strong>sourceType: 1,</strong>
+  <strong>referenceDocumentId: "sales-doc-xxx",</strong>
+  <strong>referenceDocumentNo: "HD20250001",</strong>
+  rows: [
+    { desc: "Doanh thu bán hàng (thuế 10%)", amount: 20000000, paymentMethod: 0, debitAccountId: "acc-111", creditAccountId: "acc-511" },
+    { desc: "Thuế GTGT đầu ra (10%)", amount: 2000000, paymentMethod: 0, debitAccountId: "acc-111", creditAccountId: "acc-3331" },
+    { desc: "Doanh thu bán hàng (thuế 0%)", amount: 5000000, paymentMethod: 0, debitAccountId: "acc-111", creditAccountId: "acc-511" }
+  ]
+}
+Response: { success: true, documentId: "doc-zzz", documentNo: "PT01/0003" }
+</pre>
+
+<p class="text-xs text-slate-500 mt-3">📌 <strong>Lưu ý:</strong> API <code>POST /api/vouchers/receipt</code> được dùng chung cho cả hai hướng, backend phân biệt qua trường <code>sourceType</code>. Với Hướng 1, <code>referenceDocumentId</code> là tùy chọn — khi có giá trị, hệ thống kiểm tra tổng số tiền đã thu không vượt quá giá trị chứng từ gốc. Với Hướng 2, <code>referenceDocumentId</code> là bắt buộc và phải trỏ đến Sales Document tương ứng; API này được Sales Service gọi đến trong cùng một transaction, không tiếp nhận yêu cầu trực tiếp từ frontend.</p>
+</div>
+
+<!-- ====== RÀNG BUỘC HỦY/SỬA ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-emerald-300 mb-2">🔒 Ràng buộc hủy/sửa giữa 2 hướng</h2>
+<table>
+<tr><th>Tình huống</th><th>Hành vi hệ thống</th></tr>
+<tr><td>Hủy Phiếu Thu do kế toán tự tạo</td><td>Cho phép nếu kỳ kế toán chưa bị khóa. Xóa toàn bộ dữ liệu liên quan: detail, entry, journal, ledger, trial_balance. Nếu phiếu thu có tham chiếu đến chứng từ gốc → cập nhật giảm PaidAmount trên chứng từ gốc.</td></tr>
+<tr><td>Sửa Phiếu Thu do kế toán tự tạo</td><td>Cho phép khi trạng thái là Draft (1). Nếu đã Post (2) → phải hủy Post trước khi sửa. Khi sửa số tiền, hệ thống kiểm tra lại giới hạn thu của chứng từ gốc.</td></tr>
+<tr><td>Tạo nhiều phiếu thu trên cùng 1 chứng từ gốc</td><td>Cho phép. Mỗi lần thu tạo 1 phiếu thu mới, cùng <code>ReferenceDocumentId</code>. Hệ thống tự động kiểm tra: Tổng đã thu (bao gồm phiếu hiện tại) ≤ Tổng giá trị chứng từ gốc. Nếu vượt → từ chối và thông báo số tiền còn được phép thu.</td></tr>
+<tr><td>Hủy Hóa đơn Bán hàng</td><td>Nếu đã tồn tại Phiếu Thu liên kết (SourceType=1), <strong>Phiếu Thu đó được tự động hủy</strong> trong cùng transaction. Cả hai chứng từ cùng bị xóa.</td></tr>
+<tr><td>Hủy Phiếu Thu phát sinh từ bán hàng</td><td><strong>Không cho phép hủy độc lập.</strong> Phiếu thu chỉ được hủy khi hóa đơn bán hàng nguồn bị hủy. Muốn điều chỉnh, phải thực hiện từ hóa đơn bán hàng gốc.</td></tr>
+<tr><td>Sửa Hóa đơn Bán hàng (đã có Phiếu Thu liên kết)</td><td>Nếu Phiếu Thu đã Post → <strong>không cho phép sửa.</strong> Phải hủy cả hai chứng từ rồi tạo lại. Nếu Phiếu Thu còn ở trạng thái Draft → cho phép sửa và cập nhật lại Phiếu Thu tương ứng.</td></tr>
+</table>
+</div>
+
+<!-- ====== SO SÁNH 2 HƯỚNG ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-emerald-300 mb-2">📊 So sánh nhanh 2 hướng</h2>
+<table>
+<tr><th>Tiêu chí</th><th><span class="badge badge-manual">Hướng 1: Kế toán tự tạo</span></th><th><span class="badge badge-auto">Hướng 2: Phát sinh từ bán hàng</span></th></tr>
+<tr><td>Người tạo</td><td>Kế toán</td><td>Hệ thống (tự động)</td></tr>
+<tr><td>Nguồn dữ liệu</td><td>Nhập thủ công từng dòng</td><td>Tạo tự động từ dòng hàng hóa trên hóa đơn</td></tr>
+<tr><td>TK Có</td><td>Linh hoạt: 511, 131, 141, 3331, 711...</td><td>Cố định: 511 (doanh thu) + 3331 (thuế)</td></tr>
+<tr><td>Liên kết chứng từ gốc</td><td>Có thể tham chiếu 1 chứng từ gốc (tùy chọn). 1 chứng từ gốc có thể có N phiếu thu (thu nhiều lần).</td><td>Liên kết 1-1 với Sales Document (bắt buộc). Mỗi Sales Document chỉ có 1 phiếu thu.</td></tr>
+<tr><td>Hủy</td><td>Hủy độc lập từng phiếu. Khi hủy, cập nhật giảm PaidAmount trên chứng từ gốc (nếu có).</td><td>Chỉ hủy khi hủy hóa đơn bán hàng nguồn.</td></tr>
+<tr><td>Nghiệp vụ đi kèm</td><td>Không</td><td>Luôn đi kèm Phiếu Xuất Kho (Nợ 632/Có 156)</td></tr>
+<tr><td>Đối tác</td><td>Bắt buộc nếu Có TK 131</td><td>Theo khách hàng trên hóa đơn bán hàng</td></tr>
+</table>
+</div>
+
+</div></body></html>

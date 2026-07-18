@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Spec: Phiếu Chi</title><script src="https://cdn.tailwindcss.com"></script>
+<style>body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px}.card{background:rgba(30,41,59,.7);border:1px solid rgba(71,85,105,.4);border-radius:16px;padding:24px;margin-bottom:16px}.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}.badge-insert{background:#10b981/15;color:#34d399;border:1px solid #10b981/30}.badge-update{background:#f59e0b/15;color:#fbbf24;border:1px solid #f59e0b/30}.step{display:flex;gap:12px;margin-bottom:12px}.step-num{width:28px;height:28px;background:#ef4444/20;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#f87171;flex-shrink:0}.step-content{flex:1}code{background:#1e293b;padding:2px 6px;border-radius:4px;font-size:12px;color:#38bdf8}table{width:100%;border-collapse:collapse;font-size:13px}th{background:#1e293b;padding:8px 12px;text-align:left;color:#94a3b8;font-size:11px;text-transform:uppercase}td{padding:8px 12px;border-top:1px solid #334155}pre{background:#1e293b;padding:12px;border-radius:8px;overflow-x:auto;font-size:12px;line-height:1.6}.highlight{background:#ef4444/10;border-left:3px solid #ef4444;padding:8px 12px;border-radius:0 8px 8px 0;font-size:13px;margin:8px 0}</style>
+</head>
+<body><div class="max-w-4xl mx-auto">
+<header class="mb-8"><a href="../index.html" class="text-slate-400 text-sm hover:text-white">← Quay về Home</a><h1 class="text-2xl font-bold text-white mt-2">💸 Spec: Nghiệp Vụ Phiếu Chi (Expense)</h1><p class="text-slate-400 mt-1">Mẫu số: 02-TT — Thiết kế cho dev hiểu cách hoạt động để code backend.</p></header>
+
+<div class="card"><h2 class="text-lg font-semibold text-red-300 mb-2">🎯 Mục đích & Ngữ cảnh</h2>
+<p><strong>Phiếu Chi</strong> ghi nhận tất cả các khoản tiền doanh nghiệp chi ra: mua hàng hóa/nvl, thanh toán nợ nhà cung cấp, trả lương nhân viên, nộp thuế, chi phí vận hành (thuê mặt bằng, điện nước, marketing...), tạm ứng cho nhân viên đi công tác...</p>
+<p class="mt-2">Trong ngành POS: Phiếu Chi phát sinh hàng ngày khi cửa hàng chi tiền mặt mua nguyên liệu (F&B), thanh toán tiền hàng cho NCC, trả lương nhân viên bán hàng. <strong>Mỗi phiếu Chi có thể gộp nhiều khoản chi khác nhau</strong> cho cùng 1 kỳ/quỹ.</p>
+</div>
+
+<div class="card"><h2 class="text-lg font-semibold text-red-300 mb-2">📖 Cách hoạt động của nghiệp vụ</h2>
+<div class="space-y-3 text-sm text-slate-300">
+<p><strong class="text-white">1. Kế toán chọn "Tạo Phiếu Chi"</strong> → form mở với ngày, kỳ, đối tác.</p>
+<p><strong class="text-white">2. Thêm dòng chi tiết:</strong> Mỗi dòng = 1 khoản chi với <strong>TK Nợ</strong> (156-mua hàng, 642-chi phí, 331-trả nợ NCC, 334-lương...) và <strong>TK Có</strong> luôn là 111/112 (tiền ra khỏi quỹ nào).</p>
+<p><strong class="text-white">3. TK Nợ</strong> thay đổi tùy mục đích chi, <strong>TK Có</strong> luôn là 111/112 vì tiền ra khỏi quỹ. Đây là điểm ngược với Phiếu Thu (bên Thu: TK Nợ cố định 111/112, TK Có thay đổi).</p>
+<p><strong class="text-white">4. Nhấn "Lưu & Post"</strong> → hệ thống lưu document → detail → accounting_entries → INSERT journal, ledger → UPSERT trial_balance.</p>
+</div>
+</div>
+
+<div class="card"><h2 class="text-lg font-semibold text-red-300 mb-2">❓ Tại sao hạch toán như vậy?</h2>
+<div class="space-y-3 text-sm text-slate-300">
+<div class="highlight">
+<strong class="text-red-300">Tại sao Có TK 111/112?</strong><br>
+Vì doanh nghiệp <strong>chi tiền ra</strong> (tài sản giảm). Trong kế toán, khi tài sản giảm → ghi Có. TK 111 (Tiền mặt) và TK 112 (TGNH) là tài khoản tài sản, nên khi chi tiền → ghi Có.
+</div>
+<div class="highlight">
+<strong class="text-red-300">Tại sao Nợ TK 156 (Hàng hóa)?</strong><br>
+Khi mua hàng về nhập kho, <strong>hàng tồn kho tăng</strong> (tài sản tăng) → ghi Nợ TK 156. Đồng thời, nếu có VAT đầu vào được khấu trừ → Nợ TK 133.
+</div>
+<div class="highlight">
+<strong class="text-red-300">Tại sao Nợ TK 642 (Chi phí QLKD)?</strong><br>
+TK 642 là tài khoản <strong>chi phí</strong>. Khi phát sinh chi phí (thuê mặt bằng, điện nước...) → ghi Nợ để tập hợp chi phí. Cuối kỳ, số dư Nợ của TK 642 sẽ được kết chuyển sang TK 911 để xác định KQKD.
+</div>
+<div class="highlight">
+<strong class="text-red-300">Tại sao Nợ TK 331 (Phải trả NCC)?</strong><br>
+Khi thanh toán nợ cho nhà cung cấp, khoản <strong>phải trả giảm</strong> (nợ phải trả giảm) → ghi Nợ TK 331. Trước đó khi mua chịu đã ghi Có TK 331, nay trả tiền thì ghi Nợ để tất toán.
+</div>
+<div class="highlight">
+<strong class="text-red-300">Tại sao Nợ TK 334 (Phải trả NLĐ)?</strong><br>
+Khi trả lương, khoản <strong>phải trả người lao động giảm</strong> → ghi Nợ TK 334. Trước đó khi tính lương phải trả đã ghi Có TK 334 / Nợ TK 642.
+</div>
+</div>
+</div>
+
+<div class="card"><h2 class="text-lg font-semibold text-red-300 mb-2">📥 Dữ liệu đầu vào</h2>
+<p class="text-sm text-slate-400 mb-3">Một phiếu Chi có <strong>nhiều dòng</strong>, mỗi dòng có TK Nợ/Có riêng.</p>
+<table>
+<tr><th colspan="3" class="text-red-300">Header</th></tr>
+<tr><td>Ngày chứng từ</td><td>Ngày phát sinh</td><td>2026-01-06</td></tr>
+<tr><td>Ngày ghi sổ</td><td>Ngày hạch toán</td><td>2026-01-06</td></tr>
+<tr><td>Kỳ kế toán</td><td>PeriodCode</td><td>2026-01</td></tr>
+<tr><td>Đối tác</td><td>NCC / người nhận (tùy chọn)</td><td>Công ty XYZ</td></tr>
+<tr><th colspan="3" class="text-red-300 mt-2">Mỗi dòng chi tiết (lặp N lần)</th></tr>
+<tr><td>Diễn giải</td><td>Mô tả</td><td>Mua hàng hóa nhập kho</td></tr>
+<tr><td>Số tiền</td><td>Amount</td><td>35.000.000</td></tr>
+<tr><td>Hình thức</td><td>Tiền mặt / CK</td><td>Tiền mặt</td></tr>
+<tr><td>TK Nợ</td><td>TK đối ứng (156/642/331/334)</td><td>156 (Hàng hóa)</td></tr>
+<tr><td>TK Có</td><td>TK xuất tiền (111/112)</td><td>111 (Tiền mặt)</td></tr>
+<tr><td colspan="3" class="text-slate-500 italic text-xs" style="padding-top:8px">→ Dòng 2: TK Nợ 642 / TK Có 111 — Chi thuê mặt bằng 15M</td></tr>
+<tr><td colspan="3" class="text-slate-500 italic text-xs">→ Dòng 3: TK Nợ 334 / TK Có 111 — Chi lương NV 45M</td></tr>
+</table>
+</div>
+
+<div class="card"><h2 class="text-lg font-semibold text-red-300 mb-2">📤 Dữ liệu đầu ra</h2>
+<table>
+<tr><th>Bảng</th><th>Thao tác</th><th>Số dòng</th><th>Ghi chú</th></tr>
+<tr><td><code>documents</code></td><td><span class="badge badge-insert">INSERT</span></td><td>1</td><td>DocumentType=1</td></tr>
+<tr><td><code>document_expense_details</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td></td></tr>
+<tr><td><code>document_accounting_entries</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td>SourceDetailType=1</td></tr>
+<tr><td><code>journal</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td></td></tr>
+<tr><td><code>ledger</code></td><td><span class="badge badge-insert">INSERT</span></td><td>2N</td><td></td></tr>
+<tr><td><code>trial_balance</code></td><td><span class="badge badge-update">UPSERT</span></td><td>≤ 2N</td><td></td></tr>
+</table>
+</div>
+
+<div class="card"><h2 class="text-lg font-semibold text-red-300 mb-2">⚙️ Luồng code</h2>
+<div class="step"><div class="step-num">1</div><div class="step-content"><strong>Check period_locks</strong> → nếu Locked thì ROLLBACK.<br><span class="text-slate-500 text-xs">Tại sao? Kỳ đã khóa → không được thêm/sửa/xóa chứng từ.</span></div></div>
+<div class="step"><div class="step-num">2</div><div class="step-content"><strong>INSERT documents</strong> (DocumentType=1, sinh PC01/xxxx).</div></div>
+<div class="step"><div class="step-num">3</div><div class="step-content"><strong>INSERT document_expense_details</strong> (N dòng).</div></div>
+<div class="step"><div class="step-num">4</div><div class="step-content"><strong>INSERT document_accounting_entries</strong> (N dòng, SourceDetailType=1) + INSERT journal + ledger + UPSERT trial_balance.<br><span class="text-slate-500 text-xs">Tại sao cùng transaction? Để đảm bảo toàn vẹn dữ liệu.</span></div></div>
+<div class="step"><div class="step-num">5</div><div class="step-content"><strong>UPDATE documents SET Status=Posted</strong>. COMMIT.</div></div>
+</div>
+
+<div class="card"><h2 class="text-lg font-semibold text-red-300 mb-2">🌐 API Endpoint</h2>
+<pre>POST /api/vouchers/expense
+Body: {
+  documentDate:"2026-01-06", accountingDate:"2026-01-06", periodCode:"2026-01", partner:"",
+  rows:[{desc:"Mua hàng hóa",amount:35000000,paymentMethod:0,debitAccountId:"acc-156",creditAccountId:"acc-111"}]
+}
+</pre>
+</div>
+</div></body></html>

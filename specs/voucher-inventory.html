@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Spec: Nhập/Xuất Kho</title><script src="https://cdn.tailwindcss.com"></script>
+<style>body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px}.card{background:rgba(30,41,59,.7);border:1px solid rgba(71,85,105,.4);border-radius:16px;padding:24px;margin-bottom:16px}.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}.badge-insert{background:#10b981/15;color:#34d399;border:1px solid #10b981/30}.badge-update{background:#f59e0b/15;color:#fbbf24;border:1px solid #f59e0b/30}.badge-manual{background:#6366f1/15;color:#a5b4fc;border:1px solid #6366f1/30}.badge-auto{background:#a855f7/15;color:#c084fc;border:1px solid #a855f7/30}.badge-import{background:#0891b2/15;color:#22d3ee;border:1px solid #0891b2/30}.step{display:flex;gap:12px;margin-bottom:12px}.step-num{width:28px;height:28px;background:#3b82f6/20;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#60a5fa;flex-shrink:0}.step-content{flex:1}code{background:#1e293b;padding:2px 6px;border-radius:4px;font-size:12px;color:#38bdf8}table{width:100%;border-collapse:collapse;font-size:13px}th{background:#1e293b;padding:8px 12px;text-align:left;color:#94a3b8;font-size:11px;text-transform:uppercase}td{padding:8px 12px;border-top:1px solid #334155}pre{background:#1e293b;padding:12px;border-radius:8px;overflow-x:auto;font-size:12px;line-height:1.6}.highlight{background:#3b82f6/10;border-left:3px solid #3b82f6;padding:8px 12px;border-radius:0 8px 8px 0;font-size:13px;margin:8px 0}.highlight-blue{background:#6366f1/10;border-left:3px solid #6366f1;padding:8px 12px;border-radius:0 8px 8px 0;font-size:13px;margin:8px 0}.highlight-purple{background:#a855f7/10;border-left:3px solid #a855f7;padding:8px 12px;border-radius:0 8px 8px 0;font-size:13px;margin:8px 0}.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}</style>
+</head>
+<body><div class="max-w-4xl mx-auto">
+<header class="mb-8"><a href="../index.html" class="text-slate-400 text-sm hover:text-white">← Quay về Home</a><h1 class="text-2xl font-bold text-white mt-2">📦 Spec: Nhập Kho & Xuất Kho (Inventory)</h1><p class="text-slate-400 mt-1">Mẫu số: 01-VT / 02-VT — Dùng chung bảng detail, phân biệt qua InventoryType.</p></header>
+
+<!-- ====== TỔNG QUAN ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-blue-300 mb-2">🎯 Mục đích & Ngữ cảnh</h2>
+<p><strong>Nhập kho (01-VT):</strong> Ghi nhận hàng hóa, NVL, CCDC nhập kho từ NCC, nhập trả lại từ khách, nhập điều chuyển nội bộ.</p>
+<p class="mt-2"><strong>Xuất kho (02-VT):</strong> Ghi nhận xuất hàng ra quầy bán, xuất bán cho khách, xuất trả NCC, xuất hủy hàng hết hạn. Phiếu xuất kho có thể được tạo theo 2 hướng: <span class="text-indigo-300">kế toán tự tạo</span> hoặc <span class="text-purple-300">phát sinh tự động từ nghiệp vụ bán hàng</span>.</p>
+<p class="mt-2 text-blue-300">💡 Nhập và Xuất <strong>dùng chung 1 bảng</strong> document_inventory_details, phân biệt qua InventoryType (0=Import, 1=Export).</p>
+</div>
+
+<!-- ====== NHẬP KHO ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-cyan-300 mb-2 flex items-center gap-2"><span class="badge badge-import">Nhập Kho</span> Cách hoạt động</h2>
+<div class="space-y-3 text-sm text-slate-300">
+<p><strong class="text-white">1. Kế toán chọn "Tạo Phiếu Nhập Kho"</strong> → hệ thống hiển thị màn hình nhập liệu. Kế toán nhập ngày, kỳ, chọn NCC, chọn kho nhập.</p>
+<p><strong class="text-white">2. Thêm dòng sản phẩm:</strong> Mỗi dòng = tên sản phẩm, số lượng, đơn giá nhập, kho nhập. <em>Một phiếu Nhập có thể có 1 hoặc nhiều dòng.</em></p>
+<p><strong class="text-white">3. TK Nợ</strong> = 156 (Hàng hóa), 152 (NVL), 153 (CCDC) — hàng tồn kho tăng. <strong>TK Có</strong> = 331 (nợ NCC nếu mua chịu) hoặc 111/112 (trả tiền ngay).</p>
+<p><strong class="text-white">4. Sau khi nhập đủ:</strong> Kế toán kiểm tra tổng tiền → chọn <strong>"Lưu & Post"</strong>. Hệ thống sẽ: tạo document header → lưu detail → tạo hạch toán Nợ/Có → INSERT journal, ledger → UPSERT trial_balance → cập nhật tồn kho.</p>
+</div>
+</div>
+
+<!-- ====== XUẤT KHO: HAI HƯỚNG ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-orange-300 mb-2">🔄 Xuất Kho — Hai hướng hoạt động</h2>
+<p class="text-sm text-slate-400 mb-4">Phiếu Xuất Kho có thể được tạo ra theo <strong>2 hướng</strong> khác nhau, tùy vào ngữ cảnh nghiệp vụ.</p>
+
+<div class="compare-grid">
+<!-- Hướng 1: Manual -->
+<div class="p-4 bg-indigo-900/10 rounded-lg border border-indigo-700/30">
+<h3 class="font-semibold text-indigo-300 mb-2 flex items-center gap-2"><span class="badge badge-manual">Hướng 1</span> Kế toán tự tạo</h3>
+<p class="text-xs text-slate-400 leading-relaxed">Kế toán chủ động vào màn hình <strong>"Tạo Phiếu Xuất Kho"</strong> (<code>voucher-export.html</code>), chọn loại nghiệp vụ xuất (bán hàng, trả NCC, hủy, điều chuyển, khuyến mãi...), nhập thủ công từng dòng sản phẩm và số lượng. Hệ thống tự động điền cặp TK Nợ/Có theo loại nghiệp vụ đã chọn.</p>
+<div class="mt-3 text-xs"><span class="text-indigo-300 font-semibold">SourceType = 0 (Manual)</span><br><span class="text-slate-500">ReferenceDocumentId = NULL</span></div>
+</div>
+
+<!-- Hướng 2: Auto từ Sales -->
+<div class="p-4 bg-purple-900/10 rounded-lg border border-purple-700/30">
+<h3 class="font-semibold text-purple-300 mb-2 flex items-center gap-2"><span class="badge badge-auto">Hướng 2</span> Phát sinh từ bán hàng</h3>
+<p class="text-xs text-slate-400 leading-relaxed">Khi phát sinh <strong>nghiệp vụ bán hàng</strong>, hệ thống <strong>tự động tạo 1 Phiếu Xuất Kho</strong> tương ứng để ghi nhận giá vốn. Các dòng chi tiết được tạo tự động từ danh sách hàng hóa đã bán. Định khoản cố định: <strong>Nợ 632 / Có 156</strong>.</p>
+<div class="mt-3 text-xs"><span class="text-purple-300 font-semibold">SourceType = 1 (Auto từ Sales)</span><br><span class="text-slate-500">ReferenceDocumentId = SalesDocumentId (bắt buộc)</span></div>
+</div>
+</div>
+
+<div class="highlight-blue mt-4">
+<strong class="text-indigo-300">💡 Tại sao cần phân biệt 2 hướng?</strong><br>
+<ul class="text-xs text-slate-400 mt-1 space-y-1 list-disc list-inside">
+<li><strong>Truy xuất nguồn gốc:</strong> Xác định phiếu xuất được tạo bởi ai, từ nghiệp vụ nào → thuận tiện cho công tác kiểm tra, đối chiếu.</li>
+<li><strong>Ngăn trùng lặp:</strong> Mỗi hóa đơn bán hàng chỉ được tạo <strong>1 Phiếu Xuất Kho duy nhất</strong> để ghi nhận giá vốn. Phiếu xuất tự tạo không bị ràng buộc này.</li>
+<li><strong>Hủy/sửa liên hoàn:</strong> Khi hủy hóa đơn bán hàng, Phiếu Xuất Kho liên kết được tự động hủy theo. Ngược lại, nếu phiếu xuất đã post thì không cho hủy hóa đơn.</li>
+<li><strong>Linh hoạt nghiệp vụ:</strong> Hướng 1 hỗ trợ nhiều loại xuất kho (trả NCC, hủy, điều chuyển, khuyến mãi) mà Hướng 2 không bao phủ.</li>
+</ul>
+</div>
+</div>
+
+<!-- ====== CÁCH HOẠT ĐỘNG XUẤT KHO ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-orange-300 mb-2">📖 Xuất Kho — Cách hoạt động chi tiết</h2>
+
+<!-- Hướng 1 flow -->
+<h3 class="text-sm font-semibold text-indigo-300 mb-3 flex items-center gap-2"><span class="badge badge-manual">Hướng 1</span> Kế toán tự tạo Phiếu Xuất Kho</h3>
+<div class="space-y-3 text-sm text-slate-300 mb-6">
+<p><strong class="text-white">1. Kế toán chọn "Tạo Phiếu Xuất Kho"</strong> → hệ thống hiển thị màn hình nhập liệu. Kế toán nhập ngày, kỳ. SourceType mặc định = 0.</p>
+<p><strong class="text-white">2. Chọn loại nghiệp vụ xuất kho:</strong> Bán hàng (Nợ 632/Có 156), Trả NCC (Nợ 331/Có 156), Hủy/Hết hạn (Nợ 642/Có 156), Điều chuyển nội bộ (Nợ 156/Có 156), Khuyến mãi (Nợ 641/Có 156), hoặc Tự nhập TK. Hệ thống tự động điền cặp TK Nợ/Có cho tất cả các dòng.</p>
+<p><strong class="text-white">3. Thêm dòng sản phẩm:</strong> Mỗi dòng = sản phẩm + số lượng + đơn giá vốn + kho xuất. <em>Một phiếu Xuất có thể có 1 hoặc nhiều dòng.</em> Hệ thống kiểm tra tồn kho trước khi cho phép lưu.</p>
+<p><strong class="text-white">4. Sau khi nhập đủ:</strong> Kế toán kiểm tra tổng giá vốn → chọn <strong>"Lưu & Post"</strong>. Hệ thống sẽ: tạo document header → lưu detail → tạo hạch toán Nợ/Có → INSERT journal, ledger → UPSERT trial_balance → trừ tồn kho.</p>
+</div>
+
+<!-- Hướng 2 flow -->
+<h3 class="text-sm font-semibold text-purple-300 mb-3 flex items-center gap-2"><span class="badge badge-auto">Hướng 2</span> Phiếu Xuất Kho phát sinh từ nghiệp vụ bán hàng</h3>
+<div class="space-y-3 text-sm text-slate-300">
+<p><strong class="text-white">1. Nghiệp vụ bán hàng phát sinh</strong> → hệ thống xác định danh sách mặt hàng (gồm sản phẩm, số lượng, giá vốn từng mặt hàng).</p>
+<p><strong class="text-white">2. Khi hóa đơn bán hàng được ghi nhận</strong> → hệ thống đồng thời tạo 2 chứng từ trong cùng 1 transaction:</p>
+<div class="highlight-purple mt-2">
+<strong class="text-purple-300">Transaction gồm 2 nghiệp vụ con:</strong><br>
+<span class="text-xs text-slate-400">(a) <strong>Phiếu Xuất Kho</strong> — ghi nhận giá vốn: Nợ 632 / Có 156 (từng dòng hàng hóa)</span><br>
+<span class="text-xs text-slate-400">(b) <strong>Phiếu Thu</strong> — ghi nhận doanh thu: Nợ 111/112 / Có 511, Có 3331</span>
+</div>
+<p><strong class="text-white">3. Với Phiếu Xuất Kho được tạo tự động:</strong> SourceType = 1, ReferenceDocumentId = ID của Sales Document. Các dòng chi tiết được tạo tự động từ dòng hàng hóa đã bán, mỗi dòng = 1 mặt hàng với số lượng và giá vốn tương ứng. Định khoản cố định: Nợ 632 / Có 156.</p>
+<p><strong class="text-white">4. Ràng buộc:</strong> Mỗi Sales Document chỉ liên kết với 1 Phiếu Xuất Kho duy nhất. Nếu Phiếu Xuất đã Post → không cho sửa/xóa Sales Document. Khi Sales Document bị hủy, Phiếu Xuất Kho liên kết cũng được hủy đồng thời.</p>
+</div>
+</div>
+
+<!-- ====== TẠI SAO HẠCH TOÁN NHƯ VẬY ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-blue-300 mb-2">❓ Tại sao hạch toán như vậy?</h2>
+<div class="space-y-3 text-sm text-slate-300">
+<div class="highlight"><strong class="text-blue-300">Tại sao Nhập kho: Nợ 156 / Có 331?</strong><br>Khi nhập hàng, <strong>hàng tồn kho tăng</strong> (tài sản tăng → Nợ 156). Nếu mua chịu, <strong>khoản phải trả NCC tăng</strong> (nợ phải trả tăng → Có 331). Nếu trả tiền ngay thì Có 111/112.</div>
+<div class="highlight"><strong class="text-blue-300">Tại sao Xuất kho (bán hàng): Nợ 632 / Có 156?</strong><br>Khi xuất hàng ra bán: hàng tồn kho <strong>giảm</strong> (tài sản giảm → Có 156), đồng thời ghi nhận <strong>giá vốn</strong> (chi phí tăng → Nợ 632). Đây là bút toán bắt buộc để xác định lợi nhuận gộp.</div>
+<div class="highlight"><strong class="text-blue-300">Tại sao Xuất kho (trả NCC): Nợ 331 / Có 156?</strong><br>Khi trả hàng cho NCC: hàng tồn kho <strong>giảm</strong> (Có 156), đồng thời khoản phải trả NCC <strong>giảm</strong> (Nợ 331).</div>
+<div class="highlight-purple"><strong class="text-purple-300">Tại sao Phiếu Xuất Kho từ bán hàng luôn là Nợ 632 / Có 156?</strong><br>Trong nghiệp vụ bán hàng, giá vốn là chi phí cốt lõi để xác định lợi nhuận. TK 632 phản ánh toàn bộ giá vốn hàng bán trong kỳ, được đối chiếu với doanh thu (TK 511) trên báo cáo KQKD. Vì vậy, mọi giao dịch bán hàng đều phải ghi nhận giá vốn qua bút toán này, không có ngoại lệ.</div>
+<div class="highlight-blue"><strong class="text-indigo-300">Mối quan hệ Phiếu Xuất Kho ↔ Phiếu Thu trong bán hàng?</strong><br>Đây là hai mặt của cùng một giao dịch. <strong>Phiếu Xuất Kho</strong> ghi nhận giá vốn hàng bán (Nợ 632/Có 156). <strong>Phiếu Thu</strong> ghi nhận doanh thu và dòng tiền vào (Nợ 111,112/Có 511,3331). Cả hai được tạo trong cùng một transaction, đảm bảo dữ liệu kế toán luôn khớp đúng: không thể có tình trạng "đã ghi nhận doanh thu nhưng chưa trừ kho" hoặc ngược lại.</div>
+<div class="highlight"><strong class="text-blue-300">Tại sao Nhập và Xuất dùng chung bảng detail?</strong><br>Vì cấu trúc dữ liệu giống nhau: đều có ProductName, Quantity, UnitPrice, Amount, Warehouse. Chỉ khác InventoryType và cặp TK Nợ/Có. Dùng chung giúp giảm số bảng, code CRUD dùng lại được.</div>
+</div>
+</div>
+
+<!-- ====== DỮ LIỆU ĐẦU VÀO ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-blue-300 mb-2">📥 Dữ liệu đầu vào</h2>
+
+<h3 class="text-sm font-semibold text-cyan-300 mb-2 flex items-center gap-2"><span class="badge badge-import">Nhập Kho</span> Header & dòng chi tiết</h3>
+<table>
+<tr><th colspan="3" class="text-cyan-300">Header</th></tr>
+<tr><td>Ngày chứng từ</td><td>Ngày nhập</td><td>2026-01-10</td></tr>
+<tr><td>Kỳ kế toán</td><td>PeriodCode</td><td>2026-01</td></tr>
+<tr><td>Đối tác</td><td>Nhà cung cấp</td><td>Công ty XYZ</td></tr>
+<tr><td>Kho</td><td>Warehouse</td><td>Kho tổng</td></tr>
+<tr><td><strong>InventoryType</strong></td><td>0 = Import</td><td>0</td></tr>
+<tr><th colspan="3" class="text-cyan-300 mt-2">Mỗi dòng sản phẩm</th></tr>
+<tr><td>Tên SP</td><td>ProductName</td><td>Máy POS MT-200</td></tr>
+<tr><td>SL</td><td>Quantity</td><td>10</td></tr>
+<tr><td>Đơn giá</td><td>UnitPrice</td><td>2.800.000</td></tr>
+<tr><td>Thành tiền</td><td>Amount</td><td>28.000.000</td></tr>
+<tr><td>TK Nợ</td><td>156/152/153</td><td>156</td></tr>
+<tr><td>TK Có</td><td>331 hoặc 111/112</td><td>331</td></tr>
+</table>
+
+<h3 class="text-sm font-semibold text-orange-300 mb-2 mt-4 flex items-center gap-2">Xuất Kho <span class="text-xs text-slate-500">Header & dòng chi tiết</span></h3>
+<table>
+<tr><th colspan="3" class="text-orange-300">Header (chung toàn phiếu)</th></tr>
+<tr><td>Ngày chứng từ</td><td>Ngày xuất</td><td>2026-01-10</td></tr>
+<tr><td>Kỳ kế toán</td><td>PeriodCode</td><td>2026-01</td></tr>
+<tr><td>Đối tác</td><td>Khách hàng / NCC (tùy nghiệp vụ)</td><td>Công ty ABC</td></tr>
+<tr><td>Kho</td><td>Warehouse</td><td>Kho tổng</td></tr>
+<tr><td>Lý do xuất</td><td>Bán hàng / Trả NCC / Hủy / Điều chuyển / Khuyến mãi</td><td>Xuất bán hàng</td></tr>
+<tr><td><strong>InventoryType</strong></td><td>1 = Export</td><td>1</td></tr>
+<tr><td><strong>SourceType</strong> 🆕</td><td>0=Manual (kế toán tự tạo), 1=Auto (phát sinh từ bán hàng)</td><td>0 hoặc 1</td></tr>
+<tr><td><strong>ReferenceDocumentId</strong> 🆕</td><td>ID chứng từ gốc tham chiếu. Với Hướng 1: tùy chọn (NULL). Với Hướng 2: bắt buộc, là ID của Sales Document.</td><td>NULL hoặc GUID</td></tr>
+<tr><td><strong>ReferenceDocumentNo</strong> 🆕</td><td>Số chứng từ gốc (hiển thị, tiện tra cứu)</td><td>NULL hoặc "HD20250001"</td></tr>
+<tr><th colspan="3" class="text-orange-300 mt-2">Mỗi dòng sản phẩm</th></tr>
+<tr><td>Tên SP</td><td>ProductName</td><td>Máy POS MT-200</td></tr>
+<tr><td>SL</td><td>Quantity</td><td>5</td></tr>
+<tr><td>Đơn giá vốn</td><td>UnitPrice (giá vốn)</td><td>2.500.000</td></tr>
+<tr><td>Thành tiền</td><td>Amount</td><td>12.500.000</td></tr>
+<tr><td>TK Nợ</td><td>632/331/642/641/156 (tùy loại NV)</td><td>632</td></tr>
+<tr><td>TK Có</td><td>156/152/153</td><td>156</td></tr>
+<tr><td colspan="3" class="text-purple-400 italic text-xs" style="padding-top:8px">→ Hướng Auto — Dòng 1: TK Nợ 632 / TK Có 156 — SP A, SL 2, giá vốn 2.5M = 5M</td></tr>
+<tr><td colspan="3" class="text-purple-400 italic text-xs">→ Hướng Auto — Dòng 2: TK Nợ 632 / TK Có 156 — SP B, SL 1, giá vốn 3M = 3M</td></tr>
+<tr><td colspan="3" class="text-slate-500 italic text-xs" style="padding-top:8px">→ Hướng Manual — Dòng 1: TK Nợ 331 / TK Có 156 — Trả NCC, SP C, SL 3, giá 1M = 3M</td></tr>
+</table>
+</div>
+
+<!-- ====== DỮ LIỆU ĐẦU RA ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-blue-300 mb-2">📤 Dữ liệu đầu ra — Các bảng bị INSERT/UPDATE</h2>
+<table>
+<tr><th>Bảng</th><th>Thao tác</th><th>Số dòng</th><th>Ghi chú</th></tr>
+<tr><td><code>documents</code></td><td><span class="badge badge-insert">INSERT</span></td><td>1</td><td>DocumentType=2, <strong>SourceType, ReferenceDocumentId, ReferenceDocumentNo 🆕</strong> (chỉ cho phiếu Xuất)</td></tr>
+<tr><td><code>document_inventory_details</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td>InventoryType=0/1, ProductName, Quantity, UnitPrice, Amount, Warehouse</td></tr>
+<tr><td><code>document_accounting_entries</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td>SourceDetailType=2, DebitId+CreditId+Amount</td></tr>
+<tr><td><code>journal</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td>1 dòng / accounting entry</td></tr>
+<tr><td><code>ledger</code></td><td><span class="badge badge-insert">INSERT</span></td><td>2N</td><td>1 cho TK Nợ + 1 cho TK Có</td></tr>
+<tr><td><code>trial_balance</code></td><td><span class="badge badge-update">UPSERT</span></td><td>≤ 2N</td><td>Cộng dồn MovementDebit/Credit</td></tr>
+<tr><td><code>inventory</code> (tồn kho)</td><td><span class="badge badge-update">UPDATE</span></td><td>N</td><td>Nhập kho: tăng Quantity. Xuất kho: giảm Quantity</td></tr>
+<tr><td><code>audit_logs</code></td><td><span class="badge badge-insert">INSERT</span></td><td>1</td><td>Log POST</td></tr>
+</table>
+</div>
+
+<!-- ====== LUỒNG CODE ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-blue-300 mb-2">⚙️ Luồng code (Posting Service)</h2>
+
+<!-- Nhập kho flow -->
+<h3 class="text-sm font-semibold text-cyan-300 mb-3 flex items-center gap-2"><span class="badge badge-import">Nhập Kho</span> Các bước xử lý</h3>
+<div class="step"><div class="step-num">1</div><div class="step-content"><strong>Check period_locks</strong><br>SELECT Status FROM <code>period_locks</code> WHERE PeriodCode = input.PeriodCode. Nếu Locked → ROLLBACK + lỗi.</div></div>
+<div class="step"><div class="step-num">2</div><div class="step-content"><strong>Tạo Document</strong><br>INSERT <code>documents</code> (DocumentType=2, sinh PNKxx/xxxx, Status=1=Draft).</div></div>
+<div class="step"><div class="step-num">3</div><div class="step-content"><strong>Loop dòng sản phẩm</strong> → INSERT <code>document_inventory_details</code> (InventoryType=0).</div></div>
+<div class="step"><div class="step-num">4</div><div class="step-content"><strong>Tạo accounting entry</strong> + INSERT <code>journal</code>, <code>ledger</code>, UPSERT <code>trial_balance</code>. <strong>Cập nhật tồn kho:</strong> UPDATE <code>inventory</code> SET Quantity = Quantity + input.Quantity.</div></div>
+<div class="step"><div class="step-num">5</div><div class="step-content"><strong>UPDATE documents SET Status=2 (Posted)</strong>. COMMIT.</div></div>
+
+<!-- Xuất kho flow chung -->
+<h3 class="text-sm font-semibold text-orange-300 mb-3 mt-6">Xuất Kho — Các bước chung cho cả 2 hướng</h3>
+<div class="step"><div class="step-num">1</div><div class="step-content"><strong>Check period_locks</strong><br>SELECT Status FROM <code>period_locks</code> WHERE PeriodCode = input.PeriodCode. Nếu Locked → ROLLBACK + lỗi.</div></div>
+<div class="step"><div class="step-num">2</div><div class="step-content"><strong>Validate nguồn gốc (SourceType)</strong><br>
+Nếu <code>SourceType = 0 (Manual)</code> → không yêu cầu kiểm tra bổ sung (kế toán tự chịu trách nhiệm về dữ liệu).<br>
+Nếu <code>SourceType = 1 (Auto từ Sales)</code> → kiểm tra:<br>
+&nbsp;&nbsp;• <code>ReferenceDocumentId</code> có tồn tại trong bảng <code>documents</code> với DocumentType = Sales không?<br>
+&nbsp;&nbsp;• Sales Document đó đã có Phiếu Xuất Kho nào liên kết chưa?<br>
+&nbsp;&nbsp;→ Nếu đã tồn tại → ROLLBACK + lỗi "Hóa đơn này đã có phiếu xuất kho".<br>
+<span class="text-slate-500 text-xs">Tại sao? Đảm bảo mỗi hóa đơn bán hàng chỉ có 1 phiếu xuất kho duy nhất, tránh trừ kho 2 lần cho cùng 1 giao dịch.</span></div></div>
+<div class="step"><div class="step-num">3</div><div class="step-content"><strong>Kiểm tra tồn kho</strong><br>Với từng dòng sản phẩm: SELECT Quantity FROM <code>inventory</code> WHERE ProductId = input.ProductId AND Warehouse = input.Warehouse. Nếu Quantity < input.Quantity → ROLLBACK + lỗi "Không đủ tồn kho".<br><span class="text-slate-500 text-xs">Tại sao? Không thể xuất kho nếu không đủ hàng. Đây là nguyên tắc cơ bản của quản lý kho.</span></div></div>
+<div class="step"><div class="step-num">4</div><div class="step-content"><strong>Tạo Document</strong><br>INSERT <code>documents</code> (DocumentType=2, sinh PXKxx/xxxx, Status=1=Draft, <strong>SourceType, ReferenceDocumentId, ReferenceDocumentNo</strong> — áp dụng cho phiếu Xuất).</div></div>
+<div class="step"><div class="step-num">5</div><div class="step-content"><strong>Loop dòng sản phẩm</strong> → INSERT <code>document_inventory_details</code> (InventoryType=1).</div></div>
+<div class="step"><div class="step-num">6</div><div class="step-content"><strong>Tạo accounting entry</strong> + INSERT <code>journal</code>, <code>ledger</code>, UPSERT <code>trial_balance</code>. <strong>Cập nhật tồn kho:</strong> UPDATE <code>inventory</code> SET Quantity = Quantity - input.Quantity.</div></div>
+<div class="step"><div class="step-num">7</div><div class="step-content"><strong>UPDATE documents SET Status=2 (Posted)</strong>. COMMIT.</div></div>
+
+<!-- Flow riêng cho hướng Auto -->
+<h3 class="text-sm font-semibold text-purple-300 mb-3 mt-6">🔹 Bước bổ sung cho Xuất Kho phát sinh từ nghiệp vụ bán hàng</h3>
+<div class="highlight-purple mb-3">
+<strong class="text-purple-300">A. Tạo dòng xuất kho tự động từ dữ liệu hóa đơn bán hàng:</strong>
+<ul class="text-xs text-slate-400 mt-1 space-y-1 list-disc list-inside">
+<li>Với mỗi mặt hàng trong hóa đơn bán hàng → tạo <strong>1 dòng xuất kho</strong></li>
+<li>Mỗi dòng gồm: ProductName, Quantity (số lượng bán), UnitPrice (giá vốn), Amount = Quantity × UnitPrice</li>
+<li>TK Nợ luôn là <strong>632</strong> (Giá vốn hàng bán), TK Có luôn là <strong>156</strong> (Hàng hóa)</li>
+<li>Kho xuất: theo kho được chọn tại POS</li>
+</ul>
+</div>
+<div class="highlight-purple">
+<strong class="text-purple-300">B. Transaction cha — con:</strong><br>
+<span class="text-xs text-slate-400">Toàn bộ quy trình xử lý nghiệp vụ bán hàng (Tạo Sales Document → Tạo Phiếu Xuất Kho → Tạo Phiếu Thu) được thực thi trong <strong>cùng một transaction</strong>. Nếu bất kỳ bước nào gặp lỗi, toàn bộ transaction sẽ bị ROLLBACK. Cơ chế này ngăn chặn triệt để tình trạng "đã xuất kho nhưng chưa ghi nhận doanh thu" hoặc ngược lại.</span>
+</div>
+</div>
+
+<!-- ====== API ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-blue-300 mb-2">🌐 API Endpoint</h2>
+
+<h3 class="text-sm font-semibold text-cyan-300 mb-2 flex items-center gap-2"><span class="badge badge-import">Nhập Kho</span></h3>
+<pre>POST /api/vouchers/inventory
+Body: {
+  documentDate: "2026-01-10",
+  periodCode: "2026-01",
+  partner: "Công ty XYZ",
+  warehouse: "Kho tổng",
+  inventoryType: 0,
+  rows: [
+    { productName: "Máy POS MT-200", quantity: 10, unitPrice: 2800000, debitAccountId: "acc-156", creditAccountId: "acc-331" }
+  ]
+}
+Response: { success: true, documentId: "doc-xxx", documentNo: "PNK01/0001" }
+</pre>
+
+<h3 class="text-sm font-semibold text-indigo-300 mb-2 mt-4 flex items-center gap-2"><span class="badge badge-manual">Xuất Kho — Hướng 1</span> Kế toán tự tạo</h3>
+<pre>POST /api/vouchers/inventory
+Body: {
+  documentDate: "2026-01-10",
+  periodCode: "2026-01",
+  partner: "Công ty ABC",
+  warehouse: "Kho tổng",
+  inventoryType: 1,
+  <strong>sourceType: 0,</strong>
+  <strong>referenceDocumentId: null,</strong>
+  <strong>referenceDocumentNo: null,</strong>
+  reason: "Xuất bán hàng",
+  rows: [
+    { productName: "Máy POS MT-200", quantity: 5, unitPrice: 2500000, debitAccountId: "acc-632", creditAccountId: "acc-156" }
+  ]
+}
+Response: { success: true, documentId: "doc-yyy", documentNo: "PXK01/0001" }
+</pre>
+
+<h3 class="text-sm font-semibold text-purple-300 mb-2 mt-4 flex items-center gap-2"><span class="badge badge-auto">Xuất Kho — Hướng 2</span> Phát sinh từ bán hàng (được gọi từ Sales Service)</h3>
+<pre>POST /api/vouchers/inventory
+Body: {
+  documentDate: "2026-01-10",
+  periodCode: "2026-01",
+  partner: "Khách lẻ",
+  warehouse: "Kho POS trưng bày",
+  inventoryType: 1,
+  <strong>sourceType: 1,</strong>
+  <strong>referenceDocumentId: "sales-doc-xxx",</strong>
+  <strong>referenceDocumentNo: "HD20250001",</strong>
+  reason: "Xuất bán hàng",
+  rows: [
+    { productName: "SP A", quantity: 2, unitPrice: 2500000, debitAccountId: "acc-632", creditAccountId: "acc-156" },
+    { productName: "SP B", quantity: 1, unitPrice: 3000000, debitAccountId: "acc-632", creditAccountId: "acc-156" }
+  ]
+}
+Response: { success: true, documentId: "doc-zzz", documentNo: "PXK01/0002" }
+</pre>
+
+<p class="text-xs text-slate-500 mt-3">📌 <strong>Lưu ý:</strong> API <code>POST /api/vouchers/inventory</code> được dùng chung cho cả Nhập kho và Xuất kho, backend phân biệt qua <code>inventoryType</code>. Với Xuất kho, <code>sourceType</code> phân biệt giữa kế toán tự tạo và phát sinh từ bán hàng. Với Hướng 2, API này được Sales Service gọi đến trong cùng một transaction, không tiếp nhận yêu cầu trực tiếp từ frontend.</p>
+</div>
+
+<!-- ====== RÀNG BUỘC HỦY/SỬA ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-blue-300 mb-2">🔒 Ràng buộc hủy/sửa đối với Phiếu Xuất Kho</h2>
+<table>
+<tr><th>Tình huống</th><th>Hành vi hệ thống</th></tr>
+<tr><td>Hủy Phiếu Xuất Kho do kế toán tự tạo</td><td>Cho phép nếu kỳ kế toán chưa bị khóa. Xóa toàn bộ dữ liệu liên quan: detail, entry, journal, ledger, trial_balance. Hoàn trả tồn kho (cộng lại số lượng đã xuất).</td></tr>
+<tr><td>Sửa Phiếu Xuất Kho do kế toán tự tạo</td><td>Cho phép khi trạng thái là Draft (1). Nếu đã Post (2) → phải hủy Post trước khi sửa. Khi sửa số lượng, hệ thống kiểm tra lại tồn kho.</td></tr>
+<tr><td>Hủy Hóa đơn Bán hàng</td><td>Nếu đã tồn tại Phiếu Xuất Kho liên kết (SourceType=1), <strong>Phiếu Xuất Kho đó được tự động hủy</strong> trong cùng transaction. Cả hai chứng từ cùng bị xóa, tồn kho được hoàn trả.</td></tr>
+<tr><td>Hủy Phiếu Xuất Kho phát sinh từ bán hàng</td><td><strong>Không cho phép hủy độc lập.</strong> Phiếu xuất chỉ được hủy khi hóa đơn bán hàng nguồn bị hủy. Muốn điều chỉnh, phải thực hiện từ hóa đơn bán hàng gốc.</td></tr>
+<tr><td>Sửa Hóa đơn Bán hàng (đã có Phiếu Xuất Kho liên kết)</td><td>Nếu Phiếu Xuất Kho đã Post → <strong>không cho phép sửa.</strong> Phải hủy cả hai chứng từ rồi tạo lại. Nếu Phiếu Xuất Kho còn ở trạng thái Draft → cho phép sửa và cập nhật lại Phiếu Xuất Kho tương ứng.</td></tr>
+</table>
+</div>
+
+<!-- ====== SO SÁNH ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-blue-300 mb-2">📊 So sánh nhanh 2 hướng Xuất Kho</h2>
+<table>
+<tr><th>Tiêu chí</th><th><span class="badge badge-manual">Hướng 1: Kế toán tự tạo</span></th><th><span class="badge badge-auto">Hướng 2: Phát sinh từ bán hàng</span></th></tr>
+<tr><td>Người tạo</td><td>Kế toán</td><td>Hệ thống (tự động)</td></tr>
+<tr><td>Nguồn dữ liệu</td><td>Nhập thủ công từng dòng</td><td>Tạo tự động từ dòng hàng hóa trên hóa đơn</td></tr>
+<tr><td>Loại nghiệp vụ</td><td>Linh hoạt: bán hàng, trả NCC, hủy, điều chuyển, khuyến mãi, tự nhập TK</td><td>Cố định: xuất bán hàng (Nợ 632/Có 156)</td></tr>
+<tr><td>Liên kết chứng từ gốc</td><td>Không bắt buộc</td><td>Liên kết 1-1 với Sales Document (bắt buộc)</td></tr>
+<tr><td>Hủy</td><td>Hủy độc lập từng phiếu, hoàn trả tồn kho</td><td>Chỉ hủy khi hủy hóa đơn bán hàng nguồn</td></tr>
+<tr><td>Nghiệp vụ đi kèm</td><td>Không</td><td>Luôn đi kèm Phiếu Thu (Nợ 111,112/Có 511,3331)</td></tr>
+<tr><td>Cập nhật tồn kho</td><td>Giảm tồn kho theo số lượng xuất</td><td>Giảm tồn kho theo số lượng bán</td></tr>
+</table>
+</div>
+
+</div></body></html>

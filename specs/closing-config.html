@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Spec: Cấu Hình Kết Chuyển</title><script src="https://cdn.tailwindcss.com"></script>
+<style>body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px}.card{background:rgba(30,41,59,.7);border:1px solid rgba(71,85,105,.4);border-radius:16px;padding:24px;margin-bottom:16px}.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}.badge-insert{background:#10b981/15;color:#34d399;border:1px solid #10b981/30}.badge-update{background:#f59e0b/15;color:#fbbf24;border:1px solid #f59e0b/30}.step{display:flex;gap:12px;margin-bottom:12px}.step-num{width:28px;height:28px;background:#f97316/20;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fb923c;flex-shrink:0}.step-content{flex:1}code{background:#1e293b;padding:2px 6px;border-radius:4px;font-size:12px;color:#38bdf8}table{width:100%;border-collapse:collapse;font-size:13px}th{background:#1e293b;padding:8px 12px;text-align:left;color:#94a3b8;font-size:11px;text-transform:uppercase}td{padding:8px 12px;border-top:1px solid #334155}pre{background:#1e293b;padding:12px;border-radius:8px;overflow-x:auto;font-size:12px;line-height:1.6}.highlight{background:#f97316/10;border-left:3px solid #f97316;padding:8px 12px;border-radius:0 8px 8px 0;font-size:13px;margin:8px 0}</style>
+</head>
+<body><div class="max-w-4xl mx-auto">
+<header class="mb-8"><a href="../index.html" class="text-slate-400 text-sm hover:text-white">← Quay về Home</a><h1 class="text-2xl font-bold text-white mt-2">⚙️ Spec: Cấu Hình Kết Chuyển Cuối Kỳ (Closing Config)</h1><p class="text-slate-400 mt-1">Thiết kế cho dev hiểu tại sao cần cấu hình, cách cấu hình hoạt động, và cách code CRUD + closing service.</p></header>
+
+<div class="card"><h2 class="text-lg font-semibold text-orange-300 mb-2">🎯 Tại sao cần cấu hình kết chuyển?</h2>
+<div class="space-y-3 text-sm text-slate-300">
+<p>Theo <strong>Điều 79, 80 TT 99/2025/TT-BTC</strong>, cuối mỗi kỳ kế toán (tháng, quý, năm), doanh nghiệp phải thực hiện <strong>kết chuyển</strong> để xác định kết quả kinh doanh (lãi/lỗ).</p>
+<p>Quy trình chuẩn:</p>
+<ol class="list-decimal ml-5 space-y-1">
+<li><strong>Kết chuyển Doanh thu</strong> (TK 511, 711) → ghi Có TK 911</li>
+<li><strong>Kết chuyển Chi phí</strong> (TK 632, 641, 642, 811) → ghi Nợ TK 911</li>
+<li><strong>Kết chuyển Lãi/Lỗ</strong> từ TK 911 → TK 421 (Lợi nhuận chưa phân phối)</li>
+</ol>
+<div class="highlight">
+<strong class="text-orange-300">💡 Tại sao cần bảng cấu hình riêng?</strong><br>
+Vì mỗi doanh nghiệp có hệ thống tài khoản khác nhau (có thể dùng TK 5111, 5112, 5113... hoặc có thêm TK 711 - thu nhập khác). Thay vì hardcode trong code, chúng ta lưu các rule vào <code>closing_rules</code> để <strong>kế toán tự cấu hình mà không cần sửa code</strong>.
+</div>
+</div>
+</div>
+
+<div class="card"><h2 class="text-lg font-semibold text-orange-300 mb-2">📖 Cách hoạt động của cấu hình</h2>
+<div class="space-y-3 text-sm text-slate-300">
+<p><strong class="text-white">Mỗi rule = 1 bút toán kết chuyển</strong>. Bao gồm: TK Nợ, TK Có, loại rule (revenue/cost/profit), diễn giải, thứ tự thực hiện.</p>
+<p><strong class="text-white">3 loại RuleType quan trọng:</strong></p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
+<div class="p-3 bg-cyan-900/10 border border-cyan-700/20 rounded text-xs">
+<strong class="text-cyan-300">revenue (Doanh thu)</strong><br>TK Nợ = 511/711<br>TK Có = 911<br><span class="text-slate-500">Chuyển toàn bộ doanh thu trong kỳ vào TK 911.</span>
+</div>
+<div class="p-3 bg-orange-900/10 border border-orange-700/20 rounded text-xs">
+<strong class="text-orange-300">cost (Chi phí)</strong><br>TK Nợ = 911<br>TK Có = 632/641/642/811<br><span class="text-slate-500">Chuyển toàn bộ chi phí trong kỳ vào TK 911.</span>
+</div>
+<div class="p-3 bg-green-900/10 border border-green-700/20 rounded text-xs">
+<strong class="text-green-300">profit (Lãi/Lỗ)</strong><br>TK Nợ = 911, TK Có = 421 (nếu lãi)<br>TK Nợ = 421, TK Có = 911 (nếu lỗ)<br><span class="text-slate-500">Chuyển KQKD về lợi nhuận chưa PP.</span>
+</div>
+</div>
+<p class="mt-3"><strong class="text-white">Thứ tự thực hiện (SortOrder):</strong> RẤT QUAN TRỌNG. Phải KC doanh thu trước → KC chi phí → KC lãi/lỗ sau cùng. Nếu sai thứ tự, số dư TK 911 sẽ không chính xác.</p>
+<p><strong class="text-white">Khi closing service chạy:</strong> Hệ thống SELECT tất cả rule từ <code>closing_rules</code> ORDER BY SortOrder ASC → tính số tiền thực tế từ trial_balance hoặc gl → tạo closing_voucher + accounting_entries → INSERT journal, ledger → UPSERT trial_balance.</p>
+</div>
+</div>
+
+<div class="card"><h2 class="text-lg font-semibold text-orange-300 mb-2">📋 Bộ rule mặc định (cài sẵn khi khởi tạo DB)</h2>
+<table>
+<tr><th>Sort</th><th>RuleType</th><th>TK Nợ</th><th>TK Có</th><th>Diễn giải</th><th>Ghi chú</th></tr>
+<tr><td>1</td><td>revenue</td><td>511</td><td>911</td><td>KC Doanh thu bán hàng</td><td>Bắt buộc chạy đầu tiên</td></tr>
+<tr><td>2</td><td>cost</td><td>911</td><td>632</td><td>KC Giá vốn hàng bán</td><td></td></tr>
+<tr><td>3</td><td>cost</td><td>911</td><td>641</td><td>KC Chi phí bán hàng</td><td>Có thể bỏ nếu DN không dùng TK 641</td></tr>
+<tr><td>4</td><td>cost</td><td>911</td><td>642</td><td>KC Chi phí QLKD</td><td></td></tr>
+<tr><td>5</td><td>profit</td><td>911</td><td>421</td><td>KC Lãi → LN chưa PP</td><td>Tự động: nếu lỗ thì đảo Nợ 421 / Có 911</td></tr>
+</table>
+</div>
+
+<div class="card"><h2 class="text-lg font-semibold text-orange-300 mb-2">📥 Thao tác CRUD</h2>
+<table>
+<tr><th>Thao tác</th><th>Bảng</th><th>Mô tả</th></tr>
+<tr><td>Thêm rule</td><td><code>closing_rules</code> <span class="badge badge-insert">INSERT</span></td><td>Chọn TK Nợ, TK Có (phải có trong accounts), RuleType (revenue/cost/profit), Description, SortOrder. <strong>Validate:</strong> TK Nợ/Có phải tồn tại trong accounts.</td></tr>
+<tr><td>Sửa rule</td><td><code>closing_rules</code> <span class="badge badge-update">UPDATE</span></td><td>Cập nhật TK, loại, thứ tự. Cảnh báo nếu thay đổi SortOrder làm sai thứ tự revenue → cost → profit.</td></tr>
+<tr><td>Xóa rule</td><td><code>closing_rules</code> DELETE</td><td>Xóa rule. <strong>Lưu ý:</strong> nếu xóa rule revenue hoặc profit, kết chuyển sẽ KHÔNG đầy đủ → báo cáo KQKD sai.</td></tr>
+<tr><td>Sắp xếp lại</td><td><code>closing_rules</code> <span class="badge badge-update">UPDATE</span> SortOrder</td><td>Đảm bảo: revenue (SortOrder nhỏ nhất) → cost → profit (SortOrder lớn nhất).</td></tr>
+</table>
+</div>
+
+<div class="card"><h2 class="text-lg font-semibold text-orange-300 mb-2">🗄️ Bảng closing_rules — Column Spec</h2>
+<table>
+<tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr>
+<tr><td>RuleId</td><td>string</td><td class="text-yellow-300">PK</td><td class="text-red-400">No</td><td>Khóa chính GUID</td></tr>
+<tr><td>DebitAccountId</td><td>string</td><td class="text-blue-300">FK → accounts</td><td class="text-red-400">No</td><td>TK Nợ của bút toán KC</td></tr>
+<tr><td>CreditAccountId</td><td>string</td><td class="text-blue-300">FK → accounts</td><td class="text-red-400">No</td><td>TK Có của bút toán KC</td></tr>
+<tr><td>RuleType</td><td>string</td><td class="text-violet-300">IDX</td><td class="text-red-400">No</td><td>revenue / cost / profit</td></tr>
+<tr><td>Description</td><td>string</td><td>—</td><td class="text-emerald-400">Yes</td><td>Diễn giải (vd: "KC Doanh thu bán hàng")</td></tr>
+<tr><td>SortOrder</td><td>int</td><td>—</td><td class="text-red-400">No</td><td>Thứ tự thực hiện (1,2,3...)</td></tr>
+</table>
+</div>
+
+<div class="card"><h2 class="text-lg font-semibold text-orange-300 mb-2">🌐 API Endpoints</h2>
+<pre>GET    /api/closing-rules                    → List all rules (sorted by SortOrder)
+POST   /api/closing-rules                    → Create new rule
+PUT    /api/closing-rules/:id                → Update rule
+DELETE /api/closing-rules/:id                → Delete rule
+PATCH  /api/closing-rules/reorder           → Body: [{ruleId, sortOrder}...] — cập nhật hàng loạt SortOrder
+
+<span class="text-slate-500">// Ví dụ POST body:</span>
+{ "debitAccountId":"acc-511", "creditAccountId":"acc-911", "ruleType":"revenue", "description":"KC Doanh thu bán hàng", "sortOrder":1 }
+</pre>
+</div>
+
+<div class="card"><h2 class="text-lg font-semibold text-orange-300 mb-2">🔗 Liên kết với Closing Service</h2>
+<p class="text-sm text-slate-300">Khi người dùng nhấn "Chạy Kết Chuyển" trên <code>closing.html</code>, service sẽ:</p>
+<div class="step"><div class="step-num">1</div><div class="step-content"><strong>SELECT * FROM closing_rules ORDER BY SortOrder ASC</strong></div></div>
+<div class="step"><div class="step-num">2</div><div class="step-content">Với mỗi rule, <strong>tính số tiền thực tế</strong> của kỳ từ <code>trial_balance</code>:<br>• RuleType=revenue → lấy SUM(MovementCredit) của TK Nợ<br>• RuleType=cost → lấy SUM(MovementDebit) của TK Có<br>• RuleType=profit → tính NetProfit = TotalRevenue - TotalCost</div></div>
+<div class="step"><div class="step-num">3</div><div class="step-content"><strong>INSERT closing_vouchers + closing_voucher_details + accounting_entries</strong> (SourceDetailType=4) → INSERT journal, ledger → UPSERT trial_balance.</div></div>
+</div>
+</div></body></html>

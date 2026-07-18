@@ -50,7 +50,7 @@ function getDefaultStore() {
             { id: 'fnb008', code: 'FNB-SW01', name: '🍰 Bánh flan caramel', unit: 'Cái', costPrice: 7000, sellPrice: 20000, type: 'fnb' },
         ],
         receiptTemplates: [
-            { id: 'tpl001', name: 'Thu tiền bán hàng', debit: '111', credit: '511', vat: true, desc: 'Thu tiền bán hàng tại quầy' },
+            { id: 'tpl001', name: 'Thu tiền bán hàng', debit: '111', credit: '511', vat: true, desc: 'Thu tiền bán hàng tại POS' },
             { id: 'tpl002', name: 'Thu tiền bán hàng qua TGNH', debit: '112', credit: '511', vat: true, desc: 'Thu tiền bán hàng chuyển khoản' },
             { id: 'tpl003', name: 'Thu hồi tạm ứng', debit: '111', credit: '141', vat: false, desc: 'Thu hồi tạm ứng' },
             { id: 'tpl004', name: 'Thu nợ khách hàng', debit: '111', credit: '131', vat: false, desc: 'Khách hàng thanh toán nợ' },
@@ -62,12 +62,6 @@ function getDefaultStore() {
             { id: 'ptpl004', name: 'Chi tiền thuê mặt bằng', debit: '642', credit: '111', vat: true, desc: 'Thanh toán tiền thuê' },
             { id: 'ptpl005', name: 'Chi tạm ứng', debit: '141', credit: '111', vat: false, desc: 'Tạm ứng cho nhân viên' },
             { id: 'ptpl006', name: 'Chi thanh toán NCC', debit: '331', credit: '111', vat: false, desc: 'Thanh toán nợ nhà cung cấp' },
-        ],
-        employees: [
-            { id: 'emp001', name: 'Nguyễn Văn A', position: 'Nhân viên bán hàng' },
-            { id: 'emp002', name: 'Trần Thị B', position: 'Thu ngân' },
-            { id: 'emp003', name: 'Lê Văn C', position: 'Quản lý cửa hàng' },
-            { id: 'emp004', name: 'Phạm Thị D', position: 'Nhân viên bếp' },
         ],
         vouchers: {
             receive: [
@@ -540,15 +534,37 @@ function updateJournalData() {
             (v.entries||v.items||v.rows||[]).forEach((e, idx) => {
                 const db = e.debit||'', cr = e.credit||'';
                 if (fd && db !== fd) return; if (fc && cr !== fc) return;
-                all.push({ date: dt, number: v.number||'', desc: e.desc||v.partner||v.reason||'', debit: db, credit: cr, amount: e.amount||0 });
+                all.push({ date: dt, number: v.number||'', desc: e.desc||v.partner||v.reason||'', debit: db, credit: cr, amount: e.amount||0, voucherType: type, voucherId: v.id, entryIdx: idx });
             });
         });
     });
     all.sort((a,b) => a.date.localeCompare(b.date) || a.number.localeCompare(b.number));
     let html = '', total = 0;
-    all.forEach(e => { total += e.amount; html += `<tr class="hover:bg-slate-800/50"><td class="px-4 py-2">${e.date}</td><td class="px-4 py-2">${e.number}</td><td class="px-4 py-2">${e.desc}</td><td class="px-4 py-2 text-green-400">${e.debit ? getAccountName(e.debit) : ''}</td><td class="px-4 py-2 text-red-400">${e.credit ? getAccountName(e.credit) : ''}</td><td class="px-4 py-2 text-right font-mono">${formatCurrency(e.amount)}</td></tr>`; });
-    tbody.innerHTML = html || '<tr><td colspan="6" class="px-4 py-8 text-center text-slate-500 text-xs italic">Chưa có dữ liệu.</td></tr>';
+    all.forEach(e => {
+        total += e.amount;
+        const key = `${e.voucherType}|${e.voucherId}|${e.entryIdx}`;
+        html += `<tr class="hover:bg-slate-800/50"><td class="px-4 py-2 text-xs">${e.date}</td><td class="px-4 py-2 text-xs">${e.number}</td><td class="px-4 py-2 text-xs">${e.desc}</td><td class="px-4 py-2 text-xs text-green-400">${e.debit ? getAccountName(e.debit) : ''}</td><td class="px-4 py-2 text-xs text-red-400">${e.credit ? getAccountName(e.credit) : ''}</td><td class="px-4 py-2 text-right font-mono text-xs">${formatCurrency(e.amount)}</td><td class="px-4 py-2 text-center"><button onclick="deleteJournalEntry('${e.voucherType}','${e.voucherId}',${e.entryIdx})" class="text-red-400 hover:text-red-300 hover:bg-red-900/30 px-2 py-0.5 rounded text-xs transition-all" title="Xóa dòng này khỏi chứng từ">✕</button></td></tr>`;
+    });
+    tbody.innerHTML = html || '<tr><td colspan="7" class="px-4 py-8 text-center text-slate-500 text-xs italic">Chưa có dữ liệu.</td></tr>';
     totalEl.textContent = formatCurrency(total);
+}
+function deleteJournalEntry(vType, vId, eIdx) {
+    if (!confirm(`⚠️ Xác nhận xóa dòng bút toán này?\n\nDòng này sẽ bị xóa khỏi chứng từ gốc. Hành động này không thể hoàn tác.\n\nLưu ý: Nếu đây là bút toán kết chuyển, sau khi xóa bạn cần vào Kết Chuyển để thực hiện lại.`)) return;
+    const vlist = store.vouchers[vType];
+    if (!vlist) return;
+    const v = vlist.find(x => x.id === vId);
+    if (!v) return;
+    const entries = v.entries || v.items || v.rows;
+    if (!entries || eIdx >= entries.length) return;
+    entries.splice(eIdx, 1);
+    // If no entries left, remove the whole voucher
+    if (entries.length === 0) {
+        const vidx = vlist.indexOf(v);
+        if (vidx >= 0) vlist.splice(vidx, 1);
+    }
+    v.totalAmount = (entries||[]).reduce((s, e) => s + (e.amount||0), 0);
+    saveStore(store);
+    updateJournalData();
 }
 
 // ==================== SỔ CHI TIẾT TÀI KHOẢN ====================
@@ -742,7 +758,7 @@ function saveClosingConfig() {
 
 // ==================== BÁO CÁO LƯU CHUYỂN TIỀN TỆ ====================
 function initCashFlowPage() {
-    store = getDefaultStore();
+    store = loadStore();
     document.getElementById('cf-from').value = '2026-01-01';
     document.getElementById('cf-to').value = todayStr();
     updateCashFlow();
@@ -862,7 +878,7 @@ function updateCashFlow() {
 
 // ==================== BÁO CÁO CÔNG NỢ PHẢI THU ====================
 function initReceivablesPage() {
-    store = getDefaultStore();
+    store = loadStore();
     document.getElementById('recv-from').value = '2026-01-01';
     document.getElementById('recv-to').value = todayStr();
     const sel = document.getElementById('recv-partner-filter');
@@ -952,7 +968,7 @@ function updateReceivables() {
 
 // ==================== BÁO CÁO CÔNG NỢ PHẢI TRẢ ====================
 function initPayablesPage() {
-    store = getDefaultStore();
+    store = loadStore();
     document.getElementById('payable-from').value = '2026-01-01';
     document.getElementById('payable-to').value = todayStr();
     const sel = document.getElementById('payable-supplier-filter');
@@ -1036,7 +1052,7 @@ function updatePayables() {
 
 // ==================== BẢNG CÂN ĐỐI TÀI KHOẢN ====================
 function initTrialBalancePage() {
-    store = getDefaultStore();
+    store = loadStore();
     document.getElementById('tb-from').value = '2026-01-01';
     document.getElementById('tb-to').value = todayStr();
     updateTrialBalance();

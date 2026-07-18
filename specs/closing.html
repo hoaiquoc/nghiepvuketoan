@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Spec: Kết Chuyển Cuối Kỳ</title><script src="https://cdn.tailwindcss.com"></script>
+<style>body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;padding:24px}.card{background:rgba(30,41,59,.7);border:1px solid rgba(71,85,105,.4);border-radius:16px;padding:24px;margin-bottom:16px}.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}.badge-insert{background:#10b981/15;color:#34d399;border:1px solid #10b981/30}.badge-update{background:#f59e0b/15;color:#fbbf24;border:1px solid #f59e0b/30}.badge-revenue{background:#22d3ee/15;color:#22d3ee;border:1px solid #22d3ee/30}.badge-cost{background:#fb923c/15;color:#fb923c;border:1px solid #fb923c/30}.badge-profit{background:#4ade80/15;color:#4ade80;border:1px solid #4ade80/30}.step{display:flex;gap:12px;margin-bottom:12px}.step-num{width:28px;height:28px;background:#06b6d4/20;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#22d3ee;flex-shrink:0}.step-content{flex:1}code{background:#1e293b;padding:2px 6px;border-radius:4px;font-size:12px;color:#38bdf8}table{width:100%;border-collapse:collapse;font-size:13px}th{background:#1e293b;padding:8px 12px;text-align:left;color:#94a3b8;font-size:11px;text-transform:uppercase}td{padding:8px 12px;border-top:1px solid #334155}pre{background:#1e293b;padding:12px;border-radius:8px;overflow-x:auto;font-size:12px;line-height:1.6}.highlight{background:#06b6d4/10;border-left:3px solid #06b6d4;padding:8px 12px;border-radius:0 8px 8px 0;font-size:13px;margin:8px 0}.highlight-warn{background:#f59e0b/10;border-left:3px solid #f59e0b;padding:8px 12px;border-radius:0 8px 8px 0;font-size:13px;margin:8px 0}</style>
+</head>
+<body><div class="max-w-4xl mx-auto">
+<header class="mb-8"><a href="../index.html" class="text-slate-400 text-sm hover:text-white">← Quay về Home</a><h1 class="text-2xl font-bold text-white mt-2">📊 Spec: Kết Chuyển Cuối Kỳ (Period Closing)</h1><p class="text-slate-400 mt-1">Căn cứ Điều 79, 80 TT 99/2025/TT-BTC — Kết chuyển doanh thu, chi phí → Xác định KQKD.</p></header>
+
+<!-- ====== MỤC ĐÍCH ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-cyan-300 mb-2">🎯 Mục đích & Ngữ cảnh</h2>
+<div class="space-y-3 text-sm text-slate-300">
+<p>Cuối mỗi kỳ kế toán (tháng, quý, năm), kế toán thực hiện <strong>kết chuyển</strong> toàn bộ doanh thu và chi phí phát sinh trong kỳ vào TK 911 (Xác định kết quả kinh doanh), sau đó chuyển lãi/lỗ về TK 421 (Lợi nhuận chưa phân phối).</p>
+<p>Nghiệp vụ kết chuyển được thực hiện thông qua <strong>các rule cấu hình sẵn</strong> trong bảng <code>closing_rules</code> (xem spec <a href="closing-config.html" class="text-cyan-300 underline">Cấu Hình Kết Chuyển</a>), đảm bảo linh hoạt cho từng doanh nghiệp mà không cần sửa code.</p>
+<p>Sau khi kết chuyển hoàn tất, kế toán thực hiện <strong>khóa sổ kỳ kế toán</strong> (xem spec <a href="lock-period.html" class="text-pink-300 underline">Khóa/Mở Sổ</a>) để ngăn chặn mọi thay đổi dữ liệu trong kỳ đã khóa.</p>
+</div>
+</div>
+
+<!-- ====== QUY TRÌNH KẾT CHUYỂN ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-cyan-300 mb-2">📖 Quy trình kết chuyển cuối kỳ</h2>
+<p class="text-sm text-slate-400 mb-4">Quy trình chuẩn gồm <strong>3 giai đoạn</strong>, thực hiện tuần tự theo đúng thứ tự. Nếu sai thứ tự, số dư TK 911 sẽ không chính xác.</p>
+
+<!-- Giai đoạn 1 -->
+<div class="mb-4 p-4 bg-cyan-900/10 rounded-lg border border-cyan-700/30">
+<h3 class="font-semibold text-cyan-300 mb-2 flex items-center gap-2"><span class="badge badge-revenue">GĐ 1</span> Kết chuyển Doanh thu</h3>
+<p class="text-xs text-slate-400 mb-2">Chuyển toàn bộ doanh thu trong kỳ (TK 511, 711) sang TK 911 để tổng hợp.</p>
+<div class="highlight">
+<strong class="text-cyan-300">Định khoản:</strong> Nợ TK 511 (Doanh thu) / Có TK 911 (XĐ KQKD)<br>
+<span class="text-xs text-slate-500">Tại sao Nợ 511? Vì TK 511 đang có số dư Có (doanh thu phát sinh trong kỳ). Để đưa số dư về 0, ta ghi Nợ TK 511. Đối ứng bên Có là TK 911 — nơi tập hợp để tính lãi/lỗ.</span>
+</div>
+</div>
+
+<!-- Giai đoạn 2 -->
+<div class="mb-4 p-4 bg-orange-900/10 rounded-lg border border-orange-700/30">
+<h3 class="font-semibold text-orange-300 mb-2 flex items-center gap-2"><span class="badge badge-cost">GĐ 2</span> Kết chuyển Chi phí</h3>
+<p class="text-xs text-slate-400 mb-2">Chuyển toàn bộ chi phí trong kỳ (TK 632, 641, 642, 811) sang TK 911.</p>
+<div class="highlight">
+<strong class="text-orange-300">Định khoản:</strong> Nợ TK 911 (XĐ KQKD) / Có TK 632, 641, 642, 811 (Chi phí)<br>
+<span class="text-xs text-slate-500">Tại sao Có 632/641/642? Các TK chi phí đang có số dư Nợ (chi phí phát sinh). Để đưa về 0, ta ghi Có. Đối ứng bên Nợ là TK 911 — nơi tập hợp chi phí để bù trừ với doanh thu.</span>
+</div>
+</div>
+
+<!-- Giai đoạn 3 -->
+<div class="p-4 bg-green-900/10 rounded-lg border border-green-700/30">
+<h3 class="font-semibold text-green-300 mb-2 flex items-center gap-2"><span class="badge badge-profit">GĐ 3</span> Kết chuyển Lãi/Lỗ</h3>
+<p class="text-xs text-slate-400 mb-2">Xác định chênh lệch giữa doanh thu và chi phí trên TK 911, chuyển về TK 421.</p>
+<div class="highlight">
+<strong class="text-green-300">Nếu LÃI (Doanh thu > Chi phí):</strong> Nợ TK 911 / Có TK 421<br>
+<strong class="text-red-300">Nếu LỖ (Chi phí > Doanh thu):</strong> Nợ TK 421 / Có TK 911<br>
+<span class="text-xs text-slate-500">Tại sao? Sau khi kết chuyển doanh thu và chi phí, TK 911 có số dư Có (nếu lãi) hoặc dư Nợ (nếu lỗ). Cần chuyển số dư này sang TK 421 để TK 911 về 0, sẵn sàng cho kỳ tiếp theo. TK 421 phản ánh lợi nhuận chưa phân phối lũy kế của doanh nghiệp.</span>
+</div>
+</div>
+</div>
+
+<!-- ====== DỮ LIỆU ĐẦU VÀO ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-cyan-300 mb-2">📥 Dữ liệu đầu vào</h2>
+<p class="text-sm text-slate-400 mb-3">Hệ thống tự động tính toán số liệu từ <code>trial_balance</code> của kỳ được chọn, không cần nhập tay.</p>
+<table>
+<tr><th>Chỉ tiêu</th><th>Nguồn dữ liệu</th><th>Cách tính</th><th>Ví dụ</th></tr>
+<tr><td>Tổng doanh thu (TK 511)</td><td><code>trial_balance</code></td><td>SUM(MovementCredit) WHERE AccountId LIKE '511%'</td><td>57.000.000</td></tr>
+<tr><td>Tổng thu nhập khác (TK 711)</td><td><code>trial_balance</code></td><td>SUM(MovementCredit) WHERE AccountId LIKE '711%'</td><td>2.000.000</td></tr>
+<tr><td>Tổng giá vốn (TK 632)</td><td><code>trial_balance</code></td><td>SUM(MovementDebit) WHERE AccountId LIKE '632%'</td><td>30.000.000</td></tr>
+<tr><td>Tổng CP bán hàng (TK 641)</td><td><code>trial_balance</code></td><td>SUM(MovementDebit) WHERE AccountId LIKE '641%'</td><td>5.000.000</td></tr>
+<tr><td>Tổng CP QLKD (TK 642)</td><td><code>trial_balance</code></td><td>SUM(MovementDebit) WHERE AccountId LIKE '642%'</td><td>8.000.000</td></tr>
+<tr><td>Tổng CP khác (TK 811)</td><td><code>trial_balance</code></td><td>SUM(MovementDebit) WHERE AccountId LIKE '811%'</td><td>1.000.000</td></tr>
+<tr><td><strong>Lợi nhuận trước thuế</strong></td><td>Tính toán</td><td>Tổng doanh thu - Tổng chi phí</td><td><strong>15.000.000</strong></td></tr>
+</table>
+</div>
+
+<!-- ====== DỮ LIỆU ĐẦU RA ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-cyan-300 mb-2">📤 Dữ liệu đầu ra — Các bảng bị INSERT/UPDATE</h2>
+<table>
+<tr><th>Bảng</th><th>Thao tác</th><th>Số dòng</th><th>Ghi chú</th></tr>
+<tr><td><code>closing_vouchers</code></td><td><span class="badge badge-insert">INSERT</span></td><td>1</td><td>ClosingVoucherId, VoucherNo (KCxx/xxxx), PeriodCode, ClosingDate, TotalRevenue, TotalCost, NetProfit, Status</td></tr>
+<tr><td><code>closing_voucher_details</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td>Mỗi rule trong closing_rules → 1 dòng detail, chứa Amount thực tế của kỳ</td></tr>
+<tr><td><code>document_accounting_entries</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td>SourceDetailType=4 (Closing), DebitId+CreditId+Amount</td></tr>
+<tr><td><code>journal</code></td><td><span class="badge badge-insert">INSERT</span></td><td>N</td><td>1 dòng / accounting entry</td></tr>
+<tr><td><code>ledger</code></td><td><span class="badge badge-insert">INSERT</span></td><td>2N</td><td>1 cho TK Nợ + 1 cho TK Có</td></tr>
+<tr><td><code>trial_balance</code></td><td><span class="badge badge-update">UPSERT</span></td><td>≤ 2N</td><td>Cộng dồn MovementDebit/Credit. Sau KC, số dư TK 511,632,641,642 sẽ về 0, TK 911 về 0, TK 421 thay đổi.</td></tr>
+<tr><td><code>audit_logs</code></td><td><span class="badge badge-insert">INSERT</span></td><td>1</td><td>Log hành động chạy kết chuyển</td></tr>
+</table>
+</div>
+
+<!-- ====== LUỒNG CODE ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-cyan-300 mb-2">⚙️ Luồng code (Closing Service)</h2>
+
+<div class="step"><div class="step-num">1</div><div class="step-content"><strong>Check period_locks</strong><br>SELECT Status FROM <code>period_locks</code> WHERE PeriodCode = input.PeriodCode. Nếu Locked → phải mở khóa trước khi chạy lại.<br><span class="text-slate-500 text-xs">Nếu chạy KC lần đầu trên kỳ đang mở → cho phép. Nếu kỳ đã khóa, cần mở khóa rồi chạy lại KC (vì số liệu có thể đã thay đổi sau khi mở khóa).</span></div></div>
+
+<div class="step"><div class="step-num">2</div><div class="step-content"><strong>Kiểm tra kết chuyển đã tồn tại</strong><br>SELECT COUNT(*) FROM <code>closing_vouchers</code> WHERE PeriodCode = input.PeriodCode AND Status = 'Success'.<br>Nếu đã tồn tại → cảnh báo: "Kỳ này đã được kết chuyển. Bạn có muốn chạy lại không? (Dữ liệu KC cũ sẽ bị xóa và tạo mới)."<br><span class="text-slate-500 text-xs">Cho phép chạy lại để đảm bảo số liệu luôn mới nhất (vd: sau khi mở khóa kỳ và điều chỉnh chứng từ).</span></div></div>
+
+<div class="step"><div class="step-num">3</div><div class="step-content"><strong>Nếu chạy lại → Xóa dữ liệu KC cũ</strong><br>DELETE FROM <code>closing_voucher_details</code> WHERE ClosingVoucherId = oldVoucherId.<br>DELETE FROM <code>document_accounting_entries</code> WHERE SourceDetailType=4 AND SourceDetailId IN (SELECT ClosingVoucherDetailId FROM closing_voucher_details WHERE ClosingVoucherId = oldVoucherId).<br>DELETE FROM <code>closing_vouchers</code> WHERE ClosingVoucherId = oldVoucherId.<br>Đồng thời xóa các dòng journal, ledger, trial_balance tương ứng (hoặc tính lại từ đầu).<br><span class="text-slate-500 text-xs">Tất cả trong cùng 1 transaction. Nếu có lỗi → ROLLBACK.</span></div></div>
+
+<div class="step"><div class="step-num">4</div><div class="step-content"><strong>Đọc closing_rules & tính số tiền</strong><br>SELECT * FROM <code>closing_rules</code> ORDER BY SortOrder ASC.<br>Với mỗi rule, tính số tiền thực tế của kỳ từ <code>trial_balance</code>:<br>&nbsp;&nbsp;• RuleType=<strong>revenue</strong> → SUM(MovementCredit) của DebitAccountId (vd: TK 511)<br>&nbsp;&nbsp;• RuleType=<strong>cost</strong> → SUM(MovementDebit) của CreditAccountId (vd: TK 632)<br>&nbsp;&nbsp;• RuleType=<strong>profit</strong> → NetProfit = TotalRevenue - TotalCost. Nếu NetProfit > 0 (lãi): Nợ 911/Có 421. Nếu NetProfit < 0 (lỗ): Nợ 421/Có 911.<br><span class="text-slate-500 text-xs">Tại sao dùng trial_balance? Vì đây là bảng tổng hợp số dư cuối kỳ của từng tài khoản, cho kết quả chính xác và nhanh hơn việc SUM từ gl_entries.</span></div></div>
+
+<div class="step"><div class="step-num">5</div><div class="step-content"><strong>Tạo Closing Voucher header</strong><br>INSERT <code>closing_vouchers</code>: ClosingVoucherId=new GUID, VoucherNo=KCxx/xxxx, PeriodCode, ClosingDate=now, TotalRevenue, TotalCost, NetProfit, CreatedBy, Status='Success'.</div></div>
+
+<div class="step"><div class="step-num">6</div><div class="step-content"><strong>Tạo detail & hạch toán</strong><br>Loop từng rule → INSERT <code>closing_voucher_details</code> (ClosingVoucherDetailId, ClosingVoucherId, RuleId, Description, Amount).<br>INSERT <code>document_accounting_entries</code> (SourceDetailType=4, SourceDetailId=ClosingVoucherDetailId, DebitAccountId, CreditAccountId, Amount).<br><strong>Cùng transaction:</strong> INSERT <code>journal</code>, INSERT <code>ledger</code>, UPSERT <code>trial_balance</code>.</div></div>
+
+<div class="step"><div class="step-num">7</div><div class="step-content"><strong>COMMIT</strong>. Trả về kết quả: closingVoucherId, voucherNo, totalRevenue, totalCost, netProfit.</div></div>
+</div>
+
+<!-- ====== CƠ CHẾ KIỂM SOÁT ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-cyan-300 mb-2">🔒 Cơ chế kiểm soát & ràng buộc</h2>
+<table>
+<tr><th>Tình huống</th><th>Hành vi hệ thống</th></tr>
+<tr><td>Chạy KC khi kỳ đã khóa</td><td>Từ chối. Yêu cầu mở khóa kỳ trước (theo Điều 13 TT 99). Sau khi mở khóa, phải chạy lại KC để cập nhật số liệu mới nhất.</td></tr>
+<tr><td>Chạy KC khi chưa có closing_rules</td><td>Từ chối. Hiển thị thông báo: "Chưa có rule kết chuyển. Vui lòng cấu hình tại màn hình Cấu Hình Kết Chuyển."</td></tr>
+<tr><td>Chạy lại KC trên kỳ đã có KC</td><td>Cho phép. Xóa dữ liệu KC cũ → tính lại từ đầu → tạo mới. Đảm bảo số liệu luôn phản ánh đúng thực tế sau các điều chỉnh.</td></tr>
+<tr><td>Sai thứ tự SortOrder trong closing_rules</td><td>Cảnh báo khi lưu cấu hình nếu revenue không đứng trước cost, hoặc profit không đứng cuối. Hệ thống vẫn cho lưu nhưng hiển thị warning.</td></tr>
+<tr><td>Thiếu rule bắt buộc (thiếu revenue hoặc profit)</td><td>Cảnh báo trước khi chạy KC: "Thiếu rule kết chuyển doanh thu / lãi lỗ. Kết quả KC có thể không đầy đủ." Vẫn cho phép chạy nếu người dùng xác nhận.</td></tr>
+<tr><td>Khóa kỳ sau khi KC</td><td>Sau khi KC thành công, hệ thống gợi ý khóa kỳ. Nếu chưa khóa, dữ liệu vẫn có thể bị sửa đổi → cần chạy lại KC trước khi khóa.</td></tr>
+<tr><td>Số liệu trial_balance = 0 cho tất cả TK</td><td>Cho phép chạy KC. Kết quả: TotalRevenue=0, TotalCost=0, NetProfit=0. Đây là trường hợp hợp lệ (kỳ không có phát sinh).</td></tr>
+</table>
+</div>
+
+<!-- ====== API ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-cyan-300 mb-2">🌐 API Endpoint</h2>
+<pre>POST /api/closing/run
+Body: {
+  periodCode: "2026-01",
+  forceRerun: false          // ← nếu true: xóa KC cũ và chạy lại, nếu false: báo lỗi nếu đã tồn tại
+}
+Response: {
+  success: true,
+  closingVoucherId: "kc-xxx",
+  voucherNo: "KC01/0001",
+  periodCode: "2026-01",
+  totalRevenue: 59000000,
+  totalCost: 44000000,
+  netProfit: 15000000,
+  details: [
+    { ruleId: "rule-1", description: "KC Doanh thu bán hàng", debitAccount: "511", creditAccount: "911", amount: 57000000 },
+    { ruleId: "rule-2", description: "KC Giá vốn hàng bán", debitAccount: "911", creditAccount: "632", amount: 30000000 },
+    { ruleId: "rule-3", description: "KC Chi phí bán hàng", debitAccount: "911", creditAccount: "641", amount: 5000000 },
+    { ruleId: "rule-4", description: "KC Chi phí QLKD", debitAccount: "911", creditAccount: "642", amount: 8000000 },
+    { ruleId: "rule-5", description: "KC Lãi → LN chưa PP", debitAccount: "911", creditAccount: "421", amount: 15000000 }
+  ]
+}
+
+GET /api/closing/history?periodCode=2026-01
+Response: {
+  periodCode: "2026-01",
+  lastClosing: { closingVoucherId, voucherNo, closedAt, totalRevenue, totalCost, netProfit },
+  canClose: true/false,     // ← kiểm tra điều kiện khóa kỳ
+  isLocked: false           // ← trạng thái khóa kỳ hiện tại
+}
+</pre>
+</div>
+
+<!-- ====== LIÊN KẾT ====== -->
+<div class="card"><h2 class="text-lg font-semibold text-cyan-300 mb-2">🔗 Liên kết với các nghiệp vụ khác</h2>
+<div class="space-y-3 text-sm text-slate-300">
+<div class="highlight">
+<strong class="text-cyan-300">Kết chuyển ↔ Cấu hình KC (closing-config.html)</strong><br>
+Các rule trong <code>closing_rules</code> quyết định <strong>bút toán nào</strong> được tạo ra khi chạy KC. Kế toán có thể thêm/sửa/xóa rule để phù hợp với hệ thống tài khoản của doanh nghiệp. Mọi thay đổi rule có hiệu lực ngay ở lần chạy KC tiếp theo.
+</div>
+<div class="highlight">
+<strong class="text-cyan-300">Kết chuyển ↔ Khóa sổ (lock-period.html)</strong><br>
+Quy trình chuẩn: <strong>Chạy KC → Kiểm tra kết quả → Khóa kỳ</strong>. Không thể khóa kỳ nếu chưa chạy KC (hoặc có thể khóa nhưng hệ thống sẽ cảnh báo). Sau khi khóa, mọi chứng từ trong kỳ không thể sửa đổi. Nếu cần điều chỉnh → mở khóa → sửa chứng từ → chạy lại KC → khóa lại.
+</div>
+<div class="highlight">
+<strong class="text-cyan-300">Kết chuyển ↔ Báo cáo tài chính</strong><br>
+Sau khi KC, số liệu trên <code>trial_balance</code> đã phản ánh đúng kết quả kinh doanh: TK 511,632,641,642 về 0, TK 421 thể hiện lợi nhuận lũy kế. Các báo cáo như <strong>Bảng Cân Đối Kế Toán</strong>, <strong>Báo Cáo KQKD</strong> sẽ đọc từ trial_balance hoặc ledger để hiển thị.
+</div>
+</div>
+</div>
+
+</div></body></html>

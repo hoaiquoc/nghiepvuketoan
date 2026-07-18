@@ -26,6 +26,30 @@
             </div>
             <nav class="flex items-center gap-6 text-sm">
                 <a href="accounts.html" class="hover:text-amber-400 transition-colors text-amber-300 font-semibold">TK 99</a>
+                <a href="db-design.html" class="hover:text-cyan-400 transition-colors text-cyan-300 font-semibold">Cấu trúc DB</a>
+                <div class="relative group">
+                    <a href="#" class="hover:text-indigo-400 transition-colors text-indigo-300 font-semibold">Specs ▾</a>
+                    <div class="absolute top-full left-0 mt-2 w-64 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                        <div class="p-2 space-y-1">
+                            <p class="text-[10px] uppercase tracking-wider text-slate-500 px-3 py-1">Nghiệp vụ chứng từ</p>
+                            <a href="specs/voucher-receive.html" class="block px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-emerald-600/20 hover:text-emerald-300">📋 Phiếu Thu</a>
+                            <a href="specs/voucher-pay.html" class="block px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-red-600/20 hover:text-red-300">💸 Phiếu Chi</a>
+                            <a href="specs/voucher-inventory.html" class="block px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-blue-600/20 hover:text-blue-300">📦 Nhập / Xuất Kho</a>
+                            <hr class="border-slate-700 my-1">
+                            <p class="text-[10px] uppercase tracking-wider text-slate-500 px-3 py-1">Kết chuyển & Kiểm soát</p>
+                            <a href="specs/closing-config.html" class="block px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-orange-600/20 hover:text-orange-300">⚙️ Cấu hình KC</a>
+                            <a href="specs/closing.html" class="block px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-cyan-600/20 hover:text-cyan-300">📊 Kết chuyển cuối kỳ</a>
+                            <a href="specs/lock-period.html" class="block px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-pink-600/20 hover:text-pink-300">🔒 Khóa / Mở sổ</a>
+                            <hr class="border-slate-700 my-1">
+                            <p class="text-[10px] uppercase tracking-wider text-slate-500 px-3 py-1">Báo cáo & Sổ sách</p>
+                            <a href="specs/reports.html" class="block px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-teal-600/20 hover:text-teal-300">📊 Báo cáo & Sổ sách</a>
+                            <hr class="border-slate-700 my-1">
+                            <p class="text-[10px] uppercase tracking-wider text-slate-500 px-3 py-1">Tài liệu</p>
+                            <a href="db-design.html" class="block px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-cyan-600/20 hover:text-cyan-300">🗄️ Cấu trúc DB</a>
+                            <a href="erd.html" class="block px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-cyan-600/20 hover:text-cyan-300">🗺️ Sơ đồ ERD</a>
+                        </div>
+                    </div>
+                </div>
                 <a href="#tong-quan" class="hover:text-blue-400 transition-colors">Tổng quan</a>
                 <a href="#ban-hang" class="hover:text-blue-400 transition-colors">Bán hàng</a>
                 <a href="#chung-tu" class="hover:text-blue-400 transition-colors">Chứng từ</a>
@@ -53,6 +77,10 @@
                 99/2025/TT-BTC của Bộ Tài chính.
             </p>
             <div class="flex flex-wrap justify-center gap-4">
+                <a href="db-design.html" class="bg-cyan-600 hover:bg-cyan-700 px-8 py-3 rounded-lg font-semibold transition-all flex items-center gap-2 text-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16M4 12h16M4 17h16"/></svg>
+                    Cấu Trúc DB
+                </a>
                 <a href="voucher-receive.html" class="bg-green-600 hover:bg-green-700 px-8 py-3 rounded-lg font-semibold transition-all flex items-center gap-2 text-white">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                     Phiếu Thu
@@ -144,7 +172,7 @@
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-white mb-4">🛒 Nghiệp vụ Bán Hàng POS — Retail & F&B</h2>
                 <p class="text-slate-400 max-w-4xl mx-auto">
-                    Nghiệp vụ cốt lõi nhất trong POS: mỗi giao dịch bán hàng tại quầy đồng thời phát sinh 2 chứng từ kế toán — Phiếu Thu (ghi nhận doanh thu) và Phiếu Xuất Kho (ghi nhận giá vốn).
+                    Nghiệp vụ cốt lõi nhất trong POS: mỗi giao dịch bán hàng tại POS đồng thời phát sinh 2 chứng từ kế toán — Phiếu Thu (ghi nhận doanh thu) và Phiếu Xuất Kho (ghi nhận giá vốn).
                     Chu trình dưới đây áp dụng cho cả cửa hàng bán lẻ (Retail) và nhà hàng/quán café (F&B).
                 </p>
             </div>
@@ -320,7 +348,7 @@
                             <p class="text-slate-400 text-sm mb-4 leading-relaxed">
                                 <strong class="text-slate-300">Mẫu số:</strong> 01-TT (Ban hành theo TT 99/2025/TT-BTC)<br>
                                 Dùng để ghi nhận các khoản thu tiền mặt, tiền gửi ngân hàng. Áp dụng khi
-                                thu tiền bán hàng tại quầy POS, thu tiền từ khách hàng, thu hồi tạm ứng,
+                                thu tiền bán hàng tại POS, thu tiền từ khách hàng, thu hồi tạm ứng,
                                 thu hoàn thuế, thu từ các khoản doanh thu khác.
                             </p>
                             <div class="bg-slate-800/70 rounded-lg p-4 text-sm font-mono">
@@ -477,7 +505,7 @@
                         <p class="text-slate-400 font-mono">Nợ TK 421 / Có TK 911 (Lỗ)</p>
                     </div>
                 </div>
-                <div class="flex justify-center gap-3">
+                <div class="flex justify-center gap-3 mb-6">
                     <a href="closing.html" class="bg-cyan-600 hover:bg-cyan-700 px-6 py-2.5 rounded-lg font-semibold transition-all text-white text-sm flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                         Mở Kết Chuyển Cuối Kỳ
@@ -485,6 +513,69 @@
                     <a href="closing-config.html" class="bg-slate-700 hover:bg-slate-600 px-6 py-2.5 rounded-lg font-semibold transition-all text-slate-200 text-sm flex items-center gap-2">
                         ⚙️ Cấu hình kết chuyển
                     </a>
+                </div>
+
+                <!-- Error Correction Workflow -->
+                <div class="mt-6 p-5 bg-red-900/10 border border-red-700/30 rounded-xl text-left">
+                    <h4 class="text-red-400 font-semibold text-sm mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                        ⚠️ Điều chỉnh bút toán kết chuyển cuối kỳ — 2 trường hợp
+                    </h4>
+
+                    <!-- Case 1: Chưa khóa sổ -->
+                    <div class="bg-green-900/15 border border-green-700/30 rounded-lg p-4 mb-4">
+                        <h5 class="text-green-400 font-semibold text-sm mb-2 flex items-center gap-2">
+                            <span class="px-2 py-0.5 rounded bg-green-600/20 text-green-300 text-xs">🔓 Chưa khóa sổ</span>
+                            Trường hợp 1: Kỳ kế toán CHƯA bị khóa
+                        </h5>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-2 text-xs">
+                            <div class="bg-slate-800/50 rounded p-2">
+                                <p class="text-amber-300 font-semibold mb-1">① Phát hiện sai</p>
+                                <p class="text-slate-400">Kiểm tra <a href="balance.html" class="text-cyan-400 underline hover:text-cyan-300">Bảng Cân Đối</a> → thấy số KC không khớp thực tế</p>
+                            </div>
+                            <div class="bg-slate-800/50 rounded p-2">
+                                <p class="text-amber-300 font-semibold mb-1">② Xóa bút toán KC cũ</p>
+                                <p class="text-slate-400">Vào <a href="journal.html" class="text-cyan-400 underline hover:text-cyan-300">Sổ Nhật Ký</a>, lọc TK 911 → <strong class="text-red-300">nhấn ✕</strong> xóa từng dòng KC sai</p>
+                            </div>
+                            <div class="bg-slate-800/50 rounded p-2">
+                                <p class="text-amber-300 font-semibold mb-1">③ Sửa số liệu</p>
+                                <p class="text-slate-400">Điều chỉnh lại doanh thu/chi phí cho đúng thực tế phát sinh</p>
+                            </div>
+                            <div class="bg-slate-800/50 rounded p-2">
+                                <p class="text-amber-300 font-semibold mb-1">④ KC lại + Kiểm tra</p>
+                                <p class="text-slate-400"><a href="closing.html" class="text-cyan-400 underline hover:text-cyan-300">Vào Kết Chuyển</a> → chạy lại → kiểm tra <strong class="text-green-300">✅ cân bằng</strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Case 2: Đã khóa sổ -->
+                    <div class="bg-red-900/15 border border-red-700/30 rounded-lg p-4">
+                        <h5 class="text-red-400 font-semibold text-sm mb-2 flex items-center gap-2">
+                            <span class="px-2 py-0.5 rounded bg-red-600/20 text-red-300 text-xs">🔒 Đã khóa sổ</span>
+                            Trường hợp 2: Kỳ kế toán ĐÃ bị khóa (theo Điều 13 TT 99/2025/TT-BTC)
+                        </h5>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-2 text-xs mb-3">
+                            <div class="bg-slate-800/50 rounded p-2">
+                                <p class="text-amber-300 font-semibold mb-1">① Mở khóa kỳ</p>
+                                <p class="text-slate-400">Vào <a href="lock-period.html" class="text-cyan-400 underline hover:text-cyan-300">Khóa/Mở Sổ</a> → nhấn <strong class="text-green-300">Mở sổ</strong> kỳ cần sửa. <strong class="text-red-300">Bắt buộc:</strong> nhập lý do mở + người phê duyệt</p>
+                            </div>
+                            <div class="bg-slate-800/50 rounded p-2">
+                                <p class="text-amber-300 font-semibold mb-1">② Xóa bút toán KC cũ</p>
+                                <p class="text-slate-400">Vào <a href="journal.html" class="text-cyan-400 underline hover:text-cyan-300">Sổ Nhật Ký</a>, lọc TK 911 → <strong class="text-red-300">nhấn ✕</strong> xóa từng dòng KC sai</p>
+                            </div>
+                            <div class="bg-slate-800/50 rounded p-2">
+                                <p class="text-amber-300 font-semibold mb-1">③ Sửa & KC lại</p>
+                                <p class="text-slate-400">Điều chỉnh số liệu → <a href="closing.html" class="text-cyan-400 underline hover:text-cyan-300">Kết Chuyển lại</a> → kiểm tra <strong class="text-green-300">✅ cân bằng</strong></p>
+                            </div>
+                            <div class="bg-slate-800/50 rounded p-2">
+                                <p class="text-amber-300 font-semibold mb-1">④ Khóa sổ lại</p>
+                                <p class="text-slate-400">Vào <a href="lock-period.html" class="text-cyan-400 underline hover:text-cyan-300">Khóa/Mở Sổ</a> → <strong class="text-red-300">Khóa sổ</strong> lại kỳ đó. Cần người phê duyệt xác nhận</p>
+                            </div>
+                        </div>
+                        <div class="bg-red-950/30 border border-red-800/30 rounded p-2 text-xs text-red-300/80">
+                            <strong>⚠️ Lưu ý quan trọng:</strong> Theo Điều 13 TT 99/2025/TT-BTC, khi mở lại sổ kế toán đã khóa phải có <strong>lý do chính đáng</strong> và được <strong>người có thẩm quyền phê duyệt</strong>. Mọi thao tác mở/khóa sổ đều phải được ghi nhận đầy đủ để đảm bảo tính minh bạch và kiểm toán.
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -656,8 +747,8 @@
                             <tr class="hover:bg-slate-800/50 transition-colors">
                                 <td class="px-6 py-4 text-slate-400">1</td>
                                 <td class="px-6 py-4">
-                                    <span class="text-white font-medium">Bán hàng thu tiền mặt tại quầy</span>
-                                    <p class="text-slate-500 text-xs mt-1">Khách mua hàng tại cửa hàng POS, thanh toán bằng tiền mặt</p>
+                                    <span class="text-white font-medium">Bán hàng thu tiền mặt tại POS</span>
+                                    <p class="text-slate-500 text-xs mt-1">Khách mua hàng, thanh toán bằng tiền mặt</p>
                                 </td>
                                 <td class="px-6 py-4 font-mono text-sm">
                                     <span class="text-green-400">Nợ TK 111</span><br>

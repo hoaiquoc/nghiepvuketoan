@@ -17,6 +17,7 @@
                 <span class="text-sm font-semibold text-slate-300">Quay về</span>
             </a>
             <div class="flex items-center gap-3 text-sm">
+                <a href="db-structure.html" class="text-slate-400 hover:text-cyan-400">Cấu trúc DB</a>
                 <a href="ledger.html" class="text-slate-400 hover:text-indigo-400">Sổ Chi Tiết</a>
                 <a href="closing.html" class="text-slate-400 hover:text-cyan-400">Kết Chuyển</a>
                 <a href="lock-period.html" class="text-slate-400 hover:text-pink-400">Khóa/Mở Sổ</a>
@@ -44,8 +45,8 @@
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
-                    <thead><tr class="bg-slate-800 text-slate-300"><th class="px-4 py-3 text-left">Ngày</th><th class="px-4 py-3 text-left">Số CT</th><th class="px-4 py-3 text-left">Diễn giải</th><th class="px-4 py-3 text-left">TK Nợ</th><th class="px-4 py-3 text-left">TK Có</th><th class="px-4 py-3 text-right">Số tiền</th></tr></thead>
-                    <tbody id="journal-entries" class="divide-y divide-slate-700"><tr><td colspan="6" class="px-4 py-8 text-center text-slate-500 text-xs italic">Đang tải dữ liệu...</td></tr></tbody>
+                    <thead><tr class="bg-slate-800 text-slate-300"><th class="px-4 py-3 text-left">Ngày</th><th class="px-4 py-3 text-left">Số CT</th><th class="px-4 py-3 text-left">Diễn giải</th><th class="px-4 py-3 text-left">TK Nợ</th><th class="px-4 py-3 text-left">TK Có</th><th class="px-4 py-3 text-right">Số tiền</th><th class="px-4 py-3 text-center w-16">Xóa</th></tr></thead>
+                    <tbody id="journal-entries" class="divide-y divide-slate-700"><tr><td colspan="7" class="px-4 py-8 text-center text-slate-500 text-xs italic">Đang tải dữ liệu...</td></tr></tbody>
                 </table>
             </div>
             <div class="mt-4 flex justify-between items-center text-sm"><span class="text-slate-400">Tổng phát sinh:</span><span id="journal-total" class="font-mono font-bold text-teal-400 text-lg">0 ₫</span></div>
