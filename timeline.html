@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline Triển Khai — Phần Mềm Kế Toán Doanh Nghiệp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .timeline-line {
+            position: absolute;
+            left: 24px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #8b5cf6 0%, #06b6d4 20%, #10b981 45%, #f59e0b 70%, #ef4444 100%);
+        }
+        @media (min-width: 768px) {
+            .timeline-line {
+                left: 50%;
+                transform: translateX(-50%);
+                width: 4px;
+            }
+        }
+        .timeline-dot {
+            position: absolute;
+            left: 16px;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            z-index: 10;
+            border: 3px solid #1e293b;
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.3);
+        }
+        @media (min-width: 768px) {
+            .timeline-dot {
+                left: 50%;
+                transform: translateX(-50%);
+                width: 24px;
+                height: 24px;
+                top: 24px;
+            }
+        }
+        .phase-badge-1 { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .phase-badge-2 { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+        .phase-badge-3 { background: linear-gradient(135deg, #10b981, #059669); }
+        .phase-badge-4 { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .phase-badge-5 { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .deploy-flag {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+            50% { box-shadow: 0 0 0 12px rgba(34, 197, 94, 0); }
+        }
+        .milestone-card {
+            transition: all 0.3s ease;
+        }
+        .milestone-card:hover {
+            transform: translateY(-2px);
+            border-color: #8b5cf6;
+        }
+        .summary-stat {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(124, 58, 237, 0.05));
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                        Timeline Triển Khai
+                    </h1>
+                    <p class="text-xs text-slate-400">Lộ trình 12 tuần — 5 Giai Đoạn — 5 Lần Deploy</p>
+                </div>
+            </div>
+            <nav class="flex items-center gap-4 text-sm">
+                <a href="index.html" class="text-slate-400 hover:text-blue-400 transition-colors flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    Trang Chủ
+                </a>
+                <a href="scope-product.html" class="text-slate-400 hover:text-blue-400 transition-colors flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    Scope Sản Phẩm
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-slate-800 via-emerald-950 to-slate-900 py-20 border-b border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 text-center relative z-10">
+            <span class="inline-block bg-emerald-600/20 text-emerald-300 px-4 py-1.5 rounded-full text-sm font-semibold mb-6 border border-emerald-500/30">
+                🗓️ Bắt đầu 27/07/2026 — 12 Tuần — 5 Giai Đoạn — 5 Lần Deploy
+            </span>
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+                <span class="text-white">Lộ Trình Triển Khai</span><br>
+                <span class="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">Phần Mềm Kế Toán Doanh Nghiệp</span>
+            </h2>
+            <p class="text-slate-400 text-lg max-w-3xl mx-auto mb-8 leading-relaxed">
+                Bắt đầu từ <strong class="text-white">27/07/2026</strong>. Mỗi giai đoạn là một scope <strong class="text-emerald-300">có thể triển khai độc lập</strong> cho khách hàng.
+                Không cần chờ 3 tháng — <strong class="text-white">deploy lần đầu ngày 09/08/2026.</strong>
+            </p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                <div class="summary-stat rounded-xl p-4">
+                    <p class="text-2xl font-bold text-violet-400">12</p>
+                    <p class="text-xs text-slate-400">Tuần phát triển</p>
+                </div>
+                <div class="summary-stat rounded-xl p-4">
+                    <p class="text-2xl font-bold text-emerald-400">5</p>
+                    <p class="text-xs text-slate-400">Giai đoạn</p>
+                </div>
+                <div class="summary-stat rounded-xl p-4">
+                    <p class="text-2xl font-bold text-cyan-400">5</p>
+                    <p class="text-xs text-slate-400">Lần Deploy</p>
+                </div>
+                <div class="summary-stat rounded-xl p-4">
+                    <p class="text-2xl font-bold text-amber-400">22+</p>
+                    <p class="text-xs text-slate-400">Chứng từ + Sổ + Báo cáo</p>
+                </div>
+            </div>
+        </div>
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMiI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-40"></div>
+    </section>
+
+    <!-- 5 Deploy Milestones Overview -->
+    <section class="py-12 bg-gradient-to-b from-slate-900 to-slate-800/50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-white mb-4">🚀 5 Lần Deploy — Mỗi Giai Đoạn Là Một Scope Hoàn Chỉnh</h2>
+                <p class="text-slate-400 max-w-3xl mx-auto">
+                    Mỗi giai đoạn kết thúc bằng 1 lần deploy độc lập, có thể bàn giao cho khách hàng.
+                    Giai đoạn sau bổ sung tính năng mà không làm gián đoạn hệ thống đang vận hành.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                <!-- Deploy 1 -->
+                <div class="glassmorphism rounded-xl p-5 border border-violet-700/40 relative overflow-hidden group hover:border-violet-500/60 transition-all">
+                    <div class="absolute top-2 right-2 deploy-flag text-white text-[9px] font-bold px-2 py-0.5 rounded-full">DEPLOY</div>
+                    <div class="w-10 h-10 bg-violet-600/20 rounded-lg flex items-center justify-center mb-3">
+                        <span class="text-violet-400 text-base font-bold">D1</span>
+                    </div>
+                    <h3 class="text-sm font-semibold text-violet-400 mb-1">09/08 — Foundation</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-2">Danh mục + Thu/Chi + Nhập/Xuất</p>
+                    <ul class="space-y-0.5 text-[10px] text-slate-500">
+                        <li>• Danh mục nền tảng</li>
+                        <li>• Phiếu Thu, Phiếu Chi</li>
+                        <li>• Phiếu Nhập/Xuất kho</li>
+                        <li>• Sổ NKC, Sổ Cái, Sổ Quỹ</li>
+                    </ul>
+                    <p class="text-violet-300 text-[10px] mt-2 font-semibold">🎯 DN cần kế toán cơ bản</p>
+                    <p class="text-slate-500 text-[10px] mt-1">👨‍💻 2 Dev</p>
+                </div>
+                <!-- Deploy 2 -->
+                <div class="glassmorphism rounded-xl p-5 border border-cyan-700/40 relative overflow-hidden group hover:border-cyan-500/60 transition-all">
+                    <div class="absolute top-2 right-2 deploy-flag text-white text-[9px] font-bold px-2 py-0.5 rounded-full">DEPLOY</div>
+                    <div class="w-10 h-10 bg-cyan-600/20 rounded-lg flex items-center justify-center mb-3">
+                        <span class="text-cyan-400 text-base font-bold">D2</span>
+                    </div>
+                    <h3 class="text-sm font-semibold text-cyan-400 mb-1">23/08 — Treasury</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-2">Hoàn thiện tiền tệ + kho</p>
+                    <ul class="space-y-0.5 text-[10px] text-slate-500">
+                        <li>• Tạm ứng, Thanh toán, KK quỹ</li>
+                        <li>• Thẻ kho, VC nội bộ, Bảng kê</li>
+                        <li>• Tồn kho, Công nợ aging</li>
+                    </ul>
+                    <p class="text-cyan-300 text-[10px] mt-2 font-semibold">🎯 DN cần quản lý kho</p>
+                    <p class="text-slate-500 text-[10px] mt-1">👨‍💻 4 Dev</p>
+                </div>
+                <!-- Deploy 3 -->
+                <div class="glassmorphism rounded-xl p-5 border border-emerald-700/40 relative overflow-hidden group hover:border-emerald-500/60 transition-all">
+                    <div class="absolute top-2 right-2 deploy-flag text-white text-[9px] font-bold px-2 py-0.5 rounded-full">DEPLOY</div>
+                    <div class="w-10 h-10 bg-emerald-600/20 rounded-lg flex items-center justify-center mb-3">
+                        <span class="text-emerald-400 text-base font-bold">D3</span>
+                    </div>
+                    <h3 class="text-sm font-semibold text-emerald-400 mb-1">13/09 — Tổng Hợp</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-2">Bán hàng, TSCĐ, Lương</p>
+                    <ul class="space-y-0.5 text-[10px] text-slate-500">
+                        <li>• 3 CT bán hàng</li>
+                        <li>• 5 CT TSCĐ + 3 CT LĐTL</li>
+                        <li>• 14 sổ, kết chuyển</li>
+                    </ul>
+                    <p class="text-emerald-300 text-[10px] mt-2 font-semibold">🎯 DN cần BCTC & thuế</p>
+                    <p class="text-slate-500 text-[10px] mt-1">👨‍💻 4 Dev</p>
+                </div>
+                <!-- Deploy 4 -->
+                <div class="glassmorphism rounded-xl p-5 border border-amber-700/40 relative overflow-hidden group hover:border-amber-500/60 transition-all">
+                    <div class="absolute top-2 right-2 deploy-flag text-white text-[9px] font-bold px-2 py-0.5 rounded-full">DEPLOY</div>
+                    <div class="w-10 h-10 bg-amber-600/20 rounded-lg flex items-center justify-center mb-3">
+                        <span class="text-amber-400 text-base font-bold">D4</span>
+                    </div>
+                    <h3 class="text-sm font-semibold text-amber-400 mb-1">04/10 — BCTC</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-2">BCTC + Quản trị + Kiểm soát</p>
+                    <ul class="space-y-0.5 text-[10px] text-slate-500">
+                        <li>• 4 BCTC đầy đủ</li>
+                        <li>• Thuế TNCN</li>
+                        <li>• Báo cáo quản trị</li>
+                    </ul>
+                    <p class="text-amber-300 text-[10px] mt-2 font-semibold">🎯 DN lớn, cần quản trị</p>
+                    <p class="text-slate-500 text-[10px] mt-1">👨‍💻 3 Dev</p>
+                </div>
+                <!-- Deploy 5 -->
+                <div class="glassmorphism rounded-xl p-5 border border-red-700/40 relative overflow-hidden group hover:border-red-500/60 transition-all">
+                    <div class="absolute top-2 right-2 deploy-flag text-white text-[9px] font-bold px-2 py-0.5 rounded-full">DEPLOY</div>
+                    <div class="w-10 h-10 bg-red-600/20 rounded-lg flex items-center justify-center mb-3">
+                        <span class="text-red-400 text-base font-bold">D5</span>
+                    </div>
+                    <h3 class="text-sm font-semibold text-red-400 mb-1">18/10 — Toàn Diện</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-2">TT 133, Migrate, Tích hợp</p>
+                    <ul class="space-y-0.5 text-[10px] text-slate-500">
+                        <li>• Hỗ trợ TT 133</li>
+                        <li>• Công cụ migrate</li>
+                        <li>• Kết nối CQT</li>
+                    </ul>
+                    <p class="text-red-300 text-[10px] mt-2 font-semibold">🎯 Tập đoàn, đa TT</p>
+                    <p class="text-slate-500 text-[10px] mt-1">👨‍💻 2 Dev</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed Timeline -->
+    <section class="py-16 bg-slate-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-14">
+                <h2 class="text-3xl font-bold text-white mb-4">📅 Timeline Chi Tiết 12 Tuần — 5 Giai Đoạn</h2>
+                <p class="text-slate-400 max-w-3xl mx-auto">
+                    Mỗi giai đoạn 2-3 tuần, kết thúc bằng 1 lần deploy hoàn chỉnh.
+                    Các giai đoạn có thể chạy song song một phần để tối ưu thời gian.
+                </p>
+            </div>
+
+            <div class="relative">
+                <div class="timeline-line hidden md:block"></div>
+                <div class="timeline-line md:hidden"></div>
+
+                <!-- ======= GĐ 1: Tuần 1-2 ======= -->
+                <div class="mb-16 relative">
+                    <div class="timeline-dot bg-gradient-to-br from-violet-500 to-purple-600 hidden md:block"></div>
+                    <div class="md:w-1/2 md:pr-16 ml-14 md:ml-0">
+                        <div class="glassmorphism rounded-2xl p-6 border border-violet-700/30 milestone-card relative">
+                            <span class="phase-badge-1 absolute -top-3 left-4 text-white text-xs font-bold px-3 py-1 rounded-full">GIAI ĐOẠN 1</span>
+                            <div class="mt-2 flex items-center gap-3 mb-4">
+                                <div class="w-14 h-14 bg-violet-600/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-7 h-7 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-violet-400">Foundation — Nền Tảng & Kế Toán Cơ Bản</h3>
+                                    <p class="text-slate-500 text-sm">27/07 – 09/08 &nbsp;|&nbsp; 🚀 <span class="text-emerald-400 font-bold">Deploy D1: 09/08/2026</span></p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 text-sm">
+                                <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                    <p class="text-amber-300 font-semibold mb-2 text-xs">🏗️ Danh mục nền tảng</p>
+                                    <ul class="space-y-0.5 text-slate-400 text-xs">
+                                        <li>• Hệ thống tài khoản kế toán (cấp 1,2,3 — TT 99)</li>
+                                        <li>• Khách hàng / Nhà cung cấp</li>
+                                        <li>• Nhân viên / Phòng ban</li>
+                                        <li>• Ngân hàng & TK ngân hàng DN</li>
+                                        <li>• Kỳ kế toán / Niên độ</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                    <p class="text-green-300 font-semibold mb-2 text-xs">💰 Chứng từ tiền tệ (2/7)</p>
+                                    <ul class="space-y-0.5 text-slate-400 text-xs">
+                                        <li>• Phiếu Thu (01-TT)</li>
+                                        <li>• Phiếu Chi (02-TT)</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                    <p class="text-blue-300 font-semibold mb-2 text-xs">📦 Chứng từ hàng tồn kho (2/5)</p>
+                                    <ul class="space-y-0.5 text-slate-400 text-xs">
+                                        <li>• Phiếu Nhập Kho (01-VT)</li>
+                                        <li>• Phiếu Xuất Kho (02-VT)</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                    <p class="text-teal-300 font-semibold mb-2 text-xs">📖 Sổ sách ban đầu</p>
+                                    <ul class="space-y-0.5 text-slate-400 text-xs">
+                                        <li>• Sổ Nhật Ký Chung</li>
+                                        <li>• Sổ Cái các tài khoản</li>
+                                        <li>• Sổ Quỹ Tiền Mặt</li>
+                                        <li>• Sổ Tiền Gửi Ngân Hàng</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                    <p class="text-purple-300 font-semibold mb-2 text-xs">📊 Báo cáo ban đầu</p>
+                                    <ul class="space-y-0.5 text-slate-400 text-xs">
+                                        <li>• Báo cáo công nợ phải thu</li>
+                                        <li>• Báo cáo công nợ phải trả</li>
+                                        <li>• Sổ quỹ tiền mặt (in)</li>
+                                        <li>• Sổ tiền gửi ngân hàng (in)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-3 p-3 bg-emerald-900/10 border border-emerald-700/20 rounded-lg">
+                                <p class="text-emerald-300 text-xs">
+                                    <strong>✅ D1 Sẵn sàng deploy 09/08:</strong> Danh mục nền tảng + Phiếu Thu/Chi + Nhập/Xuất kho. Khách hàng bắt đầu nhập chứng từ, xem sổ sách cơ bản.
+                                </p>
+                            </div>
+                            <div class="mt-2 flex items-center gap-2 text-xs">
+                                <span class="text-slate-500">👨‍💻 Nhân sự:</span>
+                                <span class="bg-violet-600/20 text-violet-300 px-2 py-0.5 rounded font-bold">2 Dev</span>
+                                <span class="text-slate-600">(Khởi động — danh mục + thu/chi + nhập/xuất kho cốt lõi)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:hidden absolute left-4 top-6 w-5 h-5 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 border-3 border-slate-900 z-10"></div>
+
+                <!-- ======= GĐ 2: Tuần 3-4 ======= -->
+                <div class="mb-16 relative">
+                    <div class="md:flex md:justify-end">
+                        <div class="timeline-dot bg-gradient-to-br from-cyan-500 to-teal-600 hidden md:block"></div>
+                        <div class="md:w-1/2 md:pl-16 ml-14 md:ml-0">
+                            <div class="glassmorphism rounded-2xl p-6 border border-cyan-700/30 milestone-card relative">
+                                <span class="phase-badge-2 absolute -top-3 left-4 text-white text-xs font-bold px-3 py-1 rounded-full">GIAI ĐOẠN 2</span>
+                                <div class="mt-2 flex items-center gap-3 mb-4">
+                                    <div class="w-14 h-14 bg-cyan-600/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-7 h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-2xl font-bold text-cyan-400">Treasury & Inventory — Hoàn Thiện Tiền Tệ & Kho</h3>
+                                    <p class="text-slate-500 text-sm">10/08 – 23/08 &nbsp;|&nbsp; 🚀 <span class="text-emerald-400 font-bold">Deploy D2: 23/08/2026</span></p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 text-sm">
+                                    <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                        <p class="text-green-300 font-semibold mb-2 text-xs">💰 Chứng từ tiền tệ (bổ sung 5/7)</p>
+                                        <ul class="space-y-0.5 text-slate-400 text-xs">
+                                            <li>• Bảng Kê Chi Tiền (07-TT)</li>
+                                            <li>• Giấy Đề Nghị Tạm Ứng (03-TT)</li>
+                                            <li>• Giấy Thanh Toán Tạm Ứng (04-TT)</li>
+                                            <li>• Giấy Đề Nghị Thanh Toán (05-TT)</li>
+                                            <li>• Biên Bản Kiểm Kê Quỹ (06-TT)</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                        <p class="text-blue-300 font-semibold mb-2 text-xs">📦 Chứng từ hàng tồn kho (bổ sung 3/5)</p>
+                                        <ul class="space-y-0.5 text-slate-400 text-xs">
+                                            <li>• PXK Kiêm Vận Chuyển Nội Bộ (03-VT)</li>
+                                            <li>• Biên Bản Kiểm Kê (05-VT)</li>
+                                            <li>• Thẻ Kho / Sổ Kho (06-VT)</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                        <p class="text-teal-300 font-semibold mb-2 text-xs">📖 Sổ sách bổ sung</p>
+                                        <ul class="space-y-0.5 text-slate-400 text-xs">
+                                            <li>• Sổ Chi Tiết Vật Liệu, HH (Thẻ Kho)</li>
+                                            <li>• Sổ Chi Tiết Mua Hàng</li>
+                                            <li>• Sổ Nhật Ký Đặc Biệt (mua hàng)</li>
+                                            <li>• Bảng Tổng Hợp Chi Tiết</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                        <p class="text-amber-300 font-semibold mb-2 text-xs">📋 Danh mục mở rộng</p>
+                                        <ul class="space-y-0.5 text-slate-400 text-xs">
+                                            <li>• Đơn vị tính / Nhóm hàng hóa</li>
+                                            <li>• Loại thuế / Mức thuế suất</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                        <p class="text-green-300 font-semibold mb-2 text-xs">📊 Báo cáo</p>
+                                        <ul class="space-y-0.5 text-slate-400 text-xs">
+                                            <li>• Báo cáo tồn kho</li>
+                                            <li>• Báo cáo nhập xuất tồn</li>
+                                            <li>• Báo cáo công nợ (aging analysis)</li>
+                                            <li>• Bảng kê mua vào / bán ra</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mt-3 p-3 bg-emerald-900/10 border border-emerald-700/20 rounded-lg">
+                                    <p class="text-emerald-300 text-xs">
+                                    <strong>✅ D2 Sẵn sàng deploy:</strong> Hoàn thiện toàn bộ nghiệp vụ tiền tệ và kho. DN quản lý được tạm ứng, kiểm kê quỹ, vận chuyển nội bộ, theo dõi thẻ kho.
+                                </p>
+                            </div>
+                            <div class="mt-2 flex items-center gap-2 text-xs">
+                                <span class="text-slate-500">👨‍💻 Nhân sự:</span>
+                                <span class="bg-cyan-600/20 text-cyan-300 px-2 py-0.5 rounded font-bold">4 Dev</span>
+                                <span class="text-slate-600">(Full team — bổ sung Nhập/Xuất kho + hoàn thiện tiền tệ)</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======= GĐ 3: Tuần 5-7 ======= -->
+                <div class="mb-16 relative">
+                    <div class="timeline-dot bg-gradient-to-br from-emerald-500 to-green-600 hidden md:block"></div>
+                    <div class="md:w-1/2 md:pr-16 ml-14 md:ml-0">
+                        <div class="glassmorphism rounded-2xl p-6 border border-emerald-700/30 milestone-card relative">
+                            <span class="phase-badge-3 absolute -top-3 left-4 text-white text-xs font-bold px-3 py-1 rounded-full">GIAI ĐOẠN 3</span>
+                            <div class="mt-2 flex items-center gap-3 mb-4">
+                                <div class="w-14 h-14 bg-emerald-600/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-emerald-400">Sales, Assets & Payroll — Bán Hàng, TSCĐ, Tiền Lương</h3>
+                                    <p class="text-slate-500 text-sm">24/08 – 13/09 &nbsp;|&nbsp; 🚀 <span class="text-emerald-400 font-bold">Deploy D3: 13/09/2026</span></p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 text-sm">
+                                <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                    <p class="text-purple-300 font-semibold mb-2 text-xs">🛒 Chứng từ bán hàng (3/3)</p>
+                                    <ul class="space-y-0.5 text-slate-400 text-xs">
+                                        <li>• Hóa Đơn GTGT (01GTKT3/001)</li>
+                                        <li>• Hóa Đơn Bán Hàng (02GTTT3/001)</li>
+                                        <li>• Bảng Kê Bán Lẻ (06-BH)</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                    <p class="text-amber-300 font-semibold mb-2 text-xs">🏗️ Chứng từ TSCĐ (5/5)</p>
+                                    <ul class="space-y-0.5 text-slate-400 text-xs">
+                                        <li>• Biên Bản Giao Nhận TSCĐ (01-TSCĐ)</li>
+                                        <li>• Biên Bản Thanh Lý TSCĐ (02-TSCĐ)</li>
+                                        <li>• Biên Bản Đánh Giá Lại TSCĐ (03-TSCĐ)</li>
+                                        <li>• Thẻ Tài Sản Cố Định</li>
+                                        <li>• Bảng Tính & Phân Bổ Khấu Hao (06-TSCĐ)</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                    <p class="text-pink-300 font-semibold mb-2 text-xs">👥 Chứng từ LĐTL (3/3)</p>
+                                    <ul class="space-y-0.5 text-slate-400 text-xs">
+                                        <li>• Bảng Chấm Công (01a-LĐTL)</li>
+                                        <li>• Bảng Thanh Toán Tiền Lương (02-LĐTL)</li>
+                                        <li>• Bảng Phân Bổ Lương & BHXH (11-LĐTL)</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                    <p class="text-teal-300 font-semibold mb-2 text-xs">📖 Hoàn thiện 14 sổ sách</p>
+                                    <ul class="space-y-0.5 text-slate-400 text-xs">
+                                        <li>• Sổ Nhật Ký – Sổ Cái</li>
+                                        <li>• Sổ Nhật Ký Đặc Biệt (bán hàng, chi tiền)</li>
+                                        <li>• Sổ Chi Tiết Tài Khoản (đầy đủ)</li>
+                                        <li>• Sổ Chi Tiết Bán Hàng</li>
+                                        <li>• Sổ Chi Tiết TSCĐ</li>
+                                        <li>• Sổ Chi Tiết Chi Phí SXKD</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                    <p class="text-green-300 font-semibold mb-2 text-xs">📊 Báo cáo & Kết chuyển</p>
+                                    <ul class="space-y-0.5 text-slate-400 text-xs">
+                                        <li>• Kết chuyển cuối kỳ tự động (TK 911→421)</li>
+                                        <li>• Tờ khai thuế GTGT</li>
+                                        <li>• Tờ khai thuế TNDN</li>
+                                        <li>• Báo cáo chi phí theo KM, BP</li>
+                                        <li>• Bảng Cân Đối Tài Khoản</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-3 p-3 bg-emerald-900/10 border border-emerald-700/20 rounded-lg">
+                                <p class="text-emerald-300 text-xs">
+                                    <strong>✅ D3 Sẵn sàng deploy:</strong> Hệ thống kế toán hoàn chỉnh 14 sổ theo TT 99. DN có thể lập BCTC, khai thuế GTGT & TNDN. Tự động kết chuyển cuối kỳ.
+                                </p>
+                            </div>
+                            <div class="mt-2 flex items-center gap-2 text-xs">
+                                <span class="text-slate-500">👨‍💻 Nhân sự:</span>
+                                <span class="bg-emerald-600/20 text-emerald-300 px-2 py-0.5 rounded font-bold">4 Dev</span>
+                                <span class="text-slate-600">(Full team — giai đoạn nặng nhất: 11 chứng từ + 14 sổ + kết chuyển)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======= GĐ 4: Tuần 8-10 ======= -->
+                <div class="mb-16 relative">
+                    <div class="md:flex md:justify-end">
+                        <div class="timeline-dot bg-gradient-to-br from-amber-500 to-yellow-600 hidden md:block"></div>
+                        <div class="md:w-1/2 md:pl-16 ml-14 md:ml-0">
+                            <div class="glassmorphism rounded-2xl p-6 border border-amber-700/30 milestone-card relative">
+                                <span class="phase-badge-4 absolute -top-3 left-4 text-white text-xs font-bold px-3 py-1 rounded-full">GIAI ĐOẠN 4</span>
+                                <div class="mt-2 flex items-center gap-3 mb-4">
+                                    <div class="w-14 h-14 bg-amber-600/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-2xl font-bold text-amber-400">Reports & Tax — BCTC, Thuế & Quản Trị</h3>
+                                    <p class="text-slate-500 text-sm">14/09 – 04/10 &nbsp;|&nbsp; 🚀 <span class="text-emerald-400 font-bold">Deploy D4: 04/10/2026</span></p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 text-sm">
+                                    <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                        <p class="text-green-300 font-semibold mb-2 text-xs">📈 Báo cáo tài chính bắt buộc</p>
+                                        <ul class="space-y-0.5 text-slate-400 text-xs">
+                                            <li>• Bảng Cân Đối Kế Toán</li>
+                                            <li>• Báo Cáo Kết Quả Kinh Doanh</li>
+                                            <li>• Báo Cáo Lưu Chuyển Tiền Tệ</li>
+                                            <li>• Thuyết Minh Báo Cáo Tài Chính</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                        <p class="text-cyan-300 font-semibold mb-2 text-xs">📊 Báo cáo thuế đầy đủ</p>
+                                        <ul class="space-y-0.5 text-slate-400 text-xs">
+                                            <li>• Tờ khai thuế TNCN</li>
+                                            <li>• Báo cáo tình hình sử dụng hóa đơn</li>
+                                            <li>• Bảng kê mua vào / bán ra (nâng cao)</li>
+                                            <li>• Báo cáo tổng hợp thuế</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                        <p class="text-blue-300 font-semibold mb-2 text-xs">📋 Báo cáo quản trị</p>
+                                        <ul class="space-y-0.5 text-slate-400 text-xs">
+                                            <li>• Báo cáo doanh thu (theo SP, KH, KV)</li>
+                                            <li>• Báo cáo chi phí (theo KM, BP, dự án)</li>
+                                            <li>• Báo cáo đối chiếu ngân hàng (sổ phụ)</li>
+                                            <li>• Báo cáo dòng tiền dự kiến</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                        <p class="text-purple-300 font-semibold mb-2 text-xs">⚙️ Cấu hình & Tiện ích</p>
+                                        <ul class="space-y-0.5 text-slate-400 text-xs">
+                                            <li>• Chính sách kế toán (PP giá xuất kho, KH)</li>
+                                            <li>• Nhập số dư đầu kỳ & kiểm tra cân bằng</li>
+                                            <li>• Khóa kỳ kế toán (lock period)</li>
+                                            <li>• Phân quyền chi tiết người dùng</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mt-3 p-3 bg-emerald-900/10 border border-emerald-700/20 rounded-lg">
+                                    <p class="text-emerald-300 text-xs">
+                                    <strong>✅ D4 Sẵn sàng deploy:</strong> DN có thể lập BCTC đầy đủ theo TT 99, khai báo tất cả các loại thuế, sử dụng báo cáo quản trị để ra quyết định kinh doanh.
+                                </p>
+                            </div>
+                            <div class="mt-2 flex items-center gap-2 text-xs">
+                                <span class="text-slate-500">👨‍💻 Nhân sự:</span>
+                                <span class="bg-amber-600/20 text-amber-300 px-2 py-0.5 rounded font-bold">3 Dev</span>
+                                <span class="text-slate-600">(1 dev rút — tập trung báo cáo & cấu hình)</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======= GĐ 5: Tuần 11-12 ======= -->
+                <div class="relative">
+                    <div class="timeline-dot bg-gradient-to-br from-red-500 to-rose-600 hidden md:block"></div>
+                    <div class="md:w-1/2 md:pr-16 ml-14 md:ml-0">
+                        <div class="glassmorphism rounded-2xl p-6 border border-red-700/30 milestone-card relative">
+                            <span class="phase-badge-5 absolute -top-3 left-4 text-white text-xs font-bold px-3 py-1 rounded-full">GIAI ĐOẠN 5</span>
+                            <div class="mt-2 flex items-center gap-3 mb-4">
+                                <div class="w-14 h-14 bg-red-600/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-7 h-7 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-red-400">Integration & Migration — TT 133, Chuyển Đổi & Hoàn Thiện</h3>
+                                    <p class="text-slate-500 text-sm">05/10 – 18/10 &nbsp;|&nbsp; 🚀 <span class="text-emerald-400 font-bold">Deploy D5: 18/10/2026</span></p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 text-sm">
+                                <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                    <p class="text-emerald-300 font-semibold mb-2 text-xs">🔄 Hỗ trợ TT 133/2016</p>
+                                    <ul class="space-y-0.5 text-slate-400 text-xs">
+                                        <li>• Hệ thống TK TT 133 (~50 TK)</li>
+                                        <li>• Sổ sách tinh giản (10 sổ)</li>
+                                        <li>• BCTC dạng rút gọn (B01a, B02a, B03a, B09a)</li>
+                                        <li>• Tự động nhận diện chế độ kế toán</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                    <p class="text-violet-300 font-semibold mb-2 text-xs">🔀 Công cụ chuyển đổi</p>
+                                    <ul class="space-y-0.5 text-slate-400 text-xs">
+                                        <li>• Ánh xạ TK TT 133 ↔ TT 99</li>
+                                        <li>• Chuyển đổi số dư tự động</li>
+                                        <li>• Định dạng lại báo cáo</li>
+                                        <li>• Báo cáo đối chiếu trước/sau migrate</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                    <p class="text-cyan-300 font-semibold mb-2 text-xs">🔗 Kết nối & Tích hợp</p>
+                                    <ul class="space-y-0.5 text-slate-400 text-xs">
+                                        <li>• Kết nối cơ quan thuế (eTax)</li>
+                                        <li>• Xuất XML hóa đơn điện tử</li>
+                                        <li>• API tích hợp với hệ thống khác</li>
+                                        <li>• Import/Export dữ liệu (Excel, CSV)</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-slate-800/60 rounded-lg p-3 border border-slate-700">
+                                    <p class="text-blue-300 font-semibold mb-2 text-xs">🏢 Nâng cao</p>
+                                    <ul class="space-y-0.5 text-slate-400 text-xs">
+                                        <li>• BCTC Hợp Nhất</li>
+                                        <li>• BCTC Giữa Niên Độ</li>
+                                        <li>• Đa khách hàng (dịch vụ kế toán)</li>
+                                        <li>• Nhật ký truy cập & bảo mật nâng cao</li>
+                                        <li>• UI/UX polish toàn hệ thống</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-3 p-3 bg-emerald-900/10 border border-emerald-700/20 rounded-lg">
+                                <p class="text-emerald-300 text-xs">
+                                    <strong>🎉 D5 Hoàn thiện:</strong> Hệ thống kế toán toàn diện hỗ trợ đồng thời 2 thông tư. DN SMEs có thể dùng TT 133 hoặc migrate lên TT 99. Đầy đủ kết nối thuế, hóa đơn điện tử, báo cáo hợp nhất.
+                                </p>
+                            </div>
+                            <div class="mt-2 flex items-center gap-2 text-xs">
+                                <span class="text-slate-500">👨‍💻 Nhân sự:</span>
+                                <span class="bg-red-600/20 text-red-300 px-2 py-0.5 rounded font-bold">2 Dev</span>
+                                <span class="text-slate-600">(Tinh giản — TT 133, migrate, tích hợp. Có thể tăng lên 3 nếu cần gấp)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Summary Table -->
+    <section class="py-16 bg-slate-800/50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-white mb-4">📊 Bảng Tổng Hợp Timeline — 5 Giai Đoạn, 5 Lần Deploy</h2>
+                <p class="text-slate-400 max-w-3xl mx-auto">
+                    Tổng quan lộ trình 12 tuần. Mỗi giai đoạn deploy độc lập, không phụ thuộc lẫn nhau.
+                </p>
+            </div>
+            <div class="glassmorphism rounded-xl border border-slate-700 overflow-hidden max-w-6xl mx-auto">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-slate-800">
+                                <th class="px-4 py-3 text-left text-slate-300 font-semibold w-32">Thời gian</th>
+                                <th class="px-4 py-3 text-left text-slate-300 font-semibold w-24">GĐ</th>
+                                <th class="px-4 py-3 text-left text-slate-300 font-semibold">Tính năng chính</th>
+                                <th class="px-4 py-3 text-center text-slate-300 font-semibold w-20">Deploy</th>
+                                <th class="px-4 py-3 text-left text-slate-300 font-semibold">Giá trị khách hàng</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700">
+                            <tr class="hover:bg-slate-800/30 transition-colors bg-violet-900/10">
+                                <td class="px-4 py-3 text-violet-300 font-bold text-xs">27/07 – 09/08</td>
+                                <td class="px-4 py-3"><span class="phase-badge-1 text-white text-xs px-2 py-0.5 rounded-full">GĐ 1</span></td>
+                                <td class="px-4 py-3 text-slate-300">Danh mục nền tảng, 2 CT tiền tệ (Thu/Chi) + 2 CT kho (NK, XK), 4 sổ cơ bản, báo cáo công nợ</td>
+                                <td class="px-4 py-3 text-center"><span class="deploy-flag text-white text-[10px] font-bold px-2 py-0.5 rounded-full inline-block">D1</span></td>
+                                <td class="px-4 py-3 text-slate-400 text-xs">Kế toán thu chi, công nợ cơ bản</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/30 transition-colors bg-cyan-900/10">
+                                <td class="px-4 py-3 text-cyan-300 font-bold text-xs">10/08 – 23/08</td>
+                                <td class="px-4 py-3"><span class="phase-badge-2 text-white text-xs px-2 py-0.5 rounded-full">GĐ 2</span></td>
+                                <td class="px-4 py-3 text-slate-300">5 CT tiền tệ bổ sung (BKCT, Tạm ứng, TTƯ, ĐNTT, KK quỹ); 3 CT kho bổ sung (VC nội bộ, KK, Thẻ kho); sổ mua hàng, thẻ kho; báo cáo tồn kho</td>
+                                <td class="px-4 py-3 text-center"><span class="deploy-flag text-white text-[10px] font-bold px-2 py-0.5 rounded-full inline-block">D2</span></td>
+                                <td class="px-4 py-3 text-slate-400 text-xs">Hoàn thiện tiền tệ, quản lý kho</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/30 transition-colors bg-emerald-900/10">
+                                <td class="px-4 py-3 text-emerald-300 font-bold text-xs">24/08 – 13/09</td>
+                                <td class="px-4 py-3"><span class="phase-badge-3 text-white text-xs px-2 py-0.5 rounded-full">GĐ 3</span></td>
+                                <td class="px-4 py-3 text-slate-300">Bán hàng (3 CT), TSCĐ (5 CT), LĐTL (3 CT), hoàn thiện 14 sổ, kết chuyển cuối kỳ, tờ khai GTGT & TNDN</td>
+                                <td class="px-4 py-3 text-center"><span class="deploy-flag text-white text-[10px] font-bold px-2 py-0.5 rounded-full inline-block">D3</span></td>
+                                <td class="px-4 py-3 text-slate-400 text-xs">Kế toán tổng hợp, BCTC, khai thuế</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/30 transition-colors bg-amber-900/10">
+                                <td class="px-4 py-3 text-amber-300 font-bold text-xs">14/09 – 04/10</td>
+                                <td class="px-4 py-3"><span class="phase-badge-4 text-white text-xs px-2 py-0.5 rounded-full">GĐ 4</span></td>
+                                <td class="px-4 py-3 text-slate-300">BCTC đầy đủ (4 báo cáo), thuế TNCN, báo cáo quản trị đa chiều, khóa kỳ, phân quyền</td>
+                                <td class="px-4 py-3 text-center"><span class="deploy-flag text-white text-[10px] font-bold px-2 py-0.5 rounded-full inline-block">D4</span></td>
+                                <td class="px-4 py-3 text-slate-400 text-xs">BCTC đầy đủ, quản trị, kiểm soát</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/30 transition-colors bg-red-900/10">
+                                <td class="px-4 py-3 text-red-300 font-bold">11–12</td>
+                                <td class="px-4 py-3"><span class="phase-badge-5 text-white text-xs px-2 py-0.5 rounded-full">GĐ 5</span></td>
+                                <td class="px-4 py-3 text-slate-300">TT 133, công cụ migrate, kết nối CQT, hóa đơn điện tử, BCTC hợp nhất, đa KH</td>
+                                <td class="px-4 py-3 text-center"><span class="deploy-flag text-white text-[10px] font-bold px-2 py-0.5 rounded-full inline-block">D5</span></td>
+                                <td class="px-4 py-3 text-slate-400 text-xs">Toàn diện 2 TT, tích hợp, mở rộng</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Principles -->
+    <section class="py-16 bg-slate-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-white mb-4">🎯 Nguyên Tắc Triển Khai</h2>
+                <p class="text-slate-400 max-w-3xl mx-auto">
+                    Các nguyên tắc cốt lõi đảm bảo mỗi giai đoạn đều có thể triển khai độc lập cho khách hàng.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="glassmorphism rounded-xl p-5 border border-emerald-700/30 text-center">
+                    <div class="w-12 h-12 bg-emerald-600/20 rounded-xl flex items-center justify-center mx-auto mb-3">
+                        <span class="text-emerald-400 text-xl">🚀</span>
+                    </div>
+                    <h3 class="text-emerald-400 font-semibold mb-2">Deploy Sớm, Liên Tục</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">
+                        Mỗi giai đoạn kết thúc bằng 1 phiên bản hoàn chỉnh, có thể bàn giao cho KH. Không phải chờ đến hết 12 tuần.
+                    </p>
+                </div>
+                <div class="glassmorphism rounded-xl p-5 border border-violet-700/30 text-center">
+                    <div class="w-12 h-12 bg-violet-600/20 rounded-xl flex items-center justify-center mx-auto mb-3">
+                        <span class="text-violet-400 text-xl">📦</span>
+                    </div>
+                    <h3 class="text-violet-400 font-semibold mb-2">Phân Phối Theo Giá Trị</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">
+                        Ưu tiên tính năng cốt lõi, sử dụng được ngay. Các tính năng nâng cao bổ sung dần theo từng phase.
+                    </p>
+                </div>
+                <div class="glassmorphism rounded-xl p-5 border border-cyan-700/30 text-center">
+                    <div class="w-12 h-12 bg-cyan-600/20 rounded-xl flex items-center justify-center mx-auto mb-3">
+                        <span class="text-cyan-400 text-xl">🔄</span>
+                    </div>
+                    <h3 class="text-cyan-400 font-semibold mb-2">Tương Thích Ngược</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">
+                        Mỗi bản deploy mới không làm gián đoạn dữ liệu và quy trình của KH đang sử dụng. Nâng cấp seamless.
+                    </p>
+                </div>
+                <div class="glassmorphism rounded-xl p-5 border border-amber-700/30 text-center">
+                    <div class="w-12 h-12 bg-amber-600/20 rounded-xl flex items-center justify-center mx-auto mb-3">
+                        <span class="text-amber-400 text-xl">🎯</span>
+                    </div>
+                    <h3 class="text-amber-400 font-semibold mb-2">TT 99 Làm Gốc</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">
+                        Xây dựng hệ thống trên TT 99/2025 trước (mọi DN đều dùng được), sau đó bổ sung TT 133 cho SMEs.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Links -->
+    <section class="py-12 bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 border-b border-emerald-700/30">
+        <div class="max-w-5xl mx-auto px-4 text-center">
+            <div class="glassmorphism rounded-xl p-6 border border-emerald-700/30">
+                <h2 class="text-2xl font-bold text-emerald-400 mb-4">🔗 Liên Kết Nhanh</h2>
+                <div class="flex flex-wrap justify-center gap-4 text-sm">
+                    <a href="index.html" class="bg-slate-700 hover:bg-slate-600 px-5 py-2.5 rounded-lg transition-all text-slate-200 flex items-center gap-2">🏠 Trang Chủ</a>
+                    <a href="scope-product.html" class="bg-violet-700 hover:bg-violet-600 px-5 py-2.5 rounded-lg transition-all text-white flex items-center gap-2">🎯 Scope Sản Phẩm</a>
+                    <a href="accounts.html" class="bg-amber-600 hover:bg-amber-700 px-5 py-2.5 rounded-lg transition-all text-white flex items-center gap-2">📋 Hệ Thống TK</a>
+                    <a href="db-design.html" class="bg-cyan-600 hover:bg-cyan-700 px-5 py-2.5 rounded-lg transition-all text-white flex items-center gap-2">🗄️ Database Design</a>
+                    <a href="erd.html" class="bg-indigo-600 hover:bg-indigo-700 px-5 py-2.5 rounded-lg transition-all text-white flex items-center gap-2">🗺️ Sơ Đồ ERD</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 border-t border-slate-700 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-slate-500 text-sm">
+                Timeline Triển Khai — Phần Mềm Kế Toán Doanh Nghiệp · 12 Tuần · 5 Giai Đoạn · 5 Lần Deploy
+            </p>
+            <p class="text-slate-600 text-xs mt-2">
+                Tham chiếu: TT 133/2016/TT-BTC · TT 99/2025/TT-BTC — Bộ Tài Chính
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
